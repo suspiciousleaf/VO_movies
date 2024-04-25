@@ -4,18 +4,18 @@ from pprint import pprint
 import datetime
 
 cinemas = {
-    "P5505": "CGR - Carcassonne",
-    "P0395": "Le Colisée CGR - Carcassonne",
-    "W1150": "Le Familia - Quillan",
-    "W0119": "Elysée - Limoux",
+    # "P5505": "CGR - Carcassonne",
+    # "P0395": "Le Colisée CGR - Carcassonne",
+    # "W1150": "Le Familia - Quillan",
+    # "W0119": "Elysée - Limoux",
     "P8110": "Le Casino - Lavelanet",
-    "P0218": "Méga Castillet - Perpignan",
-    "P0176": "Castillet - Perpignan",
-    "P1115": "Institut Jean Vigo - Perpignan",
-    "P1424": "Le Rex - Foix",
-    "P8108": "L'Estive - Foix",
-    "P8111": "Cinéma Casino - Ax-les-Thermes",
-    "P7201": "Rex - Pamiers",
+    # "P0218": "Méga Castillet - Perpignan",
+    # "P0176": "Castillet - Perpignan",
+    # "P1115": "Institut Jean Vigo - Perpignan",
+    # "P1424": "Le Rex - Foix",
+    # "P8108": "L'Estive - Foix",
+    # "P8111": "Cinéma Casino - Ax-les-Thermes",
+    # "P7201": "Rex - Pamiers",
 }
 
 url_list = [
@@ -88,8 +88,8 @@ pprint(f"{len(all_start_times) = }")
 
 pprint(f"Filters used in request: {data['data']}")
 
-# with open("24_hours.json", "w", encoding="utf8") as f:
-#     json.dump(page.json(), f)
+with open("vo_showings.json", "w", encoding="utf8") as f:
+    json.dump(english_showings, f, ensure_ascii=False)
 
 
 # print(page.content)

@@ -1,0 +1,5749 @@
+[
+  {
+    "movie": {
+      "synopsis": "La famille Spengler revient là où tout a commencé, l'emblématique caserne de pompiers de New York. Ils vont alors devoir faire équipe avec les membres originels de S.O.S. Fantômes, qui ont mis en place un laboratoire de recherche top secret pour faire passer la chasse aux fantômes à la vitesse supérieure.",
+      "synopsis_json": {
+        "__typename": "BodyJson",
+        "body": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "La famille Spengler revient là où tout a commencé, l'emblématique caserne de pompiers de New York. Ils vont alors devoir faire équipe avec les membres originels de S.O.S. Fantômes, qui ont mis en place un laboratoire de recherche top secret pour faire passer la chasse aux fantômes à la vitesse supérieure. Lorsque la découverte d'un ancien artefact libère une armée de fantômes qui répand une menace de glace sur la ville, les deux équipes S.O.S. Fantômes doivent unir leurs forces pour protéger leur maison et sauver le monde d'une seconde ère glaciaire."
+              }
+            ]
+          }
+        ]
+      },
+      "__typename": "Movie",
+      "internalId": 303942,
+      "id": "TW92aWU6MzAzOTQy",
+      "poster": {
+        "__typename": "InternalImage",
+        "id": "SW1hZ2U6MjIwNzM5OTE=",
+        "internalId": 22073991,
+        "url": "https://fr.web.img6.acsta.net/pictures/24/02/23/09/52/1147009.jpg",
+        "path": "/pictures/24/02/23/09/52/1147009.jpg"
+      },
+      "title": "S.O.S. Fantômes : La Menace de glace",
+      "originalTitle": "Ghostbusters: Frozen Empire",
+      "type": "FEATURE_FILM",
+      "runtime": "1h 56min",
+      "genres": [
+        {
+          "id": 13025,
+          "translate": "Action",
+          "tag": "ACTION"
+        },
+        {
+          "id": 13001,
+          "translate": "Aventure",
+          "tag": "ADVENTURE"
+        },
+        {
+          "id": 13012,
+          "translate": "Fantastique",
+          "tag": "FANTASY"
+        }
+      ],
+      "languages": [
+        "ENGLISH"
+      ],
+      "data": {
+        "__typename": "MovieData",
+        "seo": {
+          "__typename": "Seo",
+          "browsable": true,
+          "title": null
+        },
+        "productionYear": 2024
+      },
+      "stats": {
+        "userRating": {
+          "score": 2.65,
+          "count": 1024
+        },
+        "userReview": {
+          "count": 200
+        },
+        "pressReview": {
+          "score": 2.43,
+          "count": 23
+        },
+        "metric": {
+          "hits": 578915,
+          "sessions": 331800
+        },
+        "wantToSeeCount": 2040
+      },
+      "editorialReviews": [],
+      "releases": [
+        {
+          "__typename": "MovieRelease",
+          "releaseDate": {
+            "__typename": "PartialDate",
+            "date": "2024-04-10",
+            "precision": "day"
+          },
+          "name": "Released",
+          "certificate": {
+            "__typename": "Certificate",
+            "code": "U",
+            "label": "Tout public"
+          },
+          "advice": null,
+          "companyLimitation": null,
+          "releaseTags": {
+            "tagTypes": [
+              "THEATER"
+            ],
+            "tagFlags": null
+          },
+          "visaNumber": "161531"
+        }
+      ],
+      "credits": [
+        {
+          "person": {
+            "__typename": "Person",
+            "internalId": 132179,
+            "lastName": "Kenan",
+            "firstName": "Gil",
+            "seo": {
+              "__typename": "Seo",
+              "browsable": true
+            },
+            "appearanceStats": {
+              "__typename": "PersonAppearanceStats",
+              "totalMovies": 10,
+              "totalSeries": 2
+            }
+          },
+          "position": {
+            "__typename": "Position",
+            "name": "DIRECTOR",
+            "department": "DIRECTION"
+          },
+          "rank": 2
+        }
+      ],
+      "cast": {
+        "__typename": "castMemberConnection",
+        "edges": [
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 23848,
+                "lastName": "Rudd",
+                "firstName": "Paul",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 77,
+                  "totalSeries": 20
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 1
+            }
+          },
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 541934,
+                "lastName": "Coon",
+                "firstName": "Carrie",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 16,
+                  "totalSeries": 9
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 2
+            }
+          },
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 757208,
+                "lastName": "Wolfhard",
+                "firstName": "Finn",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 15,
+                  "totalSeries": 3
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 3
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 23848,
+              "lastName": "Rudd",
+              "firstName": "Paul",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 77,
+                "totalSeries": 20
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 1
+          },
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 541934,
+              "lastName": "Coon",
+              "firstName": "Carrie",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 16,
+                "totalSeries": 9
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 2
+          },
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 757208,
+              "lastName": "Wolfhard",
+              "firstName": "Finn",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 15,
+                "totalSeries": 3
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 3
+          }
+        ]
+      },
+      "countries": [
+        {
+          "__typename": "Country",
+          "id": 5002,
+          "name": "USA",
+          "localizedName": "U.S.A."
+        }
+      ],
+      "relatedTags": [
+        {
+          "__typename": "Tag",
+          "internalId": 2514,
+          "name": "Fantômes / Esprits",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 2512,
+          "name": "Suite / Sequel",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.SubGenre"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 2771,
+          "name": "Equipe / Equipage",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 1062,
+          "name": "Personnage culte",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Characteristic"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 1192,
+          "name": "Surnaturel / Phénomène surnaturel / Paranormal",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 4806,
+          "name": "Bande d'amis",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 5167,
+          "name": "Glace et glaçons",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 1938,
+          "name": "Neige - froid - hiver",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 241,
+          "name": "Pouvoirs surnaturels",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 1054,
+          "name": "Mère célibataire",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.ThemeDeSociete"
+            ]
+          }
+        }
+      ],
+      "flags": {
+        "hasDvdRelease": false,
+        "hasNews": true,
+        "hasOnlineProduct": false,
+        "hasOnlineRelease": false,
+        "hasPhysicalProduct": false,
+        "hasPreview": false,
+        "hasShowtime": true,
+        "hasSoundtrack": false,
+        "hasTheaterRelease": true,
+        "hasTrivia": true,
+        "hasAwards": false,
+        "isClub300Approved": false,
+        "hasClub300News": false,
+        "isComingSoon": false,
+        "isPlayingNow": true,
+        "tvRelease": false
+      },
+      "customFlags": {
+        "isPremiere": false,
+        "weeklyOuting": false
+      },
+      "synopsisFull": "<p class=\"bo-p\">La famille Spengler revient là où tout a commencé, l'emblématique caserne de pompiers de New York. Ils vont alors devoir faire équipe avec les membres originels de S.O.S. Fantômes, qui ont mis en place un laboratoire de recherche top secret pour faire passer la chasse aux fantômes à la vitesse supérieure. Lorsque la découverte d'un ancien artefact libère une armée de fantômes qui répand une menace de glace sur la ville, les deux équipes S.O.S. Fantômes doivent unir leurs forces pour protéger leur maison et sauver le monde d'une seconde ère glaciaire.</p>"
+    },
+    "showtimes": {
+      "dubbed": [],
+      "original": [
+        {
+          "__typename": "Showtime",
+          "internalId": 52597036090,
+          "startsAt": "2024-04-26T18:30:00",
+          "timeBeforeStart": "PT0H0M0S",
+          "service": [
+            "DISABLED_ACCESS"
+          ],
+          "experience": null,
+          "comfort": null,
+          "projection": [
+            "DIGITAL"
+          ],
+          "picture": null,
+          "sound": null,
+          "tags": [
+            "Showtime.Accessibility.Subtitled",
+            "Localization.Version.Original",
+            "Format.Projection.Digital",
+            "Theater.Service.DisabledAccess"
+          ],
+          "diffusionVersion": "ORIGINAL",
+          "data": {
+            "__typename": "ShowtimeData",
+            "ticketing": [
+              {
+                "__typename": "Ticketing",
+                "urls": [
+                  "https://www.ticketingcine.fr?nc=0716&lang=fr&ids=21367&ps=webedia"
+                ],
+                "type": "DESKTOP",
+                "provider": "default"
+              },
+              {
+                "__typename": "Ticketing",
+                "urls": [
+                  "https://relay.mvtx.us/ticketing/dbz?code_theater=P8110&gid_entity=movie.movie._.303942&tags=Showtime.Accessibility.Subtitled,Localization.Version.Original,Format.Projection.Digital&perfd=20240426&perft=18:30&code=VO; SUBTITLE"
+                ],
+                "type": "DESKTOP",
+                "provider": "relay"
+              }
+            ]
+          },
+          "isPreview": false,
+          "isWeeklyMovieOuting": false
+        }
+      ],
+      "local": [],
+      "multiple": []
+    }
+  },
+  {
+    "movie": {
+      "synopsis": "Une course effrénée à travers une Amérique fracturée qui, dans un futur proche, est plus que jamais sur le fil du rasoir. ",
+      "synopsis_json": {
+        "__typename": "BodyJson",
+        "body": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Une course effrénée à travers une Amérique fracturée qui, dans un futur proche, est plus que jamais sur le fil du rasoir. "
+              }
+            ]
+          }
+        ]
+      },
+      "__typename": "Movie",
+      "internalId": 300282,
+      "id": "TW92aWU6MzAwMjgy",
+      "poster": {
+        "__typename": "InternalImage",
+        "id": "SW1hZ2U6MjIwNzc1OTE=",
+        "internalId": 22077591,
+        "url": "https://fr.web.img4.acsta.net/pictures/24/03/08/08/44/3432270.jpg",
+        "path": "/pictures/24/03/08/08/44/3432270.jpg"
+      },
+      "title": "Civil War",
+      "originalTitle": "Civil War",
+      "type": "FEATURE_FILM",
+      "runtime": "1h 49min",
+      "genres": [
+        {
+          "id": 13025,
+          "translate": "Action",
+          "tag": "ACTION"
+        },
+        {
+          "id": 13023,
+          "translate": "Thriller",
+          "tag": "THRILLER"
+        }
+      ],
+      "languages": [
+        "ENGLISH"
+      ],
+      "data": {
+        "__typename": "MovieData",
+        "seo": {
+          "__typename": "Seo",
+          "browsable": true,
+          "title": null
+        },
+        "productionYear": 2024
+      },
+      "stats": {
+        "userRating": {
+          "score": 3.72,
+          "count": 2374
+        },
+        "userReview": {
+          "count": 379
+        },
+        "pressReview": {
+          "score": 3.66,
+          "count": 38
+        },
+        "metric": {
+          "hits": 906610,
+          "sessions": 490929
+        },
+        "wantToSeeCount": 3256
+      },
+      "editorialReviews": [],
+      "releases": [
+        {
+          "__typename": "MovieRelease",
+          "releaseDate": {
+            "__typename": "PartialDate",
+            "date": "2024-04-17",
+            "precision": "day"
+          },
+          "name": "Released",
+          "certificate": {
+            "__typename": "Certificate",
+            "code": "-12A",
+            "label": "Interdit - 12 ans avec avertissement"
+          },
+          "advice": null,
+          "companyLimitation": null,
+          "releaseTags": {
+            "tagTypes": [
+              "THEATER"
+            ],
+            "tagFlags": null
+          },
+          "visaNumber": "161503"
+        }
+      ],
+      "credits": [
+        {
+          "person": {
+            "__typename": "Person",
+            "internalId": 91203,
+            "lastName": "Garland",
+            "firstName": "Alex",
+            "seo": {
+              "__typename": "Seo",
+              "browsable": true
+            },
+            "appearanceStats": {
+              "__typename": "PersonAppearanceStats",
+              "totalMovies": 19,
+              "totalSeries": 2
+            }
+          },
+          "position": {
+            "__typename": "Position",
+            "name": "DIRECTOR",
+            "department": "DIRECTION"
+          },
+          "rank": 1
+        }
+      ],
+      "cast": {
+        "__typename": "castMemberConnection",
+        "edges": [
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 9685,
+                "lastName": "Dunst",
+                "firstName": "Kirsten",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 70,
+                  "totalSeries": 8
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 1
+            }
+          },
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 90310,
+                "lastName": "Moura",
+                "firstName": "Wagner",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 41,
+                  "totalSeries": 14
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 2
+            }
+          },
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 786532,
+                "lastName": "Spaeny",
+                "firstName": "Cailee",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 13,
+                  "totalSeries": 4
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 3
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 9685,
+              "lastName": "Dunst",
+              "firstName": "Kirsten",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 70,
+                "totalSeries": 8
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 1
+          },
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 90310,
+              "lastName": "Moura",
+              "firstName": "Wagner",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 41,
+                "totalSeries": 14
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 2
+          },
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 786532,
+              "lastName": "Spaeny",
+              "firstName": "Cailee",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 13,
+                "totalSeries": 4
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 3
+          }
+        ]
+      },
+      "countries": [
+        {
+          "__typename": "Country",
+          "id": 5002,
+          "name": "USA",
+          "localizedName": "U.S.A."
+        }
+      ],
+      "relatedTags": [
+        {
+          "__typename": "Tag",
+          "internalId": 1427,
+          "name": "Guerre civile",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 5291,
+          "name": "Etats-Unis",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Location",
+              "Tag.Localization.Country"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 5176,
+          "name": "Journaliste / Journalisme / Reporter",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 5371,
+          "name": "Dystopie",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.SubGenre"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 374,
+          "name": "Soldat / Militaire",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 5313,
+          "name": "Maison Blanche",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Location",
+              "Tag.Localization.Place"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 691,
+          "name": "Anticipation / Futur / Avenir proche",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Time"
+            ]
+          }
+        }
+      ],
+      "flags": {
+        "hasDvdRelease": false,
+        "hasNews": true,
+        "hasOnlineProduct": false,
+        "hasOnlineRelease": false,
+        "hasPhysicalProduct": false,
+        "hasPreview": false,
+        "hasShowtime": true,
+        "hasSoundtrack": false,
+        "hasTheaterRelease": true,
+        "hasTrivia": true,
+        "hasAwards": false,
+        "isClub300Approved": false,
+        "hasClub300News": false,
+        "isComingSoon": false,
+        "isPlayingNow": true,
+        "tvRelease": false
+      },
+      "customFlags": {
+        "isPremiere": false,
+        "weeklyOuting": false
+      },
+      "synopsisFull": "<p class=\"bo-p\">Une course effrénée à travers une Amérique fracturée qui, dans un futur proche, est plus que jamais sur le fil du rasoir. </p>"
+    },
+    "showtimes": {
+      "dubbed": [],
+      "original": [
+        {
+          "__typename": "Showtime",
+          "internalId": 52597036085,
+          "startsAt": "2024-04-27T18:30:00",
+          "timeBeforeStart": "PT0H0M0S",
+          "service": [
+            "DISABLED_ACCESS"
+          ],
+          "experience": null,
+          "comfort": null,
+          "projection": [
+            "DIGITAL"
+          ],
+          "picture": null,
+          "sound": null,
+          "tags": [
+            "Showtime.Accessibility.Subtitled",
+            "Localization.Version.Original",
+            "Format.Projection.Digital",
+            "Theater.Service.DisabledAccess"
+          ],
+          "diffusionVersion": "ORIGINAL",
+          "data": {
+            "__typename": "ShowtimeData",
+            "ticketing": [
+              {
+                "__typename": "Ticketing",
+                "urls": [
+                  "https://www.ticketingcine.fr?nc=0716&lang=fr&ids=21438&ps=webedia"
+                ],
+                "type": "DESKTOP",
+                "provider": "default"
+              },
+              {
+                "__typename": "Ticketing",
+                "urls": [
+                  "https://relay.mvtx.us/ticketing/dbz?code_theater=P8110&gid_entity=movie.movie._.300282&tags=Showtime.Accessibility.Subtitled,Localization.Version.Original,Format.Projection.Digital&perfd=20240427&perft=18:30&code=VO; SUBTITLE"
+                ],
+                "type": "DESKTOP",
+                "provider": "relay"
+              }
+            ]
+          },
+          "isPreview": false,
+          "isWeeklyMovieOuting": false
+        }
+      ],
+      "local": [],
+      "multiple": []
+    }
+  },
+  {
+    "movie": {
+      "synopsis": "Ayant fui la guerre, une famille syrienne entreprend un éprouvant périple pour rejoindre la Suède. A la frontière entre le Belarus et la Pologne, synonyme d'entrée dans l'Europe, ils se retrouvent embourbés avec des dizaines d'autres familles, dans une zone marécageuse, à la merci de militaires aux méthodes violentes.",
+      "synopsis_json": {
+        "__typename": "BodyJson",
+        "body": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Ayant fui la guerre, une famille syrienne entreprend un éprouvant périple pour rejoindre la Suède. A la frontière entre le Belarus et la Pologne, synonyme d'entrée dans l'Europe, ils se retrouvent embourbés avec des dizaines d'autres familles, dans une zone marécageuse, à la merci de militaires aux méthodes violentes. Ils réalisent peu à peu qu'ils sont les otages malgré eux d'une situation qui les dépasse, où chacun - garde-frontières, activistes humanitaires, population locale - tente de jouer sa partition..."
+              }
+            ]
+          }
+        ]
+      },
+      "__typename": "Movie",
+      "internalId": 312029,
+      "id": "TW92aWU6MzEyMDI5",
+      "poster": {
+        "__typename": "InternalImage",
+        "id": "SW1hZ2U6MjIwNjAwNDI=",
+        "internalId": 22060042,
+        "url": "https://fr.web.img4.acsta.net/pictures/24/01/02/12/35/4070311.jpg",
+        "path": "/pictures/24/01/02/12/35/4070311.jpg"
+      },
+      "title": "Green Border",
+      "originalTitle": "Zielona granica",
+      "type": "FEATURE_FILM",
+      "runtime": "2h 32min",
+      "genres": [
+        {
+          "id": 13008,
+          "translate": "Drame",
+          "tag": "DRAMA"
+        }
+      ],
+      "languages": [
+        "ARABIC",
+        "ENGLISH",
+        "POLISH",
+        "RUSSIAN"
+      ],
+      "data": {
+        "__typename": "MovieData",
+        "seo": {
+          "__typename": "Seo",
+          "browsable": true,
+          "title": null
+        },
+        "productionYear": 2023
+      },
+      "stats": {
+        "userRating": {
+          "score": 4.07,
+          "count": 361
+        },
+        "userReview": {
+          "count": 48
+        },
+        "pressReview": {
+          "score": 3.55,
+          "count": 29
+        },
+        "metric": {
+          "hits": 239430,
+          "sessions": 114070
+        },
+        "wantToSeeCount": 920
+      },
+      "editorialReviews": [],
+      "releases": [
+        {
+          "__typename": "MovieRelease",
+          "releaseDate": {
+            "__typename": "PartialDate",
+            "date": "2024-02-07",
+            "precision": "day"
+          },
+          "name": "Released",
+          "certificate": null,
+          "advice": null,
+          "companyLimitation": null,
+          "releaseTags": {
+            "tagTypes": [
+              "THEATER"
+            ],
+            "tagFlags": null
+          },
+          "visaNumber": "159157"
+        }
+      ],
+      "credits": [
+        {
+          "person": {
+            "__typename": "Person",
+            "internalId": 150,
+            "lastName": "Holland",
+            "firstName": "Agnieszka",
+            "seo": {
+              "__typename": "Seo",
+              "browsable": true
+            },
+            "appearanceStats": {
+              "__typename": "PersonAppearanceStats",
+              "totalMovies": 43,
+              "totalSeries": 11
+            }
+          },
+          "position": {
+            "__typename": "Position",
+            "name": "DIRECTOR",
+            "department": "DIRECTION"
+          },
+          "rank": 1
+        }
+      ],
+      "cast": {
+        "__typename": "castMemberConnection",
+        "edges": [
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 870278,
+                "lastName": "Altawil",
+                "firstName": "Jalal",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 4,
+                  "totalSeries": 1
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 1
+            }
+          },
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 201429,
+                "lastName": "Ostaszewska",
+                "firstName": "Maja",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 22,
+                  "totalSeries": 1
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 2
+            }
+          },
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 179592,
+                "lastName": "Djanati Ataï",
+                "firstName": "Behi",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 11,
+                  "totalSeries": 2
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 3
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 870278,
+              "lastName": "Altawil",
+              "firstName": "Jalal",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 4,
+                "totalSeries": 1
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 1
+          },
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 201429,
+              "lastName": "Ostaszewska",
+              "firstName": "Maja",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 22,
+                "totalSeries": 1
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 2
+          },
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 179592,
+              "lastName": "Djanati Ataï",
+              "firstName": "Behi",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 11,
+                "totalSeries": 2
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 3
+          }
+        ]
+      },
+      "countries": [
+        {
+          "__typename": "Country",
+          "id": 5023,
+          "name": "Poland",
+          "localizedName": "Pologne"
+        },
+        {
+          "__typename": "Country",
+          "id": 5001,
+          "name": "France",
+          "localizedName": "France"
+        },
+        {
+          "__typename": "Country",
+          "id": 5165,
+          "name": "Czech Republic",
+          "localizedName": "République tchèque"
+        },
+        {
+          "__typename": "Country",
+          "id": 5014,
+          "name": "Belgium",
+          "localizedName": "Belgique"
+        }
+      ],
+      "relatedTags": [
+        {
+          "__typename": "Tag",
+          "internalId": 6019,
+          "name": "Réfugiés / Migrants",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 603,
+          "name": "Périple",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 4859,
+          "name": "Noir et blanc (après 1960)",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Characteristic"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 475,
+          "name": "Otages / Prise d'otages",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 374,
+          "name": "Soldat / Militaire",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 5334,
+          "name": "Pologne",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Location",
+              "Tag.Localization.Country"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 2696,
+          "name": "Frontière",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 1241,
+          "name": "Immigration",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.ThemeDeSociete"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 5259,
+          "name": "Art et essai",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.PublicVise"
+            ]
+          }
+        }
+      ],
+      "flags": {
+        "hasDvdRelease": false,
+        "hasNews": true,
+        "hasOnlineProduct": false,
+        "hasOnlineRelease": false,
+        "hasPhysicalProduct": false,
+        "hasPreview": false,
+        "hasShowtime": true,
+        "hasSoundtrack": false,
+        "hasTheaterRelease": true,
+        "hasTrivia": true,
+        "hasAwards": true,
+        "isClub300Approved": false,
+        "hasClub300News": false,
+        "isComingSoon": false,
+        "isPlayingNow": true,
+        "tvRelease": false
+      },
+      "customFlags": {
+        "isPremiere": false,
+        "weeklyOuting": false
+      },
+      "synopsisFull": "<p class=\"bo-p\">Ayant fui la guerre, une famille syrienne entreprend un éprouvant périple pour rejoindre la Suède. A la frontière entre le Belarus et la Pologne, synonyme d'entrée dans l'Europe, ils se retrouvent embourbés avec des dizaines d'autres familles, dans une zone marécageuse, à la merci de militaires aux méthodes violentes. Ils réalisent peu à peu qu'ils sont les otages malgré eux d'une situation qui les dépasse, où chacun - garde-frontières, activistes humanitaires, population locale - tente de jouer sa partition...</p>"
+    },
+    "showtimes": {
+      "dubbed": [],
+      "original": [
+        {
+          "__typename": "Showtime",
+          "internalId": 52597036025,
+          "startsAt": "2024-04-28T17:30:00",
+          "timeBeforeStart": "PT0H0M0S",
+          "service": [
+            "DISABLED_ACCESS"
+          ],
+          "experience": null,
+          "comfort": null,
+          "projection": [
+            "DIGITAL"
+          ],
+          "picture": null,
+          "sound": null,
+          "tags": [
+            "Showtime.Accessibility.Subtitled",
+            "Localization.Version.Original",
+            "Showtime.Accessibility.Accessible",
+            "Showtime.Event.OnlySession",
+            "Showtime.Event.Headline",
+            "Format.Projection.Digital",
+            "Theater.Service.DisabledAccess"
+          ],
+          "diffusionVersion": "ORIGINAL",
+          "data": {
+            "__typename": "ShowtimeData",
+            "ticketing": [
+              {
+                "__typename": "Ticketing",
+                "urls": [
+                  "https://www.ticketingcine.fr?nc=0716&lang=fr&ids=21370&ps=webedia"
+                ],
+                "type": "DESKTOP",
+                "provider": "default"
+              },
+              {
+                "__typename": "Ticketing",
+                "urls": [
+                  "https://relay.mvtx.us/ticketing/dbz?code_theater=P8110&gid_entity=movie.movie._.312029&tags=Showtime.Accessibility.Subtitled,Localization.Version.Original,Showtime.Accessibility.Accessible,Showtime.Event.OnlySession,Showtime.Event.Headline,Format.Projection.Digital&perfd=20240428&perft=17:30&code=VO; SUBTITLE; DISABLED ACCESS; ONLY SESSION; HEADLINE"
+                ],
+                "type": "DESKTOP",
+                "provider": "relay"
+              }
+            ]
+          },
+          "isPreview": false,
+          "isWeeklyMovieOuting": false
+        }
+      ],
+      "local": [],
+      "multiple": []
+    }
+  },
+  {
+    "movie": {
+      "synopsis": "Une course effrénée à travers une Amérique fracturée qui, dans un futur proche, est plus que jamais sur le fil du rasoir. ",
+      "synopsis_json": {
+        "__typename": "BodyJson",
+        "body": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Une course effrénée à travers une Amérique fracturée qui, dans un futur proche, est plus que jamais sur le fil du rasoir. "
+              }
+            ]
+          }
+        ]
+      },
+      "__typename": "Movie",
+      "internalId": 300282,
+      "id": "TW92aWU6MzAwMjgy",
+      "poster": {
+        "__typename": "InternalImage",
+        "id": "SW1hZ2U6MjIwNzc1OTE=",
+        "internalId": 22077591,
+        "url": "https://fr.web.img4.acsta.net/pictures/24/03/08/08/44/3432270.jpg",
+        "path": "/pictures/24/03/08/08/44/3432270.jpg"
+      },
+      "title": "Civil War",
+      "originalTitle": "Civil War",
+      "type": "FEATURE_FILM",
+      "runtime": "1h 49min",
+      "genres": [
+        {
+          "id": 13025,
+          "translate": "Action",
+          "tag": "ACTION"
+        },
+        {
+          "id": 13023,
+          "translate": "Thriller",
+          "tag": "THRILLER"
+        }
+      ],
+      "languages": [
+        "ENGLISH"
+      ],
+      "data": {
+        "__typename": "MovieData",
+        "seo": {
+          "__typename": "Seo",
+          "browsable": true,
+          "title": null
+        },
+        "productionYear": 2024
+      },
+      "stats": {
+        "userRating": {
+          "score": 3.72,
+          "count": 2374
+        },
+        "userReview": {
+          "count": 379
+        },
+        "pressReview": {
+          "score": 3.66,
+          "count": 38
+        },
+        "metric": {
+          "hits": 906610,
+          "sessions": 490929
+        },
+        "wantToSeeCount": 3256
+      },
+      "editorialReviews": [],
+      "releases": [
+        {
+          "__typename": "MovieRelease",
+          "releaseDate": {
+            "__typename": "PartialDate",
+            "date": "2024-04-17",
+            "precision": "day"
+          },
+          "name": "Released",
+          "certificate": {
+            "__typename": "Certificate",
+            "code": "-12A",
+            "label": "Interdit - 12 ans avec avertissement"
+          },
+          "advice": null,
+          "companyLimitation": null,
+          "releaseTags": {
+            "tagTypes": [
+              "THEATER"
+            ],
+            "tagFlags": null
+          },
+          "visaNumber": "161503"
+        }
+      ],
+      "credits": [
+        {
+          "person": {
+            "__typename": "Person",
+            "internalId": 91203,
+            "lastName": "Garland",
+            "firstName": "Alex",
+            "seo": {
+              "__typename": "Seo",
+              "browsable": true
+            },
+            "appearanceStats": {
+              "__typename": "PersonAppearanceStats",
+              "totalMovies": 19,
+              "totalSeries": 2
+            }
+          },
+          "position": {
+            "__typename": "Position",
+            "name": "DIRECTOR",
+            "department": "DIRECTION"
+          },
+          "rank": 1
+        }
+      ],
+      "cast": {
+        "__typename": "castMemberConnection",
+        "edges": [
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 9685,
+                "lastName": "Dunst",
+                "firstName": "Kirsten",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 70,
+                  "totalSeries": 8
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 1
+            }
+          },
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 90310,
+                "lastName": "Moura",
+                "firstName": "Wagner",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 41,
+                  "totalSeries": 14
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 2
+            }
+          },
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 786532,
+                "lastName": "Spaeny",
+                "firstName": "Cailee",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 13,
+                  "totalSeries": 4
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 3
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 9685,
+              "lastName": "Dunst",
+              "firstName": "Kirsten",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 70,
+                "totalSeries": 8
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 1
+          },
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 90310,
+              "lastName": "Moura",
+              "firstName": "Wagner",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 41,
+                "totalSeries": 14
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 2
+          },
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 786532,
+              "lastName": "Spaeny",
+              "firstName": "Cailee",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 13,
+                "totalSeries": 4
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 3
+          }
+        ]
+      },
+      "countries": [
+        {
+          "__typename": "Country",
+          "id": 5002,
+          "name": "USA",
+          "localizedName": "U.S.A."
+        }
+      ],
+      "relatedTags": [
+        {
+          "__typename": "Tag",
+          "internalId": 1427,
+          "name": "Guerre civile",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 5291,
+          "name": "Etats-Unis",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Location",
+              "Tag.Localization.Country"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 5176,
+          "name": "Journaliste / Journalisme / Reporter",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 5371,
+          "name": "Dystopie",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.SubGenre"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 374,
+          "name": "Soldat / Militaire",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 5313,
+          "name": "Maison Blanche",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Location",
+              "Tag.Localization.Place"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 691,
+          "name": "Anticipation / Futur / Avenir proche",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Time"
+            ]
+          }
+        }
+      ],
+      "flags": {
+        "hasDvdRelease": false,
+        "hasNews": true,
+        "hasOnlineProduct": false,
+        "hasOnlineRelease": false,
+        "hasPhysicalProduct": false,
+        "hasPreview": false,
+        "hasShowtime": true,
+        "hasSoundtrack": false,
+        "hasTheaterRelease": true,
+        "hasTrivia": true,
+        "hasAwards": false,
+        "isClub300Approved": false,
+        "hasClub300News": false,
+        "isComingSoon": false,
+        "isPlayingNow": true,
+        "tvRelease": false
+      },
+      "customFlags": {
+        "isPremiere": false,
+        "weeklyOuting": false
+      },
+      "synopsisFull": "<p class=\"bo-p\">Une course effrénée à travers une Amérique fracturée qui, dans un futur proche, est plus que jamais sur le fil du rasoir. </p>"
+    },
+    "showtimes": {
+      "dubbed": [],
+      "original": [
+        {
+          "__typename": "Showtime",
+          "internalId": 52597036011,
+          "startsAt": "2024-04-28T18:30:00",
+          "timeBeforeStart": "PT0H0M0S",
+          "service": [
+            "DISABLED_ACCESS"
+          ],
+          "experience": null,
+          "comfort": null,
+          "projection": [
+            "DIGITAL"
+          ],
+          "picture": null,
+          "sound": null,
+          "tags": [
+            "Showtime.Accessibility.Subtitled",
+            "Localization.Version.Original",
+            "Format.Projection.Digital",
+            "Theater.Service.DisabledAccess"
+          ],
+          "diffusionVersion": "ORIGINAL",
+          "data": {
+            "__typename": "ShowtimeData",
+            "ticketing": [
+              {
+                "__typename": "Ticketing",
+                "urls": [
+                  "https://www.ticketingcine.fr?nc=0716&lang=fr&ids=21439&ps=webedia"
+                ],
+                "type": "DESKTOP",
+                "provider": "default"
+              },
+              {
+                "__typename": "Ticketing",
+                "urls": [
+                  "https://relay.mvtx.us/ticketing/dbz?code_theater=P8110&gid_entity=movie.movie._.300282&tags=Showtime.Accessibility.Subtitled,Localization.Version.Original,Format.Projection.Digital&perfd=20240428&perft=18:30&code=VO; SUBTITLE"
+                ],
+                "type": "DESKTOP",
+                "provider": "relay"
+              }
+            ]
+          },
+          "isPreview": false,
+          "isWeeklyMovieOuting": false
+        }
+      ],
+      "local": [],
+      "multiple": []
+    }
+  },
+  {
+    "movie": {
+      "synopsis": "La famille Spengler revient là où tout a commencé, l'emblématique caserne de pompiers de New York. Ils vont alors devoir faire équipe avec les membres originels de S.O.S. Fantômes, qui ont mis en place un laboratoire de recherche top secret pour faire passer la chasse aux fantômes à la vitesse supérieure.",
+      "synopsis_json": {
+        "__typename": "BodyJson",
+        "body": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "La famille Spengler revient là où tout a commencé, l'emblématique caserne de pompiers de New York. Ils vont alors devoir faire équipe avec les membres originels de S.O.S. Fantômes, qui ont mis en place un laboratoire de recherche top secret pour faire passer la chasse aux fantômes à la vitesse supérieure. Lorsque la découverte d'un ancien artefact libère une armée de fantômes qui répand une menace de glace sur la ville, les deux équipes S.O.S. Fantômes doivent unir leurs forces pour protéger leur maison et sauver le monde d'une seconde ère glaciaire."
+              }
+            ]
+          }
+        ]
+      },
+      "__typename": "Movie",
+      "internalId": 303942,
+      "id": "TW92aWU6MzAzOTQy",
+      "poster": {
+        "__typename": "InternalImage",
+        "id": "SW1hZ2U6MjIwNzM5OTE=",
+        "internalId": 22073991,
+        "url": "https://fr.web.img6.acsta.net/pictures/24/02/23/09/52/1147009.jpg",
+        "path": "/pictures/24/02/23/09/52/1147009.jpg"
+      },
+      "title": "S.O.S. Fantômes : La Menace de glace",
+      "originalTitle": "Ghostbusters: Frozen Empire",
+      "type": "FEATURE_FILM",
+      "runtime": "1h 56min",
+      "genres": [
+        {
+          "id": 13025,
+          "translate": "Action",
+          "tag": "ACTION"
+        },
+        {
+          "id": 13001,
+          "translate": "Aventure",
+          "tag": "ADVENTURE"
+        },
+        {
+          "id": 13012,
+          "translate": "Fantastique",
+          "tag": "FANTASY"
+        }
+      ],
+      "languages": [
+        "ENGLISH"
+      ],
+      "data": {
+        "__typename": "MovieData",
+        "seo": {
+          "__typename": "Seo",
+          "browsable": true,
+          "title": null
+        },
+        "productionYear": 2024
+      },
+      "stats": {
+        "userRating": {
+          "score": 2.65,
+          "count": 1024
+        },
+        "userReview": {
+          "count": 200
+        },
+        "pressReview": {
+          "score": 2.43,
+          "count": 23
+        },
+        "metric": {
+          "hits": 578915,
+          "sessions": 331800
+        },
+        "wantToSeeCount": 2040
+      },
+      "editorialReviews": [],
+      "releases": [
+        {
+          "__typename": "MovieRelease",
+          "releaseDate": {
+            "__typename": "PartialDate",
+            "date": "2024-04-10",
+            "precision": "day"
+          },
+          "name": "Released",
+          "certificate": {
+            "__typename": "Certificate",
+            "code": "U",
+            "label": "Tout public"
+          },
+          "advice": null,
+          "companyLimitation": null,
+          "releaseTags": {
+            "tagTypes": [
+              "THEATER"
+            ],
+            "tagFlags": null
+          },
+          "visaNumber": "161531"
+        }
+      ],
+      "credits": [
+        {
+          "person": {
+            "__typename": "Person",
+            "internalId": 132179,
+            "lastName": "Kenan",
+            "firstName": "Gil",
+            "seo": {
+              "__typename": "Seo",
+              "browsable": true
+            },
+            "appearanceStats": {
+              "__typename": "PersonAppearanceStats",
+              "totalMovies": 10,
+              "totalSeries": 2
+            }
+          },
+          "position": {
+            "__typename": "Position",
+            "name": "DIRECTOR",
+            "department": "DIRECTION"
+          },
+          "rank": 2
+        }
+      ],
+      "cast": {
+        "__typename": "castMemberConnection",
+        "edges": [
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 23848,
+                "lastName": "Rudd",
+                "firstName": "Paul",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 77,
+                  "totalSeries": 20
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 1
+            }
+          },
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 541934,
+                "lastName": "Coon",
+                "firstName": "Carrie",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 16,
+                  "totalSeries": 9
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 2
+            }
+          },
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 757208,
+                "lastName": "Wolfhard",
+                "firstName": "Finn",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 15,
+                  "totalSeries": 3
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 3
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 23848,
+              "lastName": "Rudd",
+              "firstName": "Paul",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 77,
+                "totalSeries": 20
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 1
+          },
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 541934,
+              "lastName": "Coon",
+              "firstName": "Carrie",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 16,
+                "totalSeries": 9
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 2
+          },
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 757208,
+              "lastName": "Wolfhard",
+              "firstName": "Finn",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 15,
+                "totalSeries": 3
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 3
+          }
+        ]
+      },
+      "countries": [
+        {
+          "__typename": "Country",
+          "id": 5002,
+          "name": "USA",
+          "localizedName": "U.S.A."
+        }
+      ],
+      "relatedTags": [
+        {
+          "__typename": "Tag",
+          "internalId": 2514,
+          "name": "Fantômes / Esprits",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 2512,
+          "name": "Suite / Sequel",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.SubGenre"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 2771,
+          "name": "Equipe / Equipage",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 1062,
+          "name": "Personnage culte",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Characteristic"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 1192,
+          "name": "Surnaturel / Phénomène surnaturel / Paranormal",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 4806,
+          "name": "Bande d'amis",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 5167,
+          "name": "Glace et glaçons",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 1938,
+          "name": "Neige - froid - hiver",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 241,
+          "name": "Pouvoirs surnaturels",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 1054,
+          "name": "Mère célibataire",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.ThemeDeSociete"
+            ]
+          }
+        }
+      ],
+      "flags": {
+        "hasDvdRelease": false,
+        "hasNews": true,
+        "hasOnlineProduct": false,
+        "hasOnlineRelease": false,
+        "hasPhysicalProduct": false,
+        "hasPreview": false,
+        "hasShowtime": true,
+        "hasSoundtrack": false,
+        "hasTheaterRelease": true,
+        "hasTrivia": true,
+        "hasAwards": false,
+        "isClub300Approved": false,
+        "hasClub300News": false,
+        "isComingSoon": false,
+        "isPlayingNow": true,
+        "tvRelease": false
+      },
+      "customFlags": {
+        "isPremiere": false,
+        "weeklyOuting": false
+      },
+      "synopsisFull": "<p class=\"bo-p\">La famille Spengler revient là où tout a commencé, l'emblématique caserne de pompiers de New York. Ils vont alors devoir faire équipe avec les membres originels de S.O.S. Fantômes, qui ont mis en place un laboratoire de recherche top secret pour faire passer la chasse aux fantômes à la vitesse supérieure. Lorsque la découverte d'un ancien artefact libère une armée de fantômes qui répand une menace de glace sur la ville, les deux équipes S.O.S. Fantômes doivent unir leurs forces pour protéger leur maison et sauver le monde d'une seconde ère glaciaire.</p>"
+    },
+    "showtimes": {
+      "dubbed": [],
+      "original": [
+        {
+          "__typename": "Showtime",
+          "internalId": 52597036051,
+          "startsAt": "2024-04-29T18:30:00",
+          "timeBeforeStart": "PT0H0M0S",
+          "service": [
+            "DISABLED_ACCESS"
+          ],
+          "experience": null,
+          "comfort": null,
+          "projection": [
+            "DIGITAL"
+          ],
+          "picture": null,
+          "sound": null,
+          "tags": [
+            "Showtime.Accessibility.Subtitled",
+            "Localization.Version.Original",
+            "Format.Projection.Digital",
+            "Theater.Service.DisabledAccess"
+          ],
+          "diffusionVersion": "ORIGINAL",
+          "data": {
+            "__typename": "ShowtimeData",
+            "ticketing": [
+              {
+                "__typename": "Ticketing",
+                "urls": [
+                  "https://www.ticketingcine.fr?nc=0716&lang=fr&ids=21372&ps=webedia"
+                ],
+                "type": "DESKTOP",
+                "provider": "default"
+              },
+              {
+                "__typename": "Ticketing",
+                "urls": [
+                  "https://relay.mvtx.us/ticketing/dbz?code_theater=P8110&gid_entity=movie.movie._.303942&tags=Showtime.Accessibility.Subtitled,Localization.Version.Original,Format.Projection.Digital&perfd=20240429&perft=18:30&code=VO; SUBTITLE"
+                ],
+                "type": "DESKTOP",
+                "provider": "relay"
+              }
+            ]
+          },
+          "isPreview": false,
+          "isWeeklyMovieOuting": false
+        }
+      ],
+      "local": [],
+      "multiple": []
+    }
+  },
+  {
+    "movie": {
+      "synopsis": "En Inde, un jeune homme sort de prison. Il se retrouve dans un monde où règne la cupidité des chefs d'entreprise et, à l'inverse, l'érosion des valeurs spirituelles.",
+      "synopsis_json": {
+        "__typename": "BodyJson",
+        "body": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Ce film aborde la quête initiatique d'un homme qui cherche à se venger des dirigeants corrompus qui ont assassiné sa mère et maintiennent les pauvres et les plus vulnérables de la société dans une constante précarité."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Inspiré de la légende d’Hanuman, l’homme singe, personnage mythique et véritable incarnation de la force et du courage en Inde, le film met en vedette Dev Patel lui-même, dans le rôle de Kid, un gamin des rues qui, après l'horrible massacre de son village natal, a grandi orphelin dans les bas fonds de la ville fictive de Yatana. Il finit par gagner sa vie dans un club qui organise des combats clandestins où dissimulé derrière un masque de gorille, il se laisse battre au sang par des adversaires pour de l'argent."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Après toutes ces années à contenir sa rage le jeune homme trouve le moyen d'accéder à la sinistre élite de la ville. Subitement submergé par son traumatisme d'enfance il va se retourner violemment contre ceux qui lui ont tout pris et trouver ce que les mystérieuses cicatrices de ses mains cachent en vérité."
+              }
+            ]
+          }
+        ]
+      },
+      "__typename": "Movie",
+      "internalId": 269122,
+      "id": "TW92aWU6MjY5MTIy",
+      "poster": {
+        "__typename": "InternalImage",
+        "id": "SW1hZ2U6MjIwNjY4NzM=",
+        "internalId": 22066873,
+        "url": "https://fr.web.img2.acsta.net/pictures/24/01/30/14/11/4017896.jpg",
+        "path": "/pictures/24/01/30/14/11/4017896.jpg"
+      },
+      "title": "Monkey Man",
+      "originalTitle": "Monkey Man",
+      "type": "FEATURE_FILM",
+      "runtime": "2h 00min",
+      "genres": [
+        {
+          "id": 13025,
+          "translate": "Action",
+          "tag": "ACTION"
+        },
+        {
+          "id": 13023,
+          "translate": "Thriller",
+          "tag": "THRILLER"
+        }
+      ],
+      "languages": [
+        "ENGLISH"
+      ],
+      "data": {
+        "__typename": "MovieData",
+        "seo": {
+          "__typename": "Seo",
+          "browsable": true,
+          "title": null
+        },
+        "productionYear": 2024
+      },
+      "stats": {
+        "userRating": {
+          "score": 3.6,
+          "count": 493
+        },
+        "userReview": {
+          "count": 59
+        },
+        "pressReview": {
+          "score": 3,
+          "count": 14
+        },
+        "metric": {
+          "hits": 231504,
+          "sessions": 137998
+        },
+        "wantToSeeCount": 986
+      },
+      "editorialReviews": [],
+      "releases": [
+        {
+          "__typename": "MovieRelease",
+          "releaseDate": {
+            "__typename": "PartialDate",
+            "date": "2024-04-17",
+            "precision": "day"
+          },
+          "name": "Released",
+          "certificate": {
+            "__typename": "Certificate",
+            "code": "-12A",
+            "label": "Interdit - 12 ans avec avertissement"
+          },
+          "advice": null,
+          "companyLimitation": null,
+          "releaseTags": {
+            "tagTypes": [
+              "THEATER"
+            ],
+            "tagFlags": null
+          },
+          "visaNumber": "161626"
+        }
+      ],
+      "credits": [
+        {
+          "person": {
+            "__typename": "Person",
+            "internalId": 189945,
+            "lastName": "Patel",
+            "firstName": "Dev",
+            "seo": {
+              "__typename": "Seo",
+              "browsable": true
+            },
+            "appearanceStats": {
+              "__typename": "PersonAppearanceStats",
+              "totalMovies": 24,
+              "totalSeries": 5
+            }
+          },
+          "position": {
+            "__typename": "Position",
+            "name": "DIRECTOR",
+            "department": "DIRECTION"
+          },
+          "rank": 1
+        }
+      ],
+      "cast": {
+        "__typename": "castMemberConnection",
+        "edges": [
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 189945,
+                "lastName": "Patel",
+                "firstName": "Dev",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 24,
+                  "totalSeries": 5
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 1
+            }
+          },
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 928306,
+                "lastName": "Kher",
+                "firstName": "Sikandar",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 3,
+                  "totalSeries": 2
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 2
+            }
+          },
+          {
+            "node": {
+              "actor": {
+                "__typename": "Person",
+                "internalId": 266142,
+                "lastName": "Copley",
+                "firstName": "Sharlto",
+                "seo": {
+                  "__typename": "Seo",
+                  "browsable": true
+                },
+                "appearanceStats": {
+                  "__typename": "PersonAppearanceStats",
+                  "totalMovies": 26,
+                  "totalSeries": 6
+                }
+              },
+              "voiceActor": null,
+              "originalVoiceActor": null,
+              "rank": 3
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 189945,
+              "lastName": "Patel",
+              "firstName": "Dev",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 24,
+                "totalSeries": 5
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 1
+          },
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 928306,
+              "lastName": "Kher",
+              "firstName": "Sikandar",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 3,
+                "totalSeries": 2
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 2
+          },
+          {
+            "actor": {
+              "__typename": "Person",
+              "internalId": 266142,
+              "lastName": "Copley",
+              "firstName": "Sharlto",
+              "seo": {
+                "__typename": "Seo",
+                "browsable": true
+              },
+              "appearanceStats": {
+                "__typename": "PersonAppearanceStats",
+                "totalMovies": 26,
+                "totalSeries": 6
+              }
+            },
+            "voiceActor": null,
+            "originalVoiceActor": null,
+            "rank": 3
+          }
+        ]
+      },
+      "countries": [
+        {
+          "__typename": "Country",
+          "id": 5002,
+          "name": "USA",
+          "localizedName": "U.S.A."
+        },
+        {
+          "__typename": "Country",
+          "id": 5018,
+          "name": "Canada",
+          "localizedName": "Canada"
+        },
+        {
+          "__typename": "Country",
+          "id": 5042,
+          "name": "India",
+          "localizedName": "Inde"
+        },
+        {
+          "__typename": "Country",
+          "id": 5113,
+          "name": "Singapore",
+          "localizedName": "Singapour"
+        }
+      ],
+      "relatedTags": [
+        {
+          "__typename": "Tag",
+          "internalId": 660,
+          "name": "Premier film",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Characteristic"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 3678,
+          "name": "Ex-détenu / Sortie de prison",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 5137,
+          "name": "Combat / Bagarre / Castagne",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 4283,
+          "name": "Ils se mettent en scène",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 168,
+          "name": "Inde",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Location",
+              "Tag.Localization.Country"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 1987,
+          "name": "Couteaux et armes blanches",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 1046,
+          "name": "Violence",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Ambiance"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 1784,
+          "name": "Armes à feu",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 5324,
+          "name": "Adrénaline",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Envies"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 4879,
+          "name": "Seul contre tous",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        },
+        {
+          "__typename": "Tag",
+          "internalId": 1061,
+          "name": "Flashback",
+          "scope": null,
+          "data": {
+            "seo": {
+              "browsable": true,
+              "friendly": false,
+              "scope": {
+                "userRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "pressRating": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "popularity": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                },
+                "ranking": {
+                  "movie": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  },
+                  "series": {
+                    "title": null,
+                    "subTitle": null,
+                    "description": null
+                  }
+                }
+              }
+            }
+          },
+          "tags": {
+            "list": [
+              "Tag.Type.Keyword"
+            ]
+          }
+        }
+      ],
+      "flags": {
+        "hasDvdRelease": false,
+        "hasNews": true,
+        "hasOnlineProduct": false,
+        "hasOnlineRelease": false,
+        "hasPhysicalProduct": false,
+        "hasPreview": false,
+        "hasShowtime": true,
+        "hasSoundtrack": false,
+        "hasTheaterRelease": true,
+        "hasTrivia": true,
+        "hasAwards": false,
+        "isClub300Approved": false,
+        "hasClub300News": false,
+        "isComingSoon": false,
+        "isPlayingNow": true,
+        "tvRelease": false
+      },
+      "customFlags": {
+        "isPremiere": false,
+        "weeklyOuting": false
+      },
+      "synopsisFull": "<p class=\"bo-p\">Ce film aborde la quête initiatique d'un homme qui cherche à se venger des dirigeants corrompus qui ont assassiné sa mère et maintiennent les pauvres et les plus vulnérables de la société dans une constante précarité.</p><p class=\"bo-p\">Inspiré de la légende d’Hanuman, l’homme singe, personnage mythique et véritable incarnation de la force et du courage en Inde, le film met en vedette Dev Patel lui-même, dans le rôle de Kid, un gamin des rues qui, après l'horrible massacre de son village natal, a grandi orphelin dans les bas fonds de la ville fictive de Yatana. Il finit par gagner sa vie dans un club qui organise des combats clandestins où dissimulé derrière un masque de gorille, il se laisse battre au sang par des adversaires pour de l'argent.</p><p class=\"bo-p\">Après toutes ces années à contenir sa rage le jeune homme trouve le moyen d'accéder à la sinistre élite de la ville. Subitement submergé par son traumatisme d'enfance il va se retourner violemment contre ceux qui lui ont tout pris et trouver ce que les mystérieuses cicatrices de ses mains cachent en vérité.</p>"
+    },
+    "showtimes": {
+      "dubbed": [],
+      "original": [
+        {
+          "__typename": "Showtime",
+          "internalId": 52597036050,
+          "startsAt": "2024-05-01T18:30:00",
+          "timeBeforeStart": "PT0H0M0S",
+          "service": [
+            "DISABLED_ACCESS"
+          ],
+          "experience": null,
+          "comfort": null,
+          "projection": [
+            "DIGITAL"
+          ],
+          "picture": null,
+          "sound": null,
+          "tags": [
+            "Showtime.Accessibility.Subtitled",
+            "Localization.Version.Original",
+            "Format.Projection.Digital",
+            "Theater.Service.DisabledAccess"
+          ],
+          "diffusionVersion": "ORIGINAL",
+          "data": {
+            "__typename": "ShowtimeData",
+            "ticketing": [
+              {
+                "__typename": "Ticketing",
+                "urls": [
+                  "https://www.ticketingcine.fr?nc=0716&lang=fr&ids=21528&ps=webedia"
+                ],
+                "type": "DESKTOP",
+                "provider": "default"
+              },
+              {
+                "__typename": "Ticketing",
+                "urls": [
+                  "https://relay.mvtx.us/ticketing/dbz?code_theater=P8110&gid_entity=movie.movie._.269122&tags=Showtime.Accessibility.Subtitled,Localization.Version.Original,Format.Projection.Digital&perfd=20240501&perft=18:30&code=VO; SUBTITLE"
+                ],
+                "type": "DESKTOP",
+                "provider": "relay"
+              }
+            ]
+          },
+          "isPreview": false,
+          "isWeeklyMovieOuting": false
+        }
+      ],
+      "local": [],
+      "multiple": []
+    }
+  }
+]
