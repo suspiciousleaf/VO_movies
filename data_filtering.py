@@ -44,7 +44,6 @@ for item in data:
             release_year,
         )
     )
-    # break
 
 for item in movie_list:
     print(item)
