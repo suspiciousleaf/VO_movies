@@ -12,7 +12,7 @@ class Movie:
         cast: list[str] = [""],
         languages: list[str] = [""],
         genres: list[str] = [""],
-        release_year: int = 0,
+        release_date: int = 0,
     ) -> None:
         # Original title
         self.original_title = original_title
@@ -31,10 +31,10 @@ class Movie:
         # Genre(s)
         self.genres = genres
         # Release year
-        self.release_year = release_year
+        self.release_date = release_date
 
     def __str__(self):
-        return f"Original Title: {self.original_title} \nFrench Title: {self.french_title} \nPoster: {self.image_poster} \nRumtime: {self.runtime} \nSynopsis:{self.synopsis} \nCast: {self.cast} \nLanguages: {self.languages} \nGenre(s): {self.genres} \nRelease Year: {self.release_year}"
+        return f"Original Title: {self.original_title} \nFrench Title: {self.french_title} \nPoster: {self.image_poster} \nRuntime: {self.runtime} \nSynopsis:{self.synopsis} \nCast: {self.cast} \nLanguages: {self.languages} \nGenre(s): {self.genres} \nRelease Date: {self.release_date}"
 
     def __repr__(self):
-        return f"Movie('{self.original_title}', '{self.french_title}', '{self.image_poster}', '{self.runtime}', '{self.synopsis}', {self.cast}, {self.languages}, {self.genres}, {self.release_year})"
+        return f"Movie('{self.original_title}', '{self.french_title}', '{self.image_poster}', '{self.runtime}', '{self.synopsis}', {self.cast}, {self.languages}, {self.genres}, {self.release_date})"
