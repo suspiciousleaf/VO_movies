@@ -4,6 +4,7 @@
 class Movie:
     def __init__(
         self,
+        allocine_id: str = "",
         original_title: str = "",
         french_title: str = "",
         image_poster: str = "",
@@ -14,6 +15,8 @@ class Movie:
         genres: list[str] = [""],
         release_date: int = 0,
     ) -> None:
+        # ID (UUID)
+        self.allocine_id = allocine_id
         # Original title
         self.original_title = original_title
         # French title
