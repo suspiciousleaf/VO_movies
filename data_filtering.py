@@ -83,4 +83,4 @@ all_keys = sorted([allocine_id for allocine_id in all_movies.keys()])
 #     print(item, all_movies[item].original_title)
 
 pprint(all_keys)
-#! Go watch some database structure videos and plan the schema!
+
