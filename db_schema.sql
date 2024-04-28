@@ -19,7 +19,8 @@ CREATE TABLE cinemas (
     name VARCHAR(191),
     address VARCHAR(255),
     info VARCHAR(255),
-    gps POINT
+    gps POINT,
+    town VARCHAR(191)
 );
 
 -- Create showtimes table

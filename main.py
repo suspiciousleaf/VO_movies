@@ -16,6 +16,8 @@ cinemas = {
     "P8108": "L'Estive - Foix",
     "P8111": "Cinéma Casino - Ax-les-Thermes",
     "P7201": "Rex - Pamiers",
+    "P1028": "Véo - Castelnaudary",
+    "W0950": "Espace Culturel André Malraux - Mirepoix",
 }
 
 url_list = [
