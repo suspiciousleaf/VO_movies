@@ -22,6 +22,7 @@ def connect_to_database(original_func):
                 use_pure=True,
             )
             cursor = db.cursor()
+            # kwargs for db and cursor to avoid conflicts with self
             results = original_func(db=db, cursor=cursor, *args, **kwargs)
 
         except Exception as e:
