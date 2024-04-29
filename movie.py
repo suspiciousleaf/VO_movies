@@ -1,10 +1,16 @@
 # Need to make one table for each movie with these details, one table with show times that links to the movie table.
 
 
+class MovieManager:
+    def __init__(self):
+        self.movies = []
+
+
 class Movie:
     def __init__(
         self,
-        allocine_id: str = "",
+        # `movie_id` is a 16 character with padding Base64 encoding of f"Movie:{showing['movie']['internalId']}"
+        movie_id: str = "",
         original_title: str = "",
         french_title: str = "",
         image_poster: str = "",
@@ -15,8 +21,8 @@ class Movie:
         genres: list[str] = [""],
         release_date: int = 0,
     ) -> None:
-        # ID (UUID)
-        self.allocine_id = allocine_id
+        # ID
+        self.movie_id = movie_id
         # Original title
         self.original_title = original_title
         # French title
@@ -37,7 +43,7 @@ class Movie:
         self.release_date = release_date
 
     def __str__(self):
-        return f"Original Title: {self.original_title} \nFrench Title: {self.french_title} \nPoster: {self.image_poster} \nRuntime: {self.runtime} \nSynopsis:{self.synopsis} \nCast: {self.cast} \nLanguages: {self.languages} \nGenre(s): {self.genres} \nRelease Date: {self.release_date}"
+        return f"Movie ID: {self.movie_id} \nOriginal Title: {self.original_title} \nFrench Title: {self.french_title} \nPoster: {self.image_poster} \nRuntime: {self.runtime} \nSynopsis:{self.synopsis} \nCast: {self.cast} \nLanguages: {self.languages} \nGenre(s): {self.genres} \nRelease Date: {self.release_date}"
 
     def __repr__(self):
-        return f"Movie('{self.original_title}', '{self.french_title}', '{self.image_poster}', '{self.runtime}', '{self.synopsis}', {self.cast}, {self.languages}, {self.genres}, {self.release_date})"
+        return f"Movie('{self.movie_id}', '{self.original_title}', '{self.french_title}', '{self.image_poster}', '{self.runtime}', '{self.synopsis}', {self.cast}, {self.languages}, {self.genres}, {self.release_date})"

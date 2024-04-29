@@ -1,7 +1,6 @@
 -- Create movies table with auto-incremented integer for movie_id
 CREATE TABLE movies (
-    movie_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    allocine_id VARCHAR(32),
+    movie_id CHAR(16) PRIMARY KEY,
     original_title VARCHAR(191),
     french_title VARCHAR(191),
     image_poster VARCHAR(255),
@@ -16,8 +15,8 @@ CREATE TABLE movies (
 -- Create cinemas table
 CREATE TABLE cinemas (
     cinema_id CHAR(5) PRIMARY KEY,
-    name VARCHAR(191),
-    address VARCHAR(255),
+    `name` VARCHAR(191),
+    `address` VARCHAR(255),
     info VARCHAR(255),
     gps POINT,
     town VARCHAR(191)
@@ -26,7 +25,7 @@ CREATE TABLE cinemas (
 -- Create showtimes table
 CREATE TABLE showtimes (
     showtime_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    movie_id INT UNSIGNED,
+    movie_id CHAR(16),
     cinema_id CHAR(5),
     start_time DATETIME,
     CONSTRAINT fk_movie_id FOREIGN KEY (movie_id) REFERENCES movies(movie_id),

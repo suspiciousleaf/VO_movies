@@ -15,22 +15,26 @@ class Showing:
 
 class ShowingsManager:
     def __init__(self):
-        self.showings = self.retrieve_showings()
+        self.old_showings = self.retrieve_showings()
+        self.new_showings = []
 
     @connect_to_database
     def retrieve_showings(db, cursor):
         try:
-            cursor = db.cursor(dictionary=True)
-
+            cursor = db.cursor()
             table_name = "showtimes"
-
             query = f"SELECT movie_id, cinema_id, start_time FROM {table_name};"
-
             cursor.execute(query)
-
             results = cursor.fetchall()
 
             return results
 
         except Exception as e:
             print(f"An error occurred: {str(e)}")
+
+    def set_new_showings(self, new_showings: list):
+        self.new_showings += new_showings
+
+
+#! Add functions to retrieve showings, compare newly scraped showigns to those from database, and add new ones
+#! Maybe add cinema manager to retrieve cinemas from database for front end

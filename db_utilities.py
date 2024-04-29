@@ -17,7 +17,7 @@ def connect_to_database(original_func):
                 user=db_user,
                 password=db_password,
                 host=db_host,
-                port=3333,
+                port=db_port,
                 database=database,
                 use_pure=True,
             )
@@ -34,26 +34,3 @@ def connect_to_database(original_func):
             return results
 
     return make_connection
-
-
-@connect_to_database
-def retrieve_showings(db, cursor):
-    try:
-        cursor = db.cursor(dictionary=True)
-
-        table_name = "showtimes"
-
-        query = f"SELECT movie_id, cinema_id, start_time FROM {table_name};"
-
-        cursor.execute(query)
-
-        results = cursor.fetchall()
-
-        return results
-
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
-
-
-cinemas = retrieve_showings()
-print(cinemas[1])
