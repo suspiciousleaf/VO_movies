@@ -22,9 +22,7 @@ def connect_to_database(original_func):
                 use_pure=True,
             )
             cursor = db.cursor()
-            results = original_func(
-                db=db, cursor=cursor, *args, **kwargs
-            )  # (db, cursor, *args, **kwargs)
+            results = original_func(db=db, cursor=cursor, *args, **kwargs)
 
         except Exception as e:
             print(f"An error occurred: {str(e)}")
