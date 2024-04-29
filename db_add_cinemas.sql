@@ -39,3 +39,6 @@ VALUES ("P1028", "Véo", "31 Boulevard Lapasset 11400 Castelnaudary", NULL, ST_G
 
 INSERT INTO cinemas (cinema_id, `name`, `address`, info, gps, town) 
 VALUES ("W0950", "Espace Culturel André Malraux", "14 Rue Vidal Lablache 09500 Mirepoix", NULL, ST_GeomFromText("POINT(43.089590 1.875012)", 4326), "Mirepoix");
+
+-- Add a single showing to showtimes table for testing:
+INSERT INTO showtimes (movie_id, cinema_id, start_time) VALUES ("TW92aWU6MjY5MTIy", "P8110", CONVERT('2024-05-01T18:30:00', DATETIME));
