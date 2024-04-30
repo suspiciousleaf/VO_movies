@@ -1,4 +1,5 @@
 from datetime import datetime
+import hashlib
 from db_utilities import connect_to_database
 
 
@@ -13,6 +14,18 @@ class Showing:
         self.movie_id = movie_id
         self.start_time = start_time
         self.cinema_id = cinema_id
+        self.hash_id = self.calculate_hash(
+            self.movie_id, self.cinema_id, self.start_time
+        )
+
+    # Hash function to create a single data point for each showing that can be compared with newly scraped showings, to identify showings not yet in the database
+    def calculate_hash(movie_id: str, cinema_id: str, start_time: datetime) -> str:
+        # Create a single string
+        data = f"{movie_id}{cinema_id}{start_time}"
+        # Calculate the SHA-256 hash
+        hash_value = hashlib.sha256(data.encode()).hexdigest()
+
+        return hash_value
 
 
 class ShowingsManager:
@@ -24,7 +37,7 @@ class ShowingsManager:
     def retrieve_showings(self, db, cursor):
         try:
             table_name = "showtimes"
-            query = f"SELECT movie_id, cinema_id, start_time FROM {table_name};"
+            query = f"SELECT hash_id FROM {table_name};"
             cursor.execute(query)
             results = cursor.fetchall()
 
@@ -41,13 +54,14 @@ class ShowingsManager:
                     movie_id = item["movie"]["id"]
                     date_str = showing["startsAt"]
                     start_time = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
+                    # Create new showing object, to create hash_id for comparison with current showings
+                    new_showing = Showing(movie_id, cinema_id, start_time)
 
-                    if (movie_id, cinema_id, start_time) in self.current_showings:
+                    if new_showing.hash_id in self.current_showings:
                         continue
                     else:
-                        new_showing = Showing(movie_id, cinema_id, start_time)
                         self.new_showings.append(new_showing)
-                        self.current_showings.add((movie_id, cinema_id, start_time))
+                        self.current_showings.add(new_showing.hash_id)
                 except:
                     continue
 
