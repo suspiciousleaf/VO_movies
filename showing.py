@@ -50,11 +50,11 @@ class ShowingsManager:
         except Exception as e:
             print(f"ShowingsManager.retrieve_showings: An error occurred: {str(e)}")
 
-    def showing_already_in_database(self, hash_id):
-        """Check if hash_id is recognised. Return False if showing not in database"""
-        return hash_id in self.current_showings
+    def showing_already_in_database(self, hash_id: str):
+        """Check if hash_id is recognised. Return False if showing not in database. Convert to tuple to match data type from database"""
+        return (hash_id,) in self.current_showings
 
-    def create_showing(self, item: dict, cinema_id: str) -> Showing:
+    def process_showing(self, item: dict, cinema_id: str) -> Showing:
         #! Find a way to pass cinema_id in from scraper - data not present in json. Could get by looping over each cinema, or maybe from url in response object
         """Create Showing object(s) for each movie & showing object in scraped json, check if showing is already in database, and if not add to new_showings list for batch addition"""
 
@@ -69,10 +69,14 @@ class ShowingsManager:
                     new_showing = Showing(movie_id, cinema_id, start_time)
                     # Check if new showing is already in database by comparing hash_id, if not add to list to new showings to be added to database
                     if not self.showing_already_in_database(new_showing.hash_id):
-                        self.new_showings.append(new_showing)
-                        self.current_showings.add(new_showing.hash_id)
+                        self.add_new_showing(new_showing)
                 except:
                     continue
+
+    def add_new_showing(self, new_showing: Showing):
+        """Add new showing to new_showings list to be added to database, and add hash_id to set"""
+        self.new_showings.append(new_showing)
+        self.current_showings.add((new_showing.hash_id,))
 
     @connect_to_database
     def add_new_showings_to_database(self, db=None, cursor=None):
