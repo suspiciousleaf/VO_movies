@@ -10,7 +10,7 @@ TABLE_NAME = "showtimes"
 class Showing:
 
     @staticmethod
-    def get_columns() -> tuple(str):
+    def get_columns() -> tuple[str]:
         """Returns a tuple of the database column names to be written to"""
         return ("movie_id", "cinema_id", "start_time", "hash_id")
 
@@ -36,6 +36,12 @@ class Showing:
         hash_value = hashlib.sha256(data.encode()).hexdigest()
 
         return hash_value
+
+    def __str__(self):
+        return f"Movie ID: {self.movie_id} \nCinema ID: {self.cinema_id} \nStart Time: {self.start_time} \nHash ID: {self.hash_id}"
+
+    def __repr__(self):
+        return f"Showing({self.movie_id}, {self.cinema_id}, {self.start_time})"
 
 
 class ShowingsManager:
