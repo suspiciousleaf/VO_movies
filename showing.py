@@ -19,7 +19,7 @@ class Showing:
         movie_id: str,
         cinema_id: str,
         start_time: datetime,
-    ):
+    ) -> None:
         self.movie_id = movie_id
         self.cinema_id = cinema_id
         self.start_time = start_time
@@ -37,20 +37,20 @@ class Showing:
 
         return hash_value
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Movie ID: {self.movie_id} \nCinema ID: {self.cinema_id} \nStart Time: {self.start_time} \nHash ID: {self.hash_id}"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Showing({self.movie_id}, {self.cinema_id}, {self.start_time})"
 
 
 class ShowingsManager:
-    def __init__(self):
+    def __init__(self) -> None:
         self.current_showings = set(self.retrieve_showings())
         self.new_showings = []
 
     @connect_to_database
-    def retrieve_showings(self, db, cursor):
+    def retrieve_showings(self, db, cursor) -> list[tuple[str]]:
         """Retrieve hash_id values for all showings in database"""
         try:
             query = f"SELECT hash_id FROM {TABLE_NAME};"
@@ -62,11 +62,11 @@ class ShowingsManager:
         except Exception as e:
             print(f"ShowingsManager.retrieve_showings: An error occurred: {str(e)}")
 
-    def showing_already_in_database(self, hash_id: str):
+    def showing_already_in_database(self, hash_id: str) -> bool:
         """Check if hash_id is recognised. Return False if showing not in database. Convert to tuple to match data type from database"""
         return (hash_id,) in self.current_showings
 
-    def process_showing(self, item: dict, cinema_id: str) -> Showing:
+    def process_showing(self, item: dict, cinema_id: str) -> None:
         #! Find a way to pass cinema_id in from scraper - data not present in json. Could get by looping over each cinema, or maybe from url in response object
         """Create Showing object(s) for each movie & showing object in scraped json, check if showing is already in database, and if not add to new_showings list for batch addition"""
 
@@ -85,13 +85,13 @@ class ShowingsManager:
                 except:
                     continue
 
-    def add_new_showing(self, new_showing: Showing):
+    def add_new_showing(self, new_showing: Showing) -> None:
         """Add new showing to new_showings list to be added to database, and add hash_id to set"""
         self.new_showings.append(new_showing)
         self.current_showings.add((new_showing.hash_id,))
 
     @connect_to_database
-    def add_new_showings_to_database(self, db=None, cursor=None):
+    def add_new_showings_to_database(self, db=None, cursor=None) -> None:
         """Run this to add all new showings stored in self.new_showings to database"""
 
         # List of dicts of values for each new showing to be inserted into {TABLE_NAME} table
