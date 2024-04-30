@@ -8,6 +8,12 @@ TABLE_NAME = "showtimes"
 
 
 class Showing:
+
+    @staticmethod
+    def get_columns() -> tuple(str):
+        """Returns a tuple of the database column names to be written to"""
+        return ("movie_id", "cinema_id", "start_time", "hash_id")
+
     def __init__(
         self,
         movie_id: str,
@@ -86,7 +92,7 @@ class ShowingsManager:
         showing_values_list = [showing.__dict__ for showing in self.new_showings]
 
         # All columns to be inserted into {TABLE_NAME} table
-        columns = ("movie_id", "cinema_id", "start_time", "hash_id")
+        columns = Showing.get_columns()
         # Create placeholders for values to be inserted
         placeholders = ", ".join(f"%({key})s" for key in columns)
         # Create INSERT query
