@@ -61,20 +61,20 @@ class Movie:
         # Release date
         self.release_date = release_date
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Movie ID: {self.movie_id} \nOriginal Title: {self.original_title} \nFrench Title: {self.french_title} \nPoster: {self.image_poster} \nRuntime: {self.runtime} \nSynopsis:{self.synopsis} \nCast: {self.cast} \nLanguages: {self.languages} \nGenre(s): {self.genres} \nRelease Date: {self.release_date}"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Movie('{self.movie_id}', '{self.original_title}', '{self.french_title}', '{self.image_poster}', '{self.runtime}', '{self.synopsis}', {self.cast}, {self.languages}, {self.genres}, {self.release_date})"
 
 
 class MovieManager:
-    def __init__(self):
+    def __init__(self) -> None:
         self.current_movie_ids = set(self.retrieve_movies())
         self.new_movies = []
 
     @connect_to_database
-    def retrieve_movies(self, db, cursor):
+    def retrieve_movies(self, db, cursor) -> list[tuple[str]]:
         try:
             query = f"SELECT movie_id FROM {TABLE_NAME};"
             cursor.execute(query)
@@ -85,16 +85,16 @@ class MovieManager:
         except Exception as e:
             print(f"MovieManager.retrieve_movies: An error occurred: {str(e)}")
 
-    def movie_already_in_database(self, movie_id):
+    def movie_already_in_database(self, movie_id) -> bool:
         """Check if movie_id is recognised. Return False if movie needs to be added"""
         return (movie_id,) in self.current_movie_ids
 
-    def add_new_movie(self, new_movie: Movie):
+    def add_new_movie(self, new_movie: Movie) -> None:
         """Takes a movie & showing item from scraped json that isn't in the database, creates a new Movie object to add to database, and adds the movie_id to the set of current movie_ids to prevent additional copies being added."""
         self.new_movies.append(new_movie)
         self.current_movie_ids.add((new_movie.movie_id,))
 
-    def process_movie(self, item: dict):
+    def process_movie(self, item: dict) -> None:
         movie_id = item["movie"]["id"]
         if not self.movie_already_in_database(movie_id):
             new_movie = self.create_movie(item)
@@ -163,7 +163,7 @@ class MovieManager:
         )
 
     @connect_to_database
-    def add_new_movies_to_database(self, db=None, cursor=None):
+    def add_new_movies_to_database(self, db=None, cursor=None) -> None:
         """Run this to add all new movies stored in self.new_movies to database"""
 
         # List of dicts of values for each new movie to be inserted into {TABLE_NAME} table
@@ -181,6 +181,3 @@ class MovieManager:
         cursor.executemany(insert_query, movie_values_list)
         # Commit changes to database
         db.commit()
-
-
-#! Maybe add cinema manager to retrieve cinemas from database for front end
