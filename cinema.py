@@ -1,4 +1,3 @@
-import json
 from pprint import pprint
 from db_utilities import connect_to_database
 
@@ -7,8 +6,14 @@ TABLE_NAME = "cinemas"
 
 class Cinema:
     def __init__(
-        self, cinema_id: str, name: str, address: str, info: str, gps_raw, town: str
-    ):
+        self,
+        cinema_id: str,
+        name: str,
+        address: str,
+        info: str,
+        gps_raw: str,
+        town: str,
+    ) -> None:
         self.cinema_id = cinema_id
         self.name = name
         self.address = address
@@ -16,7 +21,7 @@ class Cinema:
         self.gps = self.parse_gps(gps_raw)
         self.town = town
 
-    def parse_gps(self, gps_raw: str | None):
+    def parse_gps(self, gps_raw: str | None) -> list[float] | None:
         """This is to convert the output from the database to a more readable format.
         'POINT(42.965081 1.607716)' from database becomes [42.965081 1.607716]"""
 
@@ -28,15 +33,20 @@ class Cinema:
             ]
         return gps or gps_raw
 
+    def __str__(self):
+        return f"\nCinema details: \nID: {self.cinema_id}\nName: {self.name}\nTown: {self.town}\nAdditional info: {self.info}\nGPS coordinates: {self.gps}\nAddress: {self.address}"
+
 
 class CinemaManager:
+    """To access `cinema_id`s, iterate over the `CinemaManager` class instance"""
+
     def __init__(self):
         self.cinemas = self.retrieve_cinemas()
 
     @staticmethod
     @connect_to_database
     def retrieve_cinemas(db, cursor) -> list[str]:
-        """Retrieve cinema_id values for all cinemas in database"""
+        """Retrieve cinema information for all cinemas in database"""
         try:
             cursor = db.cursor(dictionary=True)
             query = f"SELECT cinema_id, name, address, info, ST_AsText(gps) AS gps_raw, town FROM {TABLE_NAME};"
@@ -50,6 +60,16 @@ class CinemaManager:
         except Exception as e:
             print(f"ShowingsManager.retrieve_showings: An error occurred: {str(e)}")
 
+    def __iter__(self):
+        """Allows all `cinema_id`s to be iterated over directly for easier access"""
+        for cinema in self.cinemas:
+            yield cinema.cinema_id
+
+    def __str__(self):
+        return "All cinemas held by the manager:\n" + "\n".join(
+            str(cinema) for cinema in self.cinemas
+        )
+
 
 cinema_man = CinemaManager()
-pprint(cinema_man.cinemas)
+print(cinema_man)
