@@ -73,21 +73,22 @@ class MovieManager:
         self.current_movie_ids = set(self.retrieve_movies())
         self.new_movies = []
 
+    @staticmethod
     @connect_to_database
-    def retrieve_movies(self, db, cursor) -> list[tuple[str]]:
+    def retrieve_movies(db, cursor) -> list[tuple[str]]:
         try:
             query = f"SELECT movie_id FROM {TABLE_NAME};"
             cursor.execute(query)
             results = cursor.fetchall()
 
-            return results
+            return [result[0] for result in results]
 
         except Exception as e:
             print(f"MovieManager.retrieve_movies: An error occurred: {str(e)}")
 
     def movie_already_in_database(self, movie_id) -> bool:
         """Check if movie_id is recognised. Return False if movie needs to be added"""
-        return (movie_id,) in self.current_movie_ids
+        return movie_id in self.current_movie_ids
 
     def add_new_movie(self, new_movie: Movie) -> None:
         """Takes a movie & showing item from scraped json that isn't in the database, creates a new Movie object to add to database, and adds the movie_id to the set of current movie_ids to prevent additional copies being added."""

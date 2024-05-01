@@ -49,22 +49,23 @@ class ShowingsManager:
         self.current_showings = set(self.retrieve_showings())
         self.new_showings = []
 
+    @staticmethod
     @connect_to_database
-    def retrieve_showings(self, db, cursor) -> list[tuple[str]]:
+    def retrieve_showings(db, cursor) -> list[tuple[str]]:
         """Retrieve hash_id values for all showings in database"""
         try:
             query = f"SELECT hash_id FROM {TABLE_NAME};"
             cursor.execute(query)
             results = cursor.fetchall()
 
-            return results
+            return [result[0] for result in results]
 
         except Exception as e:
             print(f"ShowingsManager.retrieve_showings: An error occurred: {str(e)}")
 
     def showing_already_in_database(self, hash_id: str) -> bool:
         """Check if hash_id is recognised. Return False if showing not in database. Convert to tuple to match data type from database"""
-        return (hash_id,) in self.current_showings
+        return hash_id in self.current_showings
 
     def process_showing(self, item: dict, cinema_id: str) -> None:
         #! Find a way to pass cinema_id in from scraper - data not present in json. Could get by looping over each cinema, or maybe from url in response object
