@@ -92,23 +92,22 @@ class ShowingsManager:
 
     @connect_to_database
     def add_new_showings_to_database(self, db=None, cursor=None) -> None:
-        """Run this to add all new showings stored in self.new_showings to database"""
+        if self.new_showings:
+            """Run this to add all new showings stored in self.new_showings to database"""
 
-        # List of dicts of values for each new showing to be inserted into {TABLE_NAME} table
-        showing_values_list = [showing.__dict__ for showing in self.new_showings]
+            # List of dicts of values for each new showing to be inserted into {TABLE_NAME} table
+            showing_values_list = [showing.__dict__ for showing in self.new_showings]
 
-        # All columns to be inserted into {TABLE_NAME} table
-        columns = Showing.get_columns()
-        # Create placeholders for values to be inserted
-        placeholders = ", ".join(f"%({key})s" for key in columns)
-        # Create INSERT query
-        insert_query = (
-            f"INSERT INTO {TABLE_NAME} ({', '.join(columns)}) VALUES ({placeholders});"
-        )
-        # Execute above query to insert new showings into database
-        cursor.executemany(insert_query, showing_values_list)
-        # Commit changes to database
-        db.commit()
+            # All columns to be inserted into {TABLE_NAME} table
+            columns = Showing.get_columns()
+            # Create placeholders for values to be inserted
+            placeholders = ", ".join(f"%({key})s" for key in columns)
+            # Create INSERT query
+            insert_query = f"INSERT INTO {TABLE_NAME} ({', '.join(columns)}) VALUES ({placeholders});"
+            # Execute above query to insert new showings into database
+            cursor.executemany(insert_query, showing_values_list)
+            # Commit changes to database
+            db.commit()
 
     def __str__(self):
         if self.new_showings:

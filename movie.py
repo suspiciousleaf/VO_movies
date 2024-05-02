@@ -168,23 +168,22 @@ class MovieManager:
 
     @connect_to_database
     def add_new_movies_to_database(self, db=None, cursor=None) -> None:
-        """Run this to add all new movies stored in self.new_movies to database"""
+        if self.new_movies:
+            """Run this to add all new movies stored in self.new_movies to database"""
 
-        # List of dicts of values for each new movie to be inserted into {TABLE_NAME} table
-        movie_values_list = [movie.__dict__ for movie in self.new_movies]
+            # List of dicts of values for each new movie to be inserted into {TABLE_NAME} table
+            movie_values_list = [movie.__dict__ for movie in self.new_movies]
 
-        # All columns to be inserted into {TABLE_NAME} table
-        columns = Movie.get_columns()
-        # Create placeholders for values to be inserted
-        placeholders = ", ".join(f"%({key})s" for key in columns)
-        # Create INSERT query
-        insert_query = (
-            f"INSERT INTO {TABLE_NAME} ({', '.join(columns)}) VALUES ({placeholders});"
-        )
-        # Execute above query to insert new showings into database
-        cursor.executemany(insert_query, movie_values_list)
-        # Commit changes to database
-        db.commit()
+            # All columns to be inserted into {TABLE_NAME} table
+            columns = Movie.get_columns()
+            # Create placeholders for values to be inserted
+            placeholders = ", ".join(f"%({key})s" for key in columns)
+            # Create INSERT query
+            insert_query = f"INSERT INTO {TABLE_NAME} ({', '.join(columns)}) VALUES ({placeholders});"
+            # Execute above query to insert new showings into database
+            cursor.executemany(insert_query, movie_values_list)
+            # Commit changes to database
+            db.commit()
 
     def __str__(self):
         if self.new_movies:
