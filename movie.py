@@ -67,6 +67,9 @@ class Movie:
     def __repr__(self) -> str:
         return f"Movie('{self.movie_id}', '{self.original_title}', '{self.french_title}', '{self.image_poster}', '{self.runtime}', '{self.synopsis}', {self.cast}, {self.languages}, {self.genres}, {self.release_date})"
 
+    def movie_name(self):
+        return f"Name: {self.original_title}"
+
 
 class MovieManager:
     def __init__(self) -> None:
@@ -182,3 +185,11 @@ class MovieManager:
         cursor.executemany(insert_query, movie_values_list)
         # Commit changes to database
         db.commit()
+
+    def __str__(self):
+        if self.new_movies:
+            return f"{len(self.new_movies)} new movie(s) found:\n" + "\n".join(
+                [movie.movie_name() for movie in self.new_movies]
+            )
+        else:
+            return "No new movies found."
