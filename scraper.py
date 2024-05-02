@@ -41,7 +41,7 @@ class Scraper:
             #! Delete below
             print(f"Scraping target: {target_url})")
             base_url = "https://api.scrapingant.com/v2/general"
-            payload = {"filters": [{"showtimes.version": ["ORIGINAL"]}]}
+            payload = payload
             params = {
                 "url": target_url,
                 "x-api-key": scraping_ant_api_key,
