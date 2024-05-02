@@ -66,10 +66,4 @@ class CinemaManager:
             yield cinema.cinema_id
 
     def __str__(self):
-        return "All cinemas held by the manager:\n" + "\n".join(
-            str(cinema) for cinema in self.cinemas
-        )
-
-
-cinema_man = CinemaManager()
-print(cinema_man)
+        return f"Cinema Manager Info:\nNumber of cinemas: {len(self.cinemas)}"
