@@ -32,13 +32,13 @@ class Scraper:
     def create_url_list(self, start_day: int, end_day: int):
         """Return a list of all urls to be scraped for this cinema, i.e. one url for each day in the range of days to be scraped"""
         return [
-            f"https://www.allocine.fr/_/showtimes/theater-{self.cinema_id}/d-{i}/"
-            for i in range(start_day, end_day)
+            f"{base_prefix}{self.cinema_id}/d-{i}/" for i in range(start_day, end_day)
         ]
 
     def scrape_urls(self) -> list:
         """Run scraper on all target urls and process responses"""
         for target_url in self.target_urls:
+            #! Delete below
             print(f"Scraping target: {target_url})")
             base_url = "https://api.scrapingant.com/v2/general"
             payload = {"filters": [{"showtimes.version": ["ORIGINAL"]}]}
