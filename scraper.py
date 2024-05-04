@@ -39,8 +39,6 @@ class Scraper:
     def scrape_urls(self) -> list:
         """Run scraper on all target urls and process responses"""
         for target_url in self.target_urls:
-            # #! Delete below
-            # print(f"Scraping target: {target_url})")
             base_url = "https://api.scrapingant.com/v2/general"
             params = {
                 "url": target_url,
@@ -99,6 +97,6 @@ class ScraperManager:
 
 if __name__ == "__main__":
     t0 = time.perf_counter()
-    scraper_man = ScraperManager(4, 6)
+    scraper_man = ScraperManager(7, 14)
 
-    print(f"Time taken: {time.perf_counter() - t0:.2f}")
+    print(f"Time taken: {time.perf_counter() - t0:.2f}s")
