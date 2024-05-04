@@ -31,5 +31,6 @@ CREATE TABLE showtimes (
     start_time DATETIME,
     hash_id CHAR(64),
     CONSTRAINT fk_movie_id FOREIGN KEY (movie_id) REFERENCES movies(movie_id),
-    CONSTRAINT fk_cinema_id FOREIGN KEY (cinema_id) REFERENCES cinemas(cinema_id)
+    CONSTRAINT fk_cinema_id FOREIGN KEY (cinema_id) REFERENCES cinemas(cinema_id),
+    CONSTRAINT unique_hash_id UNIQUE (hash_id)
 );
