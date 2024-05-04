@@ -42,6 +42,7 @@ class CinemaManager:
 
     def __init__(self):
         self.cinemas = self.retrieve_cinemas()
+        self.cinema_ids = [cinema.cinema_id for cinema in self.cinemas]
 
     @staticmethod
     @connect_to_database
@@ -59,11 +60,6 @@ class CinemaManager:
 
         except Exception as e:
             print(f"ShowingsManager.retrieve_showings: An error occurred: {str(e)}")
-
-    def __iter__(self):
-        """Allows all `cinema_id`s to be iterated over directly for easier access"""
-        for cinema in self.cinemas:
-            yield cinema.cinema_id
 
     def __str__(self):
         return f"Cinema Manager Info:\nNumber of cinemas: {len(self.cinemas)}"
