@@ -1,6 +1,7 @@
 # Project specific additions
 creds.py
 raw_data*
+test*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
