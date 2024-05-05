@@ -40,6 +40,7 @@ class Movie:
         genres: list[str] | None = None,
         release_date: datetime | None = None,
     ) -> None:
+        """Initialize a Movie object with provided attributes."""
         # ID
         self.movie_id = movie_id
         # Original title
@@ -62,23 +63,28 @@ class Movie:
         self.release_date = release_date
 
     def __str__(self) -> str:
+        """Return a string representation of the Movie object."""
         return f"Movie ID: {self.movie_id} \nOriginal Title: {self.original_title} \nFrench Title: {self.french_title} \nPoster: {self.image_poster} \nRuntime: {self.runtime} \nSynopsis:{self.synopsis} \nCast: {self.cast} \nLanguages: {self.languages} \nGenre(s): {self.genres} \nRelease Date: {self.release_date}"
 
     def __repr__(self) -> str:
+        """Return a string representation of the Movie object for debugging."""
         return f"Movie('{self.movie_id}', '{self.original_title}', '{self.french_title}', '{self.image_poster}', '{self.runtime}', '{self.synopsis}', {self.cast}, {self.languages}, {self.genres}, {self.release_date})"
 
     def movie_name(self):
+        """Return the original title of the movie."""
         return f"Name: {self.original_title}"
 
 
 class MovieManager:
     def __init__(self) -> None:
+        """Initialize a MovieManager object."""
         self.current_movie_ids = set(self.retrieve_movies())
         self.new_movies = []
 
     @staticmethod
     @connect_to_database
     def retrieve_movies(db, cursor) -> list[tuple[str]]:
+        """Retrieve existing movie IDs from the database."""
         try:
             query = f"SELECT movie_id FROM {TABLE_NAME};"
             cursor.execute(query)
@@ -90,7 +96,7 @@ class MovieManager:
             print(f"MovieManager.retrieve_movies: An error occurred: {str(e)}")
 
     def movie_already_in_database(self, movie_id) -> bool:
-        """Check if movie_id is recognised. Return False if movie needs to be added"""
+        """Check if a movie is already in the database."""
         return movie_id in self.current_movie_ids
 
     def add_new_movie(self, new_movie: Movie) -> None:
@@ -99,20 +105,14 @@ class MovieManager:
         self.current_movie_ids.add(new_movie.movie_id)
 
     def process_movie(self, item: dict) -> None:
+        """Process a movie item from scraped JSON data."""
         movie_id = item["movie"]["id"]
         if not self.movie_already_in_database(movie_id):
             new_movie = self.create_movie(item)
             self.add_new_movie(new_movie)
 
     def create_movie(self, item: dict) -> Movie:
-        """Creates a Movie object from the raw json data
-
-        Args:
-            item (dict): raw movie data from request, single movie at a time
-
-        Returns:
-            Movie object
-        """
+        """Create a Movie object from raw JSON data."""
         movie_id = item["movie"]["id"]
         original_title = item["movie"]["originalTitle"]
         french_title = item["movie"]["title"]
@@ -168,8 +168,8 @@ class MovieManager:
 
     @connect_to_database
     def add_new_movies_to_database(self, db=None, cursor=None) -> None:
+        """Add new movies to the database."""
         if self.new_movies:
-            """Run this to add all new movies stored in self.new_movies to database"""
 
             movie_values_list = [movie.__dict__ for movie in self.new_movies]
 
@@ -180,6 +180,7 @@ class MovieManager:
             db.commit()
 
     def __str__(self):
+        """Return a string representation of the MovieManager object."""
         if self.new_movies:
             return f"{len(self.new_movies)} new movie(s) found:\n" + "\n".join(
                 [movie.movie_name() for movie in self.new_movies]
