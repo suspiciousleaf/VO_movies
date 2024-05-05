@@ -17,7 +17,9 @@ movie_man = MovieManager()
 
 
 class Scraper:
-    def __init__(self, cinema_id: str, start_day: int, end_day: int) -> None:
+    def __init__(
+        self, session: requests.Session, cinema_id: str, start_day: int, end_day: int
+    ) -> None:
         """
         Initialize a Scraper object.
 
@@ -26,6 +28,7 @@ class Scraper:
             start_day (int): The starting day for scraping. Today is day 0.
             end_day (int): The ending day for scraping.
         """
+        self.session = session
         self.cinema_id = cinema_id
         self.target_urls = self.create_url_list(start_day, end_day)
         self.raw_json_data = []
@@ -75,7 +78,7 @@ class Scraper:
             }
 
             try:
-                response = requests.post(base_url, params=params, json=payload)
+                response = self.session.post(base_url, params=params, json=payload)
                 response.raise_for_status()
 
                 if response.status_code == 200:
@@ -119,14 +122,15 @@ class ScraperManager:
             start_day (int): The starting day for scraping. Today is day 0.
             end_day (int): The ending day for scraping.
         """
-        for cinema in tqdm(cinema_man.cinema_ids, unit="Cinema"):
-            scraper = Scraper(cinema, start_day, end_day)
-            data = scraper.return_data()
-            for showing in data:
-                # Process movie
-                movie_man.process_movie(showing)
-                # Process showing
-                show_man.process_showing(showing, cinema)
+        with requests.Session() as session:
+            for cinema in tqdm(cinema_man.cinema_ids, unit="Cinema"):
+                scraper = Scraper(session, cinema, start_day, end_day)
+                data = scraper.return_data()
+                for showing in data:
+                    # Process movie
+                    movie_man.process_movie(showing)
+                    # Process showing
+                    show_man.process_showing(showing, cinema)
 
     def save_raw_data(self):
         """Save raw JSON data to a file."""
