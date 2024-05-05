@@ -18,6 +18,14 @@ movie_man = MovieManager()
 
 class Scraper:
     def __init__(self, cinema_id: str, start_day: int, end_day: int) -> None:
+        """
+        Initialize a Scraper object.
+
+        Args:
+            cinema_id (str): The ID of the cinema to scrape.
+            start_day (int): The starting day for scraping. Today is day 0.
+            end_day (int): The ending day for scraping.
+        """
         self.cinema_id = cinema_id
         self.target_urls = self.create_url_list(start_day, end_day)
         self.raw_json_data = []
@@ -27,17 +35,36 @@ class Scraper:
             print(f"Scraper {self.cinema_id} failed: {e}")
 
     def create_url_list(self, start_day: int, end_day: int):
-        """Return a list of all urls to be scraped for this cinema, i.e. one url for each day in the range of days to be scraped"""
+        """
+        Return a list of all URLs to be scraped for this cinema.
+
+        Args:
+            start_day (int): The starting day for scraping.
+            end_day (int): The ending day for scraping.
+
+        Returns:
+            list: List of URLs.
+        """
         return [
             f"{base_prefix}{self.cinema_id}/d-{i}/" for i in range(start_day, end_day)
         ]
 
     def return_data(self):
-        """Return all the scraped raw data"""
+        """
+        Return all the scraped raw data.
+
+        Returns:
+            list: List of raw JSON data.
+        """
         return self.raw_json_data
 
     def scrape_urls(self) -> list:
-        """Run scraper on all target urls and process responses"""
+        """
+        Run scraper on all target URLs and process responses.
+
+        Returns:
+            list: List of scraped data.
+        """
         for target_url in self.target_urls:
             base_url = "https://api.scrapingant.com/v2/general"
             params = {
@@ -64,6 +91,14 @@ class Scraper:
 
 class ScraperManager:
     def __init__(self, start_day, end_day, save_raw_json_data=False):
+        """
+        Initialize a ScraperManager object.
+
+        Args:
+            start_day (int): The starting day for scraping. Today is day 0.
+            end_day (int): The ending day for scraping.
+            save_raw_json_data (bool, optional): Whether to save raw JSON data. Defaults to False.
+        """
         self.all_scraped_json_data = []
         self.run_scrapers(start_day, end_day)
         # print(movie_man)
@@ -77,6 +112,13 @@ class ScraperManager:
             self.save_raw_data()
 
     def run_scrapers(self, start_day, end_day):
+        """
+        Run all scrapers for specified days and process the data.
+
+        Args:
+            start_day (int): The starting day for scraping. Today is day 0.
+            end_day (int): The ending day for scraping.
+        """
         for cinema in tqdm(cinema_man.cinema_ids, unit="Cinema"):
             scraper = Scraper(cinema, start_day, end_day)
             data = scraper.return_data()
@@ -87,6 +129,7 @@ class ScraperManager:
                 show_man.process_showing(showing, cinema)
 
     def save_raw_data(self):
+        """Save raw JSON data to a file."""
         current_time = datetime.datetime.now()
         formatted_time = current_time.strftime("%Y-%m-%d_%H-%M-%S")
         file_name = f"raw_data_{formatted_time}.json"
