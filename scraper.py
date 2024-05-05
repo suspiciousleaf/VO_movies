@@ -24,6 +24,7 @@ class Scraper:
         Initialize a Scraper object.
 
         Args:
+            session(Session): Session object
             cinema_id (str): The ID of the cinema to scrape.
             start_day (int): The starting day for scraping. Today is day 0.
             end_day (int): The ending day for scraping.
