@@ -1,6 +1,10 @@
 from pprint import pprint
 from db_utilities import connect_to_database
 
+from geopy.geocoders import Nominatim
+from geopy.location import Location
+
+
 TABLE_NAME = "cinemas"
 
 
@@ -11,7 +15,7 @@ class Cinema:
         name: str,
         address: str,
         info: str,
-        gps_raw: str,
+        gps: str | list[float],
         town: str,
     ) -> None:
         """
@@ -22,35 +26,67 @@ class Cinema:
             name (str): The name of the cinema.
             address (str): The address of the cinema.
             info (str): Additional information about the cinema.
-            gps_raw (str): The GPS coordinates of the cinema in raw format.
+            gps (str): The GPS coordinates of the cinema in raw format.
             town (str): The town where the cinema is located.
         """
         self.cinema_id = cinema_id
         self.name = name
         self.address = address
         self.info = info
-        self.gps = self.parse_gps(gps_raw)
+        self.gps = self.parse_gps(gps)
         self.town = town
 
-    def parse_gps(self, gps_raw: str | None) -> list[float] | None:
+    def parse_gps(self, gps: str | list[float] | None) -> list[float] | None:
         """
-        Parse the GPS coordinates from raw format to a more readable format.
+        Parse the GPS coordinates from raw database format to a more readable format.
         e.g. 'POINT(42.965081 1.607716)' from database becomes [42.965081 1.607716]
+        If provided in list form for insertion into database, will be left untouched.
 
         Args:
-            gps_raw (str | None): The GPS coordinates in raw format.
+            gps (str | list[float] | None): The GPS coordinates in raw format.
 
         Returns:
             list[float] | None: The parsed GPS coordinates or None if input is None.
         """
 
-        gps = None
-        if isinstance(gps_raw, str):
-            gps = [
-                float(coord)
-                for coord in (gps_raw.replace("POINT(", "").replace(")", "").split(" "))
-            ]
-        return gps or gps_raw
+        # gps = None
+        if isinstance(gps, str):
+            try:
+                gps = [
+                    float(coord)
+                    for coord in (gps.replace("POINT(", "").replace(")", "").split(" "))
+                ]
+            except:
+                gps = None
+        return gps or None
+
+    @connect_to_database
+    def add_to_database(self, db, cursor):
+        """Adds cinema object to the database if not already present"""
+        try:
+            columns = list(self.__dict__.keys())
+            values = self.__dict__
+            gps = values.get("gps")
+
+            # If GPS details are provided, extracts lat and lon to be added via placeholder, and removes "gps" key so it can be placed in the correct index for addition.
+            if isinstance(gps, list):
+                values["lat"] = gps[0]
+                values["lon"] = gps[1]
+                values.pop("gps")
+                columns.remove("gps")
+                placeholders = ", ".join(f"%({key})s" for key in columns)
+                # Create the GPS string and places it at the first index position.
+                gps_string = "ST_GeomFromText('POINT(%(lat)s %(lon)s)', 4326)"
+                insert_query = f"INSERT INTO {TABLE_NAME} (gps, {', '.join(columns)}) VALUES ({gps_string}, {placeholders});"
+            else:
+                placeholders = ", ".join(f"%({key})s" for key in columns)
+                insert_query = f"INSERT INTO {TABLE_NAME} ({', '.join(columns)}) VALUES ({placeholders});"
+
+            cursor.execute(insert_query, values)
+            db.commit()
+
+        except Exception as e:
+            print(f"ShowingsManager.retrieve_showings: An error occurred: {str(e)}")
 
     def __str__(self):
         """
@@ -78,7 +114,7 @@ class CinemaManager:
         """
         try:
             cursor = db.cursor(dictionary=True)
-            query = f"SELECT cinema_id, name, address, info, ST_AsText(gps) AS gps_raw, town FROM {TABLE_NAME};"
+            query = f"SELECT cinema_id, name, address, info, ST_AsText(gps) AS gps, town FROM {TABLE_NAME};"
             cursor.execute(query)
             results = cursor.fetchall()
 
@@ -88,6 +124,49 @@ class CinemaManager:
 
         except Exception as e:
             print(f"ShowingsManager.retrieve_showings: An error occurred: {str(e)}")
+
+    @staticmethod
+    def get_gps(cinema: dict) -> Location | None:
+        """Returns GPS coordinates of cinema location in France."""
+        address = cinema.get("address") or ""
+        name = cinema.get("name") or ""
+        town = cinema.get("town") or ""
+        geolocator = Nominatim(user_agent="cinema-app")
+        location = None
+        searches = [address, f"{name} {town}", town]
+
+        # Tries first using the full address, then using the cinema name and town, and finally just with the town. Decreasing accuracy but higher chance of success with each iteration.
+        for search in searches:
+            if search and location is None:
+                try:
+                    location = geolocator.geocode(f"{search}, France")
+                except:
+                    pass
+        if isinstance(location, Location):
+            location = [location.latitude, location.longitude]
+
+        return location
+
+    def add_cinema_to_database(self, cinema: dict):
+        """Creates a new Cinema object and adds it to the database, so that the cinema will be scraped in the future.
+        New cinema details to be provided as a dict with keys matching the database columns:
+        {"cinema_id":str,
+        "name":str | None,
+        "address":str | None,
+        "info":str | None,
+        "gps": list[float] | None,
+        "town":str | None}
+
+        Note: "cinema_id" is obligatory, "gps" will attempt to be found if not provided.
+        """
+        # If gps is not provided, or is in incorrect format, attempt to find correct gps coordinates
+        if cinema.get("gps") is None or not all(
+            isinstance(x, float) for x in cinema.get("gps")
+        ):
+            cinema["gps"] = self.get_gps(cinema)
+        # Create new Cinema object and add it to the database
+        new_cinema = Cinema(**cinema)
+        new_cinema.add_to_database()
 
     def __str__(self):
         """
