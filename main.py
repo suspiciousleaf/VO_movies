@@ -23,9 +23,9 @@ def find_showings(towns: str | None = Query(default=None, min_length=3)) -> list
 
 
 @app.post("/add_cinema", status_code=201)
-def create_cinema(cinema: CinemaModel):
+async def create_cinema(cinema: CinemaModel):
     cinema_man = CinemaManager()
-    response = cinema_man.add_cinema_to_database(cinema.__dict__)
+    response = await cinema_man.add_cinema_to_database(cinema.__dict__)
     response["payload"] = cinema
     if response["ok"]:
         return response

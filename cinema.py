@@ -1,6 +1,7 @@
 from pprint import pprint
 from db_utilities import connect_to_database
 
+from geopy.adapters import AioHTTPAdapter
 from geopy.geocoders import Nominatim
 from geopy.location import Location
 
@@ -61,7 +62,7 @@ class Cinema:
         return gps or None
 
     @connect_to_database
-    def add_to_database(self, db, cursor):
+    async def add_to_database(self, db, cursor):
         """Adds cinema object to the database if not already present"""
         try:
             columns = list(self.__dict__.keys())
@@ -82,7 +83,7 @@ class Cinema:
                 placeholders = ", ".join(f"%({key})s" for key in columns)
                 insert_query = f"INSERT INTO {TABLE_NAME} ({', '.join(columns)}) VALUES ({placeholders});"
 
-            cursor.execute(insert_query, values)
+            await cursor.execute(insert_query, values)
             db.commit()
 
         except Exception as e:
@@ -126,28 +127,31 @@ class CinemaManager:
             print(f"ShowingsManager.retrieve_showings: An error occurred: {str(e)}")
 
     @staticmethod
-    def get_gps(cinema: dict) -> Location | None:
+    async def get_gps(cinema: dict) -> Location | None:
         """Returns GPS coordinates of cinema location in France."""
         address = cinema.get("address") or ""
         name = cinema.get("name") or ""
         town = cinema.get("town") or ""
         geolocator = Nominatim(user_agent="cinema-app")
-        location = None
-        searches = [address, f"{name} {town}", town]
+        async with Nominatim(
+            user_agent="cinema-app", adapter_factory=AioHTTPAdapter
+        ) as geolocator:
+            location = None
+            searches = [address, f"{name} {town}", town]
 
-        # Tries first using the full address, then using the cinema name and town, and finally just with the town. Decreasing accuracy but higher chance of success with each iteration.
-        for search in searches:
-            if search and location is None:
-                try:
-                    location = geolocator.geocode(f"{search}, France")
-                except:
-                    pass
-        if isinstance(location, Location):
-            location = [location.latitude, location.longitude]
+            # Tries first using the full address, then using the cinema name and town, and finally just with the town. Decreasing accuracy but higher chance of success with each iteration.
+            for search in searches:
+                if search and location is None:
+                    try:
+                        location = await geolocator.geocode(f"{search}, France")
+                    except:
+                        pass
+            if isinstance(location, Location):
+                location = [location.latitude, location.longitude]
 
-        return location
+            return location
 
-    def add_cinema_to_database(self, cinema: dict):
+    async def add_cinema_to_database(self, cinema: dict):
         """Creates a new Cinema object and adds it to the database, so that the cinema will be scraped in the future.
         New cinema details to be provided as a dict with keys matching the database columns:
         {"cinema_id":str,
@@ -167,10 +171,10 @@ class CinemaManager:
                 if cinema.get("gps") is None or not all(
                     isinstance(x, float) for x in cinema.get("gps")
                 ):
-                    cinema["gps"] = self.get_gps(cinema)
+                    cinema["gps"] = await self.get_gps(cinema)
                 # Create new Cinema object and add it to the database
                 new_cinema = Cinema(**cinema)
-                new_cinema.add_to_database()
+                await new_cinema.add_to_database()
                 self.cinema_ids.add(new_cinema.cinema_id)
                 return {"ok": True, "code": 201, "info": "Cinema added to database"}
 
