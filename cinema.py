@@ -101,7 +101,7 @@ class CinemaManager:
     def __init__(self):
         """Initialize a CinemaManager object."""
         self.cinemas = self.retrieve_cinemas()
-        self.cinema_ids = [cinema.cinema_id for cinema in self.cinemas]
+        self.cinema_ids = set(cinema.cinema_id for cinema in self.cinemas)
 
     @staticmethod
     @connect_to_database
@@ -159,14 +159,23 @@ class CinemaManager:
 
         Note: "cinema_id" is obligatory, "gps" will attempt to be found if not provided.
         """
-        # If gps is not provided, or is in incorrect format, attempt to find correct gps coordinates
-        if cinema.get("gps") is None or not all(
-            isinstance(x, float) for x in cinema.get("gps")
-        ):
-            cinema["gps"] = self.get_gps(cinema)
-        # Create new Cinema object and add it to the database
-        new_cinema = Cinema(**cinema)
-        new_cinema.add_to_database()
+        if cinema["cinema_id"] in self.cinema_ids:
+            return {"ok": False, "code": 409, "info": "Cinema ID already in database"}
+        else:
+            try:
+                # If gps is not provided, or is in incorrect format, attempt to find correct gps coordinates
+                if cinema.get("gps") is None or not all(
+                    isinstance(x, float) for x in cinema.get("gps")
+                ):
+                    cinema["gps"] = self.get_gps(cinema)
+                # Create new Cinema object and add it to the database
+                new_cinema = Cinema(**cinema)
+                new_cinema.add_to_database()
+                self.cinema_ids.add(new_cinema.cinema_id)
+                return {"ok": True, "code": 201, "info": "Cinema added to database"}
+
+            except Exception as e:
+                return {"ok": False, "code": 400, "info": f"Bad request: {e}"}
 
     def __str__(self):
         """
