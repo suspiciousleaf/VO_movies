@@ -181,7 +181,8 @@ class CinemaManager:
             except Exception as e:
                 return {"ok": False, "code": 400, "info": f"Bad request: {e}"}
 
-    def retrieve_cinema_info(self):
+    def retrieve_cinema_info(self) -> str:
+        """Return a string showing info for each cinema in the database"""
         cinemas_info = (
             "\n".join(str(cinema) for cinema in self.cinemas) + f"\n{str(self)}"
         )
