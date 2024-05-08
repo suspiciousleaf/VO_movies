@@ -1,36 +1,28 @@
-from fastapi import FastAPI, Query, HTTPException
+from fastapi import FastAPI, Request, HTTPException
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
+from routers.cinema_router import router as cinema_router
+from routers.showings_router import router as showings_router
+from routers.limiter import limiter
 from search import Search
-from cinema import CinemaManager
-from fastapi_cinema_model import CinemaModel
+
 
 app = FastAPI()
 search = Search()
 
+app.include_router(cinema_router)
+app.include_router(showings_router)
+
+app.state.limiter = limiter
+
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 
 @app.get("/")
-def index() -> str:
-    return "hello"
+@limiter.limit("1/second")
+def ping(request: Request) -> str:
+    return "The server is running."
 
 
-@app.get("/search")
-def find_showings(towns: str | None = Query(default=None, min_length=3)) -> list:
-    if towns is None:
-        return search.search()
-    else:
-        towns = towns.split(",")
-        return search.search(towns)
-
-
-@app.post("/add_cinema", status_code=201)
-async def create_cinema(cinema: CinemaModel):
-    cinema_man = CinemaManager()
-    response = await cinema_man.add_cinema_to_database(cinema.__dict__)
-    response["payload"] = cinema
-    if response["ok"]:
-        return response
-    else:
-        raise HTTPException(status_code=response["code"], detail=response["info"])
-
-
-# TODO End point to insert new cinema into database, maybe end point to modify cinemas, add info, and end point to delete cinemas á la CRUD. Maybe add additional scraper to get cinema details
+# TODO End point to modify cinemas, add info, and end point to delete cinemas á la CRUD. Maybe add additional scraper to get cinema details
