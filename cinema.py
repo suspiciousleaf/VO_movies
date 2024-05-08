@@ -93,7 +93,7 @@ class Cinema:
         """
         Return a string representation of the Cinema object.
         """
-        return f"\nCinema details: \nID: {self.cinema_id}\nName: {self.name}\nTown: {self.town}\nAdditional info: {self.info}\nGPS coordinates: {self.gps}\nAddress: {self.address}"
+        return f"\nID: {self.cinema_id}\nName: {self.name}\nTown: {self.town}\nAdditional info: {self.info}\nAddress: {self.address}\nGPS coordinates: {self.gps}"
 
 
 class CinemaManager:
@@ -181,8 +181,14 @@ class CinemaManager:
             except Exception as e:
                 return {"ok": False, "code": 400, "info": f"Bad request: {e}"}
 
+    def retrieve_cinema_info(self):
+        cinemas_info = (
+            "\n".join(str(cinema) for cinema in self.cinemas) + f"\n{str(self)}"
+        )
+        return cinemas_info
+
     def __str__(self):
         """
         Return a string representation of the CinemaManager object showing how many cinemas it contains.
         """
-        return f"Cinema Manager Info:\nNumber of cinemas: {len(self.cinemas)}"
+        return f"\nTotal cinemas: {len(self.cinemas)}"
