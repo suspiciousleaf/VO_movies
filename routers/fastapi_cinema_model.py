@@ -24,3 +24,11 @@ class CinemaModel(BaseModel):
         if not all(abs(num) <= 180 for num in gps):
             raise ValueError("gps coordinates outside valid range")
         return gps
+
+
+class CinemaDelete(BaseModel):
+    """Validation model for cinema deletion by cinema_id"""
+
+    cinema_id: Annotated[
+        str, StringConstraints(min_length=5, max_length=5, pattern=r"^[A-Z]\d{4}$")
+    ]

@@ -62,7 +62,7 @@ class Cinema:
         return gps or None
 
     @connect_to_database
-    async def add_to_database(self, db, cursor):
+    def add_to_database(self, db, cursor):
         """Adds cinema object to the database if not already present"""
         try:
             columns = list(self.__dict__.keys())
@@ -83,11 +83,16 @@ class Cinema:
                 placeholders = ", ".join(f"%({key})s" for key in columns)
                 insert_query = f"INSERT INTO {TABLE_NAME} ({', '.join(columns)}) VALUES ({placeholders});"
 
-            await cursor.execute(insert_query, values)
+            cursor.execute(insert_query, values)
             db.commit()
+            return {"ok": True, "info": None}
 
         except Exception as e:
-            print(f"ShowingsManager.retrieve_showings: An error occurred: {str(e)}")
+            print(f"CinemaManager.add_to_database: An error occurred: {str(e)}")
+            return {
+                "ok": False,
+                "info": f"cinema.add_to_database: An error occurred: {e}",
+            }
 
     def __str__(self):
         """
@@ -167,6 +172,7 @@ class CinemaManager:
             return {"ok": False, "code": 409, "info": "Cinema ID already in database"}
         else:
             try:
+                response = None
                 # If gps is not provided, or is in incorrect format, attempt to find correct gps coordinates
                 if cinema.get("gps") is None or not all(
                     isinstance(x, float) for x in cinema.get("gps")
@@ -174,9 +180,32 @@ class CinemaManager:
                     cinema["gps"] = await self.get_gps(cinema)
                 # Create new Cinema object and add it to the database
                 new_cinema = Cinema(**cinema)
-                await new_cinema.add_to_database()
-                self.cinema_ids.add(new_cinema.cinema_id)
-                return {"ok": True, "code": 201, "info": "Cinema added to database"}
+                # print(new_cinema)
+                response = new_cinema.add_to_database()
+                if response["ok"]:
+                    self.cinema_ids.add(new_cinema.cinema_id)
+                    return {"ok": True, "code": 201, "info": "Cinema added to database"}
+                else:
+                    return response
+
+            except Exception as e:
+                resp_dict = {"ok": False, "code": 400, "info": [f"Bad request: {e}"]}
+                if response:
+                    resp_dict["info"].append(response["info"])
+                return resp_dict
+
+    @connect_to_database
+    def delete_cinema(self, db, cursor, cinema_id: dict):
+        """Delete cinema from database using cinema_id"""
+        if cinema_id["cinema_id"] not in self.cinema_ids:
+            return {"ok": False, "code": 409, "info": "Cinema ID not in database"}
+        else:
+            try:
+                delete_query = f"DELETE FROM {TABLE_NAME} WHERE cinema_id = %s;"
+                cursor.execute(delete_query, (cinema_id["cinema_id"],))
+                db.commit()
+                self.cinema_ids.remove(cinema_id["cinema_id"])
+                return {"ok": True, "code": 200, "info": "Cinema removed from database"}
 
             except Exception as e:
                 return {"ok": False, "code": 400, "info": f"Bad request: {e}"}
