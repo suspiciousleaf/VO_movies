@@ -71,7 +71,7 @@ class ShowingsManager:
 
     @staticmethod
     @connect_to_database
-    def retrieve_showings(db, cursor) -> list[tuple[str]]:
+    async def retrieve_showings(db, cursor) -> list[tuple[str]]:
         """
         Retrieve hash_id values for all showings in the database.
 
@@ -79,8 +79,9 @@ class ShowingsManager:
             list: List of hash_id values.
         """
         try:
+            cursor = db.cursor()
             query = f"SELECT hash_id FROM {TABLE_NAME};"
-            cursor.execute(query)
+            await cursor.execute(query)
             results = cursor.fetchall()
 
             # results has a list of tuples, the line below extracts the string from each tuple.
