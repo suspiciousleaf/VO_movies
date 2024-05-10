@@ -1,7 +1,9 @@
 from datetime import datetime
 from pprint import pprint
+import requests
 
 from db_utilities import connect_to_database
+from creds import movies_db_api_key
 
 TABLE_NAME = "movies"
 
@@ -14,9 +16,11 @@ class Movie:
     def get_columns() -> tuple[str]:
         """Returns a tuple of the database column names to be written to"""
         return (
+            "imdb_ref",
             "movie_id",
             "original_title",
             "french_title",
+            "rating",
             "image_poster",
             "runtime",
             "synopsis",
@@ -34,14 +38,13 @@ class Movie:
         french_title: str | None = None,
         image_poster: str | None = None,
         runtime: str | None = None,
-        synopsis: str | None = None,
         cast: list[str] | None = None,
         languages: list[str] | None = None,
         genres: list[str] | None = None,
         release_date: datetime | None = None,
     ) -> None:
         """Initialize a Movie object with provided attributes."""
-        # ID
+        # Movie ID in database
         self.movie_id = movie_id
         # Original title
         self.original_title = original_title
@@ -51,8 +54,6 @@ class Movie:
         self.image_poster = image_poster
         # Runtime
         self.runtime = runtime
-        # Synopsis
-        self.synopsis = synopsis
         # Main cast
         self.cast = ",".join(cast)
         # Language(s)
@@ -62,13 +63,96 @@ class Movie:
         # Release date
         self.release_date = release_date
 
+        # Some movie details are not available from the main source, so they are retrived from an API
+        extra_movie_data = self.get_additional_details()
+        # IMDB Ref
+        self.imdb_ref = extra_movie_data.get("imdb_ref")
+        # Rating
+        self.rating = extra_movie_data.get("rating")
+        # Synopsis
+        self.synopsis = extra_movie_data.get("synopsis")
+
+    def get_additional_details(self):
+        """Retrieve additional details for the movie from an external API.
+
+        Returns:
+            dict: A dictionary containing additional details for the movie:
+                - imdb_ref (str): The IMDB reference of the movie.
+                - rating (float): The rating of the movie.
+                - synopsis (str): The synopsis of the movie.
+        """
+
+        # Create empty dict to hold additional details
+        extra_movie_data = {}
+
+        try:
+            ref_url = f"https://moviesdatabase.p.rapidapi.com/titles/search/title/{self.original_title}"
+            # Query movies between release date and one year before to allow for possible inconsistent data
+            params = {
+                "exact": "false",
+                "endYear": f"{self.release_date.year}",
+                "startYear": f"{self.release_date.year-1}",
+                "titleType": "movie",
+            }
+
+            headers = {
+                "X-RapidAPI-Key": movies_db_api_key,
+                "X-RapidAPI-Host": "moviesdatabase.p.rapidapi.com",
+            }
+
+            s = requests.Session()
+            # IMDB ref must be identified first, then other details can be retrieved
+            response = s.get(ref_url, headers=headers, params=params)
+            response.raise_for_status()
+            if response.json()["results"]:
+                extra_movie_data["imdb_ref"] = response.json()["results"][0]["id"]
+            # If no results found using title and year, try again without the year.
+            else:
+                params = {
+                    "exact": "false",
+                    "titleType": "movie",
+                }
+                response = s.get(ref_url, headers=headers, params=params)
+                response.raise_for_status()
+                if response.json()["results"]:
+                    extra_movie_data["imdb_ref"] = response.json()["results"][0]["id"]
+                else:
+                    raise Exception("Movie not found")
+
+            # Dict to store each of the required details, and the keys required to access that data in the json
+            required_details = {
+                "rating": ("results", "ratingsSummary", "aggregateRating"),
+                "plot": ("results", "plot", "plotText", "plainText"),
+            }
+
+            for detail, keys in required_details.items():
+                try:
+
+                    query_url = f"https://moviesdatabase.p.rapidapi.com/titles/{extra_movie_data['imdb_ref']}?info={detail}"
+
+                    response = s.get(query_url, headers=headers)
+
+                    response.raise_for_status()
+                    nested_data = response.json()
+                    for key in keys:
+                        nested_data = nested_data.get(key, {})
+
+                    if detail == "plot":
+                        detail = "synopsis"
+                    extra_movie_data[detail] = nested_data
+                except:
+                    extra_movie_data[detail] = None
+        except:
+            print(f"{self.original_title}: additional movie details not found")
+        return extra_movie_data
+
     def __str__(self) -> str:
         """Return a string representation of the Movie object."""
-        return f"Movie ID: {self.movie_id} \nOriginal Title: {self.original_title} \nFrench Title: {self.french_title} \nPoster: {self.image_poster} \nRuntime: {self.runtime} \nSynopsis:{self.synopsis} \nCast: {self.cast} \nLanguages: {self.languages} \nGenre(s): {self.genres} \nRelease Date: {self.release_date}"
+        return f"IMDB Ref: {self.imdb_ref} \nMovie ID: {self.movie_id} \nOriginal Title: {self.original_title} \nFrench Title: {self.french_title} \nRating: {self.rating}\nPoster: {self.image_poster} \nRuntime: {self.runtime} \nSynopsis:{self.synopsis} \nCast: {self.cast} \nLanguages: {self.languages} \nGenre(s): {self.genres} \nRelease Date: {self.release_date}"
 
     def __repr__(self) -> str:
         """Return a string representation of the Movie object for debugging."""
-        return f"Movie('{self.movie_id}', '{self.original_title}', '{self.french_title}', '{self.image_poster}', '{self.runtime}', '{self.synopsis}', {self.cast}, {self.languages}, {self.genres}, {self.release_date})"
+        return f"Movie('{self.imdb_ref}', '{self.movie_id}', '{self.original_title}', '{self.french_title}', '{self.rating}', '{self.image_poster}', '{self.runtime}', '{self.synopsis}', {self.cast}, {self.languages}, {self.genres}, {self.release_date})"
 
     def movie_name(self):
         """Return the original title of the movie."""
@@ -90,12 +174,13 @@ class MovieManager:
             cursor.execute(query)
             results = cursor.fetchall()
 
+            # Convert list of tuples to list of strings
             return [result[0] for result in results]
 
         except Exception as e:
             print(f"MovieManager.retrieve_movies: An error occurred: {str(e)}")
 
-    def movie_already_in_database(self, movie_id) -> bool:
+    def movie_already_in_database(self, movie_id: str) -> bool:
         """Check if a movie is already in the database."""
         return movie_id in self.current_movie_ids
 
@@ -116,7 +201,7 @@ class MovieManager:
         movie_id = item["movie"]["id"]
         original_title = item["movie"]["originalTitle"]
         french_title = item["movie"]["title"]
-        synopsis = item["movie"]["synopsis"]
+        # synopsis = item["movie"]["synopsis"]
         image_poster = item["movie"]["poster"]["url"]
         runtime = item["movie"]["runtime"]
         genres = [genre["tag"].title() for genre in item["movie"]["genres"]]
@@ -159,7 +244,7 @@ class MovieManager:
             french_title,
             image_poster,
             runtime,
-            synopsis,
+            # synopsis,
             cast,
             languages,
             genres,
@@ -187,3 +272,9 @@ class MovieManager:
             )
         else:
             return "No new movies found."
+
+
+# An error occurred: 1406 (22001): Data too long for column 'movie_id' at row 18
+# An error occurred: 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`vo_movies`.`showtimes`, CONSTRAINT `fk_movie_id` FOREIGN KEY (`movie_id`) REFERENCES `movies` (`movie_id`))
+
+#! Run again and save data, see what the error is

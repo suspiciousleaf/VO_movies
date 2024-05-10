@@ -145,6 +145,6 @@ class ScraperManager:
 
 if __name__ == "__main__":
     t0 = time.perf_counter()
-    scraper_man = ScraperManager(7, 14)
+    scraper_man = ScraperManager(1, 14, save_raw_json_data=True)
 
     print(f"Time taken: {time.perf_counter() - t0:.2f}s")

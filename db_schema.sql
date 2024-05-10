@@ -1,8 +1,10 @@
 -- Create movies table with auto-incremented integer for movie_id
 CREATE TABLE movies (
     movie_id CHAR(16) PRIMARY KEY,
+    imdb_ref VARCHAR(191),
     original_title VARCHAR(191),
     french_title VARCHAR(191),
+    rating FLOAT,
     image_poster VARCHAR(255),
     runtime VARCHAR(16),
     synopsis VARCHAR(1000),

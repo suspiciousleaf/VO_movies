@@ -2,44 +2,74 @@ from requests import Session
 from pprint import pprint
 from creds import *
 
+# titles = ["Ghostbusters: Frozen Empire"]
+
 s = Session()
 
-# Search movie with title, get IMDB ref to find more details. Includes url to poster. response["results"][0]["id"]
-title = "Ghostbusters: Frozen Empire"
-year = 2023
-ref_url = f"https://moviesdatabase.p.rapidapi.com/titles/search/title/{title}"
+movies = [
+    {"title": "The Big Lebowski", "year": 2024},
+    # {"title": "The Hobbit", "year": 2012},
+    # {"title": "Legally Blonde", "year": 2001},
+    # {"title": "Skyfall", "year": 2012},
+]
 
-querystring = {
-    "exact": "false",
-    "endYear": f"{year+1}",
-    "startYear": f"{year-1}",
-    "titleType": "movie",
-}
 
-headers = {
-    "X-RapidAPI-Key": movies_db_api_key,
-    "X-RapidAPI-Host": "moviesdatabase.p.rapidapi.com",
-}
+for movie in movies:
+    ref_url = (
+        f"https://moviesdatabase.p.rapidapi.com/titles/search/title/{movie['title']}"
+    )
+    queryparams = {
+        "exact": "false",
+        "endYear": f"{movie['year']}",
+        "startYear": f"{movie['year']-1}",
+        "titleType": "movie",
+    }
 
-response = s.get(ref_url, headers=headers, params=querystring).json()
+    headers = {
+        "X-RapidAPI-Key": movies_db_api_key,
+        "X-RapidAPI-Host": "moviesdatabase.p.rapidapi.com",
+    }
 
-imdb_ref = response["results"][0]["id"]
-print(f"{imdb_ref = }")
+    # IMDB ref must be identified first, then other details can be retrieved
+    response = s.get(ref_url, headers=headers, params=queryparams)
+    response.raise_for_status()
+    if response.json()["results"]:
+        movie["imdb_ref"] = response.json()["results"][0]["id"]
+    # If no results found using title and year, try again without the year.
+    else:
+        queryparams = {
+            "exact": "false",
+            "titleType": "movie",
+        }
+        response = s.get(ref_url, headers=headers, params=queryparams)
+        response.raise_for_status()
+        if response.json()["results"]:
+            movie["imdb_ref"] = response.json()["results"][0]["id"]
+        else:
+            raise Exception("Movie not found")
 
-# Get IMDB rating
+    # Dict to store each of the required details, and the keys required to access that data in the json
+    required_details = {
+        "rating": ("results", "ratingsSummary", "aggregateRating"),
+        "plot": ("results", "plot", "plotText", "plainText"),
+    }
 
-url = f"https://moviesdatabase.p.rapidapi.com/titles/{imdb_ref}?info=rating"
+    for detail, keys in required_details.items():
+        try:
 
-response = s.get(url, headers=headers).json()
+            query_url = f"https://moviesdatabase.p.rapidapi.com/titles/{movie['imdb_ref']}?info={detail}"
 
-rating = response["results"]["ratingsSummary"]["aggregateRating"]
-print(f"{rating = }")
+            response = s.get(query_url, headers=headers)
 
-# Synopsis
+            response.raise_for_status()
+            nested_data = response.json()
+            for key in keys:
+                nested_data = nested_data.get(key, {})
 
-url = f"https://moviesdatabase.p.rapidapi.com/titles/{imdb_ref}?info=plot"
+            if detail == "plot":
+                detail = "synopsis"
+            movie[detail] = nested_data
+        except:
+            movie[detail] = None
 
-response = s.get(url, headers=headers).json()
-
-synopsis = response["results"]["plot"]["plotText"]["plainText"]
-print(f"{synopsis = }")
+    pprint(movie)
