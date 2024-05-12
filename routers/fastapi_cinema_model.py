@@ -21,7 +21,7 @@ class CinemaModel(BaseModel):
             raise ValueError("gps coordinates must have exactly two elements")
         if not all(isinstance(coord, float) for coord in gps):
             raise ValueError("gps coordinates must be floats")
-        if not -90 <= abs(gps[0]) <= 90 and -180 <= abs(gps[1]) <= 180:
+        if not all(abs(gps[0]) <= 90 and abs(gps[1]) <= 180):
             raise ValueError("gps coordinates outside valid range")
         return gps
 
