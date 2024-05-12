@@ -1,8 +1,10 @@
 from datetime import datetime
 import hashlib
 from pprint import pprint
+from pydantic import ValidationError
 
 from db_utilities import connect_to_database
+from models.showing_model import ShowingModel
 
 TABLE_NAME = "showtimes"
 
@@ -28,9 +30,22 @@ class Showing:
             cinema_id (str): The ID of the cinema.
             start_time (datetime): The start time of the showing.
         """
-        self.movie_id = movie_id
-        self.cinema_id = cinema_id
-        self.start_time = start_time
+        try:
+            data = {
+                "movie_id": movie_id,
+                "cinema_id": cinema_id,
+                "start_time": start_time,
+            }
+            # Validate input data by creating ShowingModel object
+            showing_model = ShowingModel(**data)
+        except ValidationError as e:
+            raise ValidationError(f"Validation error: {e}")
+        except Exception as e:
+            raise Exception(f"Exception: {e}")
+
+        self.movie_id = showing_model.movie_id
+        self.cinema_id = showing_model.cinema_id
+        self.start_time = showing_model.start_time
         self.hash_id = self.calculate_hash(
             self.movie_id, self.cinema_id, self.start_time
         )
@@ -121,8 +136,8 @@ class ShowingsManager:
                     # Check if new showing is already in database by comparing hash_id, if not add to list to new showings to be added to database
                     if not self.showing_already_in_database(new_showing.hash_id):
                         self.add_new_showing(new_showing)
-                except:
-                    continue
+                except Exception as e:
+                    print(f"Showing could not be created: {e}")
 
     def add_new_showing(self, new_showing: Showing) -> None:
         """Add new showing to new_showings list to be added to database, and add hash_id to set.
