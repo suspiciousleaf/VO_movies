@@ -59,19 +59,21 @@ class Movie:
             # Validate the input data using MovieModel
             movie_model = MovieModel(**data)
 
-            # If validation succeeds, assign the validated data to attributes
-            self.movie_id = movie_model.movie_id
-            self.original_title = movie_model.original_title
-            self.french_title = movie_model.french_title
-            self.image_poster = movie_model.image_poster
-            self.runtime = movie_model.runtime
-            self.cast = ",".join(movie_model.cast)
-            self.languages = ",".join(movie_model.languages)
-            self.genres = ",".join(movie_model.genres)
-            self.release_date = movie_model.release_date
-
         except ValidationError as e:
-            print(f"Validation error: {e}")
+            raise ValidationError(f"Validation error: {e}")
+        except Exception as e:
+            raise Exception(f"Exception: {e}")
+
+        # If validation succeeds, assign the validated data to attributes
+        self.movie_id = movie_model.movie_id
+        self.original_title = movie_model.original_title
+        self.french_title = movie_model.french_title
+        self.image_poster = movie_model.image_poster
+        self.runtime = movie_model.runtime
+        self.cast = ",".join(movie_model.cast)
+        self.languages = ",".join(movie_model.languages)
+        self.genres = ",".join(movie_model.genres)
+        self.release_date = movie_model.release_date
 
         # Some movie details are not available from the main source, so they are retrived from an API
         extra_movie_data = self.get_additional_details()
