@@ -159,7 +159,7 @@ class ScraperManager:
                 # Process showing
                 show_man.process_showing(showing, cinema)
             except Exception as e:
-                print(f"Movie could not be processed: {e}")
+                print(f"Unable to process: {e}")
 
     def save_raw_data(self):
         """Save raw JSON data to a file."""
