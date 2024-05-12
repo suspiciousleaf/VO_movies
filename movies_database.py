@@ -2,15 +2,19 @@ from requests import Session
 from pprint import pprint
 from creds import *
 
-# titles = ["Ghostbusters: Frozen Empire"]
-
 s = Session()
 
 movies = [
-    {"title": "The Big Lebowski", "year": 2024},
-    # {"title": "The Hobbit", "year": 2012},
-    # {"title": "Legally Blonde", "year": 2001},
-    # {"title": "Skyfall", "year": 2012},
+    {"title": "LaRoy, Texas", "year": 2023},
+    {"title": "The Dead Don't Hurt", "year": 2023},
+    {"title": "Madame Butterfly (Metropolitan Opera)", "year": 2016},
+    {
+        "title": "John Singer Sargent: Fashion and Swagger",
+        "year": 2024,
+    },
+    {"title": "Kingdom of the Planet of the Apes", "year": 2024},
+    # {"title": "Transformers: 40th Anniversary Event", "year": 2012},
+    {"title": "Back To Black", "year": 2024},
 ]
 
 
@@ -43,10 +47,10 @@ for movie in movies:
         }
         response = s.get(ref_url, headers=headers, params=queryparams)
         response.raise_for_status()
-        if response.json()["results"]:
-            movie["imdb_ref"] = response.json()["results"][0]["id"]
-        else:
-            raise Exception("Movie not found")
+        # if response.json()["results"]:
+        #     movie["imdb_ref"] = response.json()["results"][0]["id"]
+        # else:
+        #     raise Exception("Movie not found")
 
     # Dict to store each of the required details, and the keys required to access that data in the json
     required_details = {

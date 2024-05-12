@@ -1,7 +1,9 @@
 from datetime import datetime
 from pprint import pprint
 import requests
+from pydantic import ValidationError
 
+from models.movie_model import MovieModel
 from db_utilities import connect_to_database
 from creds import movies_db_api_key
 
@@ -11,31 +13,29 @@ TABLE_NAME = "movies"
 
 
 class Movie:
+    """Represents a movie object with its details. Validates input data using pydantic MovieModel(BaseModel) to ensure it is compatible with database schema.
 
-    @staticmethod
-    def get_columns() -> tuple[str]:
-        """Returns a tuple of the database column names to be written to"""
-        return (
-            "imdb_ref",
-            "movie_id",
-            "original_title",
-            "french_title",
-            "rating",
-            "image_poster",
-            "runtime",
-            "synopsis",
-            "cast",
-            "languages",
-            "genres",
-            "release_date",
-        )
+    Attributes:
+        movie_id (str): The unique identifier of the movie. Base64 format
+        original_title (str): The original title of the movie.
+        french_title (str): The French title of the movie.
+        image_poster (str, optional): The URL of the movie poster image.
+        runtime (str, optional): The runtime of the movie.
+        cast (list[str], optional): The list of cast members.
+        languages (list[str], optional): The list of languages the movie is available in.
+        genres (list[str], optional): The list of genres the movie belongs to.
+        release_date (datetime, optional): The release date of the movie.
+
+    Methods:
+        get_additional_details(): Retrieve additional details for the movie from an external API.
+        movie_name(): Return the original title of the movie.
+    """
 
     def __init__(
         self,
-        # `movie_id` is a 16 character with padding Base64 encoding of f"Movie:{showing['movie']['internalId']}"
-        movie_id: str | None = None,
-        original_title: str | None = None,
-        french_title: str | None = None,
+        movie_id: str,
+        original_title: str,
+        french_title: str,
         image_poster: str | None = None,
         runtime: str | None = None,
         cast: list[str] | None = None,
@@ -43,25 +43,35 @@ class Movie:
         genres: list[str] | None = None,
         release_date: datetime | None = None,
     ) -> None:
-        """Initialize a Movie object with provided attributes."""
-        # Movie ID in database
-        self.movie_id = movie_id
-        # Original title
-        self.original_title = original_title
-        # French title
-        self.french_title = french_title
-        # Poster image url
-        self.image_poster = image_poster
-        # Runtime
-        self.runtime = runtime
-        # Main cast
-        self.cast = ",".join(cast)
-        # Language(s)
-        self.languages = ",".join(languages)
-        # Genre(s)
-        self.genres = ",".join(genres)
-        # Release date
-        self.release_date = release_date
+        try:
+            data = {
+                "movie_id": movie_id,
+                "original_title": original_title,
+                "french_title": french_title,
+                "image_poster": image_poster,
+                "runtime": runtime,
+                "cast": cast,
+                "languages": languages,
+                "genres": genres,
+                "release_date": release_date,
+            }
+
+            # Validate the input data using MovieModel
+            movie_model = MovieModel(**data)
+
+            # If validation succeeds, assign the validated data to attributes
+            self.movie_id = movie_model.movie_id
+            self.original_title = movie_model.original_title
+            self.french_title = movie_model.french_title
+            self.image_poster = movie_model.image_poster
+            self.runtime = movie_model.runtime
+            self.cast = ",".join(movie_model.cast)
+            self.languages = ",".join(movie_model.languages)
+            self.genres = ",".join(movie_model.genres)
+            self.release_date = movie_model.release_date
+
+        except ValidationError as e:
+            print(f"Validation error: {e}")
 
         # Some movie details are not available from the main source, so they are retrived from an API
         extra_movie_data = self.get_additional_details()
@@ -146,6 +156,24 @@ class Movie:
             print(f"{self.original_title}: additional movie details not found")
         return extra_movie_data
 
+    @staticmethod
+    def get_columns() -> tuple[str]:
+        """Returns a tuple of the database column names to be written to"""
+        return (
+            "imdb_ref",
+            "movie_id",
+            "original_title",
+            "french_title",
+            "rating",
+            "image_poster",
+            "runtime",
+            "synopsis",
+            "cast",
+            "languages",
+            "genres",
+            "release_date",
+        )
+
     def __str__(self) -> str:
         """Return a string representation of the Movie object."""
         return f"IMDB Ref: {self.imdb_ref} \nMovie ID: {self.movie_id} \nOriginal Title: {self.original_title} \nFrench Title: {self.french_title} \nRating: {self.rating}\nPoster: {self.image_poster} \nRuntime: {self.runtime} \nSynopsis:{self.synopsis} \nCast: {self.cast} \nLanguages: {self.languages} \nGenre(s): {self.genres} \nRelease Date: {self.release_date}"
@@ -193,63 +221,69 @@ class MovieManager:
         """Process a movie item from scraped JSON data."""
         movie_id = item["movie"]["id"]
         if not self.movie_already_in_database(movie_id):
-            new_movie = self.create_movie(item)
-            self.add_new_movie(new_movie)
+            try:
+                new_movie = self.create_movie(item)
+                self.add_new_movie(new_movie)
+            except Exception as e:
+                raise Exception(f"Movie could not be processed: {e}")
 
     def create_movie(self, item: dict) -> Movie:
-        """Create a Movie object from raw JSON data."""
-        movie_id = item["movie"]["id"]
-        original_title = item["movie"]["originalTitle"]
-        french_title = item["movie"]["title"]
-        # synopsis = item["movie"]["synopsis"]
-        image_poster = item["movie"]["poster"]["url"]
-        runtime = item["movie"]["runtime"]
-        genres = [genre["tag"].title() for genre in item["movie"]["genres"]]
-        languages = [language.title() for language in item["movie"]["languages"]]
+        try:
+            """Create a Movie object from raw JSON data."""
+            movie_id = item["movie"]["id"]
+            original_title = item["movie"]["originalTitle"]
+            french_title = item["movie"]["title"]
+            image_poster = item["movie"]["poster"]["url"]
+            runtime = item["movie"]["runtime"]
+            genres = [genre["tag"].title() for genre in item["movie"]["genres"]]
+            languages = [language.title() for language in item["movie"]["languages"]]
 
-        cast = []
-        for cast_raw in item["movie"]["cast"]["edges"]:
-            try:
-                # Below is to deal with some cast members having only first or last name
-                cast_member = cast_raw["node"]["actor"]
-                first_name = cast_member["firstName"] or ""
-                last_name = cast_member["lastName"] or ""
-                name = " ".join([first_name, last_name]).strip()
-
-                cast.append(name)
-
-            except:
-                continue
-
-        # Find release date - if note available, use production date instead
-        release_date = None
-        for release in item["movie"]["releases"]:
-            if release["__typename"] == "MovieRelease" and release["releaseDate"]:
+            cast = []
+            for cast_raw in item["movie"]["cast"]["edges"]:
                 try:
-                    date_str = release["releaseDate"]["date"]
-                    release_date = datetime.strptime(date_str, "%Y-%m-%d")
-                    break
+                    # Below is to deal with some cast members having only first or last name
+                    cast_member = cast_raw["node"]["actor"]
+                    first_name = cast_member["firstName"] or ""
+                    last_name = cast_member["lastName"] or ""
+                    name = " ".join([first_name, last_name]).strip()
+
+                    cast.append(name)
+
                 except:
                     continue
-        if not release_date:
-            try:
-                date_str = str(item["movie"]["data"]["productionYear"]) + ("-01-01")
-                release_date = datetime.strptime(date_str, "%Y-%m-%d")
-            except:
-                pass
 
-        return Movie(
-            movie_id,
-            original_title,
-            french_title,
-            image_poster,
-            runtime,
-            # synopsis,
-            cast,
-            languages,
-            genres,
-            release_date,
-        )
+            # Find release date - if note available, use production date instead
+            release_date = None
+            for release in item["movie"]["releases"]:
+                if release["__typename"] == "MovieRelease" and release["releaseDate"]:
+                    try:
+                        date_str = release["releaseDate"]["date"]
+                        release_date = datetime.strptime(date_str, "%Y-%m-%d")
+                        break
+                    except:
+                        continue
+            if not release_date:
+                try:
+                    date_str = str(item["movie"]["data"]["productionYear"]) + ("-01-01")
+                    release_date = datetime.strptime(date_str, "%Y-%m-%d")
+                except:
+                    pass
+
+            new_movie = Movie(
+                movie_id,
+                original_title,
+                french_title,
+                image_poster,
+                runtime,
+                cast,
+                languages,
+                genres,
+                release_date,
+            )
+
+            return new_movie
+        except Exception as e:
+            raise Exception(f"Movie could not be created: {e}")
 
     @connect_to_database
     def add_new_movies_to_database(self, db=None, cursor=None) -> None:
@@ -274,7 +308,4 @@ class MovieManager:
             return "No new movies found."
 
 
-# An error occurred: 1406 (22001): Data too long for column 'movie_id' at row 18
-# An error occurred: 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`vo_movies`.`showtimes`, CONSTRAINT `fk_movie_id` FOREIGN KEY (`movie_id`) REFERENCES `movies` (`movie_id`))
-
-#! Run again and save data, see what the error is
+# TODO Consider changing to INSERT OR IGNORE to prevent individual errors stopping the entire batch insert
