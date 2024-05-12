@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Request
 
-from routers.fastapi_cinema_model import CinemaModel, CinemaDelete
+from routers.cinema_model import CinemaModel, CinemaDelete
 from cinema import CinemaManager
 from routers.limiter import limiter
 
