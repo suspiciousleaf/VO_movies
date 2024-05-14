@@ -157,7 +157,7 @@ class ShowingsManager:
 
             columns = Showing.get_columns()
             placeholders = ", ".join(f"%({key})s" for key in columns)
-            insert_query = f"INSERT INTO {TABLE_NAME} ({', '.join(columns)}) VALUES ({placeholders});"
+            insert_query = f"INSERT IGNORE INTO {TABLE_NAME} ({', '.join(columns)}) VALUES ({placeholders});"
             cursor.executemany(insert_query, showing_values_list)
             # Commit changes to database
             db.commit()
