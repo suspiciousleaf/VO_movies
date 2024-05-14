@@ -1,11 +1,12 @@
 from datetime import datetime
 from pprint import pprint
-import requests
+from requests import Session
 from pydantic import ValidationError
 
-from models.movie_model import MovieModel
+from models.movie_model import MovieModel, AdditionalDataMovieModel
+
 from db_utilities import connect_to_database
-from creds import movies_db_api_key
+from creds import tmdb_api_token
 
 TABLE_NAME = "movies"
 
@@ -19,8 +20,6 @@ class Movie:
         movie_id (str): The unique identifier of the movie. Base64 format
         original_title (str): The original title of the movie.
         french_title (str): The French title of the movie.
-        image_poster (str, optional): The URL of the movie poster image.
-        runtime (str, optional): The runtime of the movie.
         cast (list[str], optional): The list of cast members.
         languages (list[str], optional): The list of languages the movie is available in.
         genres (list[str], optional): The list of genres the movie belongs to.
@@ -36,8 +35,6 @@ class Movie:
         movie_id: str,
         original_title: str,
         french_title: str,
-        image_poster: str | None = None,
-        runtime: str | None = None,
         cast: list[str] | None = None,
         languages: list[str] | None = None,
         genres: list[str] | None = None,
@@ -48,8 +45,6 @@ class Movie:
                 "movie_id": movie_id,
                 "original_title": original_title,
                 "french_title": french_title,
-                "image_poster": image_poster,
-                "runtime": runtime,
                 "cast": cast,
                 "languages": languages,
                 "genres": genres,
@@ -60,7 +55,10 @@ class Movie:
             movie_model = MovieModel(**data)
 
         except ValidationError as e:
-            raise ValidationError(f"Validation error: {e}")
+            print("Validation errors:")
+            for error in e.errors():
+                print(error)
+            raise e
         except Exception as e:
             raise Exception(f"Exception: {e}")
 
@@ -68,121 +66,169 @@ class Movie:
         self.movie_id = movie_model.movie_id
         self.original_title = movie_model.original_title
         self.french_title = movie_model.french_title
-        self.image_poster = movie_model.image_poster
-        self.runtime = movie_model.runtime
-        self.cast = ",".join(movie_model.cast)
-        self.languages = ",".join(movie_model.languages)
-        self.genres = ",".join(movie_model.genres)
+        self.cast = movie_model.cast
+        self.languages = movie_model.languages
+        self.genres = movie_model.genres
         self.release_date = movie_model.release_date
 
-        # Some movie details are not available from the main source, so they are retrived from an API
-        extra_movie_data = self.get_additional_details()
-        # IMDB Ref
-        self.imdb_ref = extra_movie_data.get("imdb_ref")
-        # Rating
-        self.rating = extra_movie_data.get("rating")
-        # Synopsis
-        self.synopsis = extra_movie_data.get("synopsis")
+        # The info below is not available from the initial source, so it is aquired from TBDM on instantiation. Dict below holds the attribute name for the Movie object, and the key value that stores the information in the json from the API.
+        additional_required_details = {
+            "origin_country": ("origin_country"),
+            "rating": ("vote_average"),
+            "runtime": ("runtime"),
+            "tagline": ("tagline"),
+            "synopsis": ("overview"),
+            "imdb_url": ("imdb_id"),
+            "poster_slug": ("poster_path"),
+            "homepage": ("homepage"),
+        }
 
-    def get_additional_details(self):
-        """Retrieve additional details for the movie from an external API.
+        try:
+            extra_movie_data = self.get_additional_details(additional_required_details)
+
+            additional_details_movie_model = AdditionalDataMovieModel(
+                **extra_movie_data
+            )
+
+        except ValidationError as e:
+            print("Validation errors:")
+            for error in e.errors():
+                print(error)
+            raise e
+        except Exception as e:
+            raise Exception(f"Exception: {e}")
+
+        # for key, value in additional_details_movie_model.__dict__.items():
+        #     setattr(self, key, value)
+
+        self.origin_country = additional_details_movie_model.origin_country
+        self.rating = additional_details_movie_model.rating
+        self.tagline = additional_details_movie_model.tagline
+        self.synopsis = additional_details_movie_model.synopsis
+        self.imdb_url = additional_details_movie_model.imdb_url
+        self.poster_hi_res = additional_details_movie_model.poster_hi_res
+        self.poster_lo_res = additional_details_movie_model.poster_lo_res
+        self.homepage = additional_details_movie_model.homepage
+        self.tmdb_id = additional_details_movie_model.tmdb_id
+        self.runtime = additional_details_movie_model.runtime
+
+    def get_additional_details(self, additional_required_details):
+        """Retrieve additional details for the movie from an TMDB API.
 
         Returns:
             dict: A dictionary containing additional details for the movie:
-                - imdb_ref (str): The IMDB reference of the movie.
-                - rating (float): The rating of the movie.
+                - origin_country (str): The country of origin for the movie.
+                - rating (float): The average rating of the movie.
+                - runtime (int): The runtime of the movie in minutes.
+                - tagline (str): The tagline of the movie.
                 - synopsis (str): The synopsis of the movie.
+                - imdb_url (str): The IMDB URL of the movie.
+                - poster_hi_res (str): The URL to the high-resolution poster image of the movie.
+                - poster_lo_res (str): The URL to the low-resolution poster image of the movie.
+                - homepage (str): The URL to the official homepage of the movie.
+
+        Raises:
+            Exception: If additional movie details are not found.
         """
 
         # Create empty dict to hold additional details
         extra_movie_data = {}
 
+        s = Session()
+        headers = {
+            "accept": "application/json",
+            "Authorization": f"Bearer {tmdb_api_token}",
+        }
+
         try:
-            ref_url = f"https://moviesdatabase.p.rapidapi.com/titles/search/title/{self.original_title}"
-            # Query movies between release date and one year before to allow for possible inconsistent data
-            params = {
-                "exact": "false",
-                "endYear": f"{self.release_date.year}",
-                "startYear": f"{self.release_date.year-1}",
-                "titleType": "movie",
+            id_url = f"https://api.themoviedb.org/3/search/movie"
+            queryparams = {
+                "query": self.original_title,
+                "year": self.release_date.year,
             }
 
-            headers = {
-                "X-RapidAPI-Key": movies_db_api_key,
-                "X-RapidAPI-Host": "moviesdatabase.p.rapidapi.com",
-            }
-
-            s = requests.Session()
-            # IMDB ref must be identified first, then other details can be retrieved
-            response = s.get(ref_url, headers=headers, params=params)
+            # TMDB ID must be identified first, then other details can be retrieved
+            response = s.get(id_url, params=queryparams, headers=headers)
             response.raise_for_status()
-            if response.json()["results"]:
-                extra_movie_data["imdb_ref"] = response.json()["results"][0]["id"]
+            if response.json()["total_results"]:
+                extra_movie_data["tmdb_id"] = response.json()["results"][0]["id"]
             # If no results found using title and year, try again without the year.
             else:
-                params = {
-                    "exact": "false",
-                    "titleType": "movie",
+                queryparams = {
+                    "query": self.original_title,
                 }
-                response = s.get(ref_url, headers=headers, params=params)
+                response = s.get(id_url, params=queryparams, headers=headers)
                 response.raise_for_status()
-                if response.json()["results"]:
-                    extra_movie_data["imdb_ref"] = response.json()["results"][0]["id"]
+                if response.json()["total_results"]:
+                    extra_movie_data["tmdb_id"] = response.json()["results"][0]["id"]
                 else:
                     raise Exception("Movie not found")
 
-            # Dict to store each of the required details, and the keys required to access that data in the json
-            required_details = {
-                "rating": ("results", "ratingsSummary", "aggregateRating"),
-                "plot": ("results", "plot", "plotText", "plainText"),
-            }
+            details_url = (
+                f"https://api.themoviedb.org/3/movie/{extra_movie_data['tmdb_id']}"
+            )
 
-            for detail, keys in required_details.items():
-                try:
+            # TMDB ID must be identified first, then other details can be retrieved
+            response = s.get(details_url, headers=headers)
+            response.raise_for_status()
 
-                    query_url = f"https://moviesdatabase.p.rapidapi.com/titles/{extra_movie_data['imdb_ref']}?info={detail}"
+            response_data = response.json()
 
-                    response = s.get(query_url, headers=headers)
+            for detail, key in additional_required_details.items():
+                info = response_data.get(key)
+                if isinstance(info, list):
+                    extra_movie_data[detail] = ",".join(info)
+                else:
+                    extra_movie_data[detail] = info
 
-                    response.raise_for_status()
-                    nested_data = response.json()
-                    for key in keys:
-                        nested_data = nested_data.get(key, {})
+            extra_movie_data["poster_hi_res"] = (
+                f"https://image.tmdb.org/t/p/w780{extra_movie_data.get('poster_slug')}"
+            )
+            extra_movie_data["poster_lo_res"] = (
+                f"https://image.tmdb.org/t/p/w342{extra_movie_data.get('poster_slug')}"
+            )
+            extra_movie_data.pop("poster_slug")
 
-                    if detail == "plot":
-                        detail = "synopsis"
-                    extra_movie_data[detail] = nested_data
-                except:
-                    extra_movie_data[detail] = None
-        except:
-            print(f"{self.original_title}: additional movie details not found")
+            extra_movie_data["imdb_url"] = (
+                f"https://www.imdb.com/title/{extra_movie_data.get('imdb_url')}"
+            )
+
+        except Exception as e:
+            print(f"{self.original_title}: additional movie details not found: {e}")
+        finally:
+            s.close()
         return extra_movie_data
 
     @staticmethod
     def get_columns() -> tuple[str]:
         """Returns a tuple of the database column names to be written to"""
         return (
-            "imdb_ref",
             "movie_id",
             "original_title",
             "french_title",
+            "tagline",
             "rating",
-            "image_poster",
             "runtime",
             "synopsis",
             "cast",
             "languages",
             "genres",
             "release_date",
+            "origin_country",
+            "imdb_url",
+            "poster_hi_res",
+            "poster_lo_res",
+            "homepage",
+            "tmdb_id",
         )
 
     def __str__(self) -> str:
         """Return a string representation of the Movie object."""
-        return f"IMDB Ref: {self.imdb_ref} \nMovie ID: {self.movie_id} \nOriginal Title: {self.original_title} \nFrench Title: {self.french_title} \nRating: {self.rating}\nPoster: {self.image_poster} \nRuntime: {self.runtime} \nSynopsis:{self.synopsis} \nCast: {self.cast} \nLanguages: {self.languages} \nGenre(s): {self.genres} \nRelease Date: {self.release_date}"
+        return f"IMDB Ref: {self.imdb_url} \nMovie ID: {self.movie_id} \nOriginal Title: {self.original_title} \nFrench Title: {self.french_title} \nRating: {self.rating} \nRuntime: {self.runtime} \nSynopsis:{self.synopsis} \nCast: {self.cast} \nLanguages: {self.languages} \nGenre(s): {self.genres} \nRelease Date: {self.release_date}"
 
     def __repr__(self) -> str:
         """Return a string representation of the Movie object for debugging."""
-        return f"Movie('{self.imdb_ref}', '{self.movie_id}', '{self.original_title}', '{self.french_title}', '{self.rating}', '{self.image_poster}', '{self.runtime}', '{self.synopsis}', {self.cast}, {self.languages}, {self.genres}, {self.release_date})"
+        return f"Movie('{self.imdb_url}', '{self.movie_id}', '{self.original_title}', '{self.french_title}', '{self.rating}', '{self.runtime}', '{self.synopsis}', {self.cast}, {self.languages}, {self.genres}, {self.release_date})"
 
     def movie_name(self):
         """Return the original title of the movie."""
@@ -225,22 +271,27 @@ class MovieManager:
         if not self.movie_already_in_database(movie_id):
             try:
                 new_movie = self.create_movie(item)
-                self.add_new_movie(new_movie)
+                if new_movie is not None:
+                    self.add_new_movie(new_movie)
             except Exception as e:
-                raise Exception(f"Movie could not be processed: {e}")
+                raise Exception(f"Movie error: {e}")
 
     def create_movie(self, item: dict) -> Movie:
         try:
             """Create a Movie object from raw JSON data."""
-            movie_id = item["movie"]["id"]
-            original_title = item["movie"]["originalTitle"]
-            french_title = item["movie"]["title"]
-            image_poster = item["movie"]["poster"]["url"]
-            runtime = item["movie"]["runtime"]
-            genres = [genre["tag"].title() for genre in item["movie"]["genres"]]
-            languages = [language.title() for language in item["movie"]["languages"]]
+            movie_details = {}
+            movie_details["movie_id"] = item["movie"]["id"]
+            movie_details["original_title"] = item["movie"]["originalTitle"]
+            movie_details["french_title"] = item["movie"]["title"]
+            # movie_details["image_poster"] = item["movie"]["poster"]["url"]
+            movie_details["genres"] = [
+                genre["tag"].title() for genre in item["movie"]["genres"]
+            ]
+            movie_details["languages"] = [
+                language.title() for language in item["movie"]["languages"]
+            ]
 
-            cast = []
+            movie_details["cast"] = []
             for cast_raw in item["movie"]["cast"]["edges"]:
                 try:
                     # Below is to deal with some cast members having only first or last name
@@ -249,42 +300,38 @@ class MovieManager:
                     last_name = cast_member["lastName"] or ""
                     name = " ".join([first_name, last_name]).strip()
 
-                    cast.append(name)
+                    movie_details["cast"].append(name)
 
                 except:
                     continue
 
             # Find release date - if note available, use production date instead
-            release_date = None
+            movie_details["release_date"] = None
             for release in item["movie"]["releases"]:
                 if release["__typename"] == "MovieRelease" and release["releaseDate"]:
                     try:
                         date_str = release["releaseDate"]["date"]
-                        release_date = datetime.strptime(date_str, "%Y-%m-%d")
+                        movie_details["release_date"] = datetime.strptime(
+                            date_str, "%Y-%m-%d"
+                        )
                         break
                     except:
                         continue
-            if not release_date:
+            if not movie_details["release_date"]:
                 try:
                     date_str = str(item["movie"]["data"]["productionYear"]) + ("-01-01")
-                    release_date = datetime.strptime(date_str, "%Y-%m-%d")
+                    movie_details["release_date"] = datetime.strptime(
+                        date_str, "%Y-%m-%d"
+                    )
                 except:
                     pass
 
-            new_movie = Movie(
-                movie_id,
-                original_title,
-                french_title,
-                image_poster,
-                runtime,
-                cast,
-                languages,
-                genres,
-                release_date,
-            )
+            new_movie = Movie(**movie_details)
 
             return new_movie
+
         except Exception as e:
+            print(e)
             raise Exception(f"Movie could not be created: {e}")
 
     @connect_to_database
@@ -296,7 +343,7 @@ class MovieManager:
 
             columns = Movie.get_columns()
             placeholders = ", ".join(f"%({key})s" for key in columns)
-            insert_query = f"INSERT INTO {TABLE_NAME} ({', '.join(columns)}) VALUES ({placeholders});"
+            insert_query = f"INSERT IGNORE INTO {TABLE_NAME} ({', '.join(columns)}) VALUES ({placeholders});"
             cursor.executemany(insert_query, movie_values_list)
             db.commit()
 

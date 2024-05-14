@@ -1,7 +1,7 @@
 from base64 import b64decode
 from typing_extensions import Annotated
 from typing import List
-from pydantic import BaseModel, StringConstraints, validator, ValidationError
+from pydantic import BaseModel, StringConstraints, validator
 from datetime import datetime
 
 
@@ -131,6 +131,3 @@ class AdditionalDataMovieModel(BaseModel):
         if not 0 < input <= 10:
             raise RatingError(value=input, message="Rating not between 0.1 and 10")
         return input
-
-
-#! Some movies are failing validation I think and causing errors, see the new methods in the models code, and try using those methods to validate in the movies.py code and see what's up
