@@ -135,7 +135,7 @@ class ScraperManager:
         logger.debug("Initializing  cinema, movie, and showing managers")
         self.cinema_man = CinemaManager()  # logger)
         self.show_man = ShowingsManager(logger)
-        self.movie_man = MovieManager()  # logger)
+        self.movie_man = MovieManager(logger)
 
         logger.debug(
             "ScraperManager initialized successfully, checking new movie & showing info."
@@ -180,7 +180,7 @@ class ScraperManager:
                 # Process showing
                 self.show_man.process_showing(showing, cinema)
             except Exception as e:
-                self.logger.error("Unable to process data: %s", e, exc_info=True)
+                self.logger.error(f"Unable to process data: {e}")  # , exc_info=True)
 
     def save_raw_data(self):
         """Save raw JSON data to a file."""

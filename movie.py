@@ -2,6 +2,7 @@ from datetime import datetime
 from pprint import pprint
 from requests import Session
 from pydantic import ValidationError
+from logging import Logger
 
 from models.movie_model import MovieModel, AdditionalDataMovieModel
 
@@ -17,6 +18,7 @@ class Movie:
     """Represents a movie object with its details. Validates input data using pydantic MovieModel(BaseModel) to ensure it is compatible with database schema.
 
     Attributes:
+        logger (Logger): Logger instance
         movie_id (str): The unique identifier of the movie. Base64 format
         original_title (str): The original title of the movie.
         french_title (str): The French title of the movie.
@@ -32,6 +34,7 @@ class Movie:
 
     def __init__(
         self,
+        logger: Logger,
         movie_id: str,
         original_title: str,
         french_title: str,
@@ -40,27 +43,26 @@ class Movie:
         genres: list[str] | None = None,
         release_date: datetime | None = None,
     ) -> None:
+        self.logger = logger
+        data = {
+            "movie_id": movie_id,
+            "original_title": original_title,
+            "french_title": french_title,
+            "cast": cast,
+            "languages": languages,
+            "genres": genres,
+            "release_date": release_date,
+        }
         try:
-            data = {
-                "movie_id": movie_id,
-                "original_title": original_title,
-                "french_title": french_title,
-                "cast": cast,
-                "languages": languages,
-                "genres": genres,
-                "release_date": release_date,
-            }
-
             # Validate the input data using MovieModel
-            movie_model = MovieModel(**data)
+            movie_model = MovieModel(**data, logger=logger)
 
         except ValidationError as e:
-            print("Validation errors:")
-            for error in e.errors():
-                print(error)
+            self.logger.error(f"Validation error: {e}")
             raise e
         except Exception as e:
-            raise Exception(f"Exception: {e}")
+            self.logger.error(f"Unable to create Movie instance: {e}")
+            raise e
 
         # If validation succeeds, assign the validated data to attributes
         self.movie_id = movie_model.movie_id
@@ -87,19 +89,15 @@ class Movie:
             extra_movie_data = self.get_additional_details(additional_required_details)
 
             additional_details_movie_model = AdditionalDataMovieModel(
-                **extra_movie_data
+                **extra_movie_data, logger=logger
             )
 
         except ValidationError as e:
-            print("Validation errors:")
-            for error in e.errors():
-                print(error)
+            self.logger.error(f"Validation error: {e}")
             raise e
         except Exception as e:
-            raise Exception(f"Exception: {e}")
-
-        # for key, value in additional_details_movie_model.__dict__.items():
-        #     setattr(self, key, value)
+            self.logger.error(f"Unable to create Movie instance: {e}")
+            raise e
 
         self.origin_country = additional_details_movie_model.origin_country
         self.rating = additional_details_movie_model.rating
@@ -150,17 +148,17 @@ class Movie:
             # TMDB ID must be identified first, then other details can be retrieved
             response = s.get(id_url, params=queryparams, headers=headers)
             response.raise_for_status()
-            if response.json()["total_results"]:
-                extra_movie_data["tmdb_id"] = response.json()["results"][0]["id"]
+            results = response.json().get("results")
+            if results:
+                extra_movie_data["tmdb_id"] = results[0]["id"]
             # If no results found using title and year, try again without the year.
             else:
-                queryparams = {
-                    "query": self.original_title,
-                }
+                queryparams.pop("year")
                 response = s.get(id_url, params=queryparams, headers=headers)
                 response.raise_for_status()
-                if response.json()["total_results"]:
-                    extra_movie_data["tmdb_id"] = response.json()["results"][0]["id"]
+                results = response.json().get("results")
+                if results:
+                    extra_movie_data["tmdb_id"] = results[0]["id"]
                 else:
                     raise Exception("Movie not found")
 
@@ -194,7 +192,9 @@ class Movie:
             )
 
         except Exception as e:
-            print(f"{self.original_title}: additional movie details not found: {e}")
+            self.logger.warning(
+                f"{self.original_title}: additional movie details not found: {e}"
+            )
         finally:
             s.close()
         return extra_movie_data
@@ -222,6 +222,10 @@ class Movie:
             "tmdb_id",
         )
 
+    def database_format(self):
+        """Return object in a format to be inserted into database"""
+        return {attr: self.__dict__.get(attr) for attr in self.get_columns()}
+
     def __str__(self) -> str:
         """Return a string representation of the Movie object."""
         return f"IMDB Ref: {self.imdb_url} \nMovie ID: {self.movie_id} \nOriginal Title: {self.original_title} \nFrench Title: {self.french_title} \nRating: {self.rating} \nRuntime: {self.runtime} \nSynopsis:{self.synopsis} \nCast: {self.cast} \nLanguages: {self.languages} \nGenre(s): {self.genres} \nRelease Date: {self.release_date}"
@@ -236,14 +240,14 @@ class Movie:
 
 
 class MovieManager:
-    def __init__(self) -> None:
+    def __init__(self, logger: Logger) -> None:
         """Initialize a MovieManager object."""
+        self.logger = logger
         self.current_movie_ids = set(self.retrieve_movies())
         self.new_movies = []
 
-    @staticmethod
     @connect_to_database
-    def retrieve_movies(db, cursor) -> list[tuple[str]]:
+    def retrieve_movies(self, db, cursor) -> list[tuple[str]]:
         """Retrieve existing movie IDs from the database."""
         try:
             query = f"SELECT movie_id FROM {TABLE_NAME};"
@@ -254,7 +258,11 @@ class MovieManager:
             return [result[0] for result in results]
 
         except Exception as e:
-            print(f"MovieManager.retrieve_movies: An error occurred: {str(e)}")
+            self.logger.critical(
+                f"MovieManager.retrieve_movies: An error occurred: {str(e)}",
+                exc_info=True,
+            )
+            raise e
 
     def movie_already_in_database(self, movie_id: str) -> bool:
         """Check if a movie is already in the database."""
@@ -274,72 +282,74 @@ class MovieManager:
                 if new_movie is not None:
                     self.add_new_movie(new_movie)
             except Exception as e:
-                raise Exception(f"Movie error: {e}")
+                self.logger.error(f"Unable to create Movie: {e}")
 
     def create_movie(self, item: dict) -> Movie:
         try:
             """Create a Movie object from raw JSON data."""
-            movie_details = {}
-            movie_details["movie_id"] = item["movie"]["id"]
-            movie_details["original_title"] = item["movie"]["originalTitle"]
-            movie_details["french_title"] = item["movie"]["title"]
-            # movie_details["image_poster"] = item["movie"]["poster"]["url"]
-            movie_details["genres"] = [
-                genre["tag"].title() for genre in item["movie"]["genres"]
-            ]
-            movie_details["languages"] = [
-                language.title() for language in item["movie"]["languages"]
-            ]
-
-            movie_details["cast"] = []
-            for cast_raw in item["movie"]["cast"]["edges"]:
-                try:
-                    # Below is to deal with some cast members having only first or last name
-                    cast_member = cast_raw["node"]["actor"]
-                    first_name = cast_member["firstName"] or ""
-                    last_name = cast_member["lastName"] or ""
-                    name = " ".join([first_name, last_name]).strip()
-
-                    movie_details["cast"].append(name)
-
-                except:
-                    continue
-
-            # Find release date - if note available, use production date instead
-            movie_details["release_date"] = None
-            for release in item["movie"]["releases"]:
-                if release["__typename"] == "MovieRelease" and release["releaseDate"]:
-                    try:
-                        date_str = release["releaseDate"]["date"]
-                        movie_details["release_date"] = datetime.strptime(
-                            date_str, "%Y-%m-%d"
-                        )
-                        break
-                    except:
-                        continue
-            if not movie_details["release_date"]:
-                try:
-                    date_str = str(item["movie"]["data"]["productionYear"]) + ("-01-01")
-                    movie_details["release_date"] = datetime.strptime(
-                        date_str, "%Y-%m-%d"
-                    )
-                except:
-                    pass
-
-            new_movie = Movie(**movie_details)
+            movie_details = {
+                "movie_id": item["movie"]["id"],
+                "original_title": item["movie"]["originalTitle"],
+                "french_title": item["movie"]["title"],
+                "genres": [genre["tag"].title() for genre in item["movie"]["genres"]],
+                "languages": [
+                    language.title() for language in item["movie"]["languages"]
+                ],
+                "cast": self.get_cast(item["movie"]["cast"]["edges"]),
+                "release_date": self.get_release_date(item),
+            }
+            new_movie = Movie(**movie_details, logger=self.logger)
 
             return new_movie
 
         except Exception as e:
-            print(e)
-            raise Exception(f"Movie could not be created: {e}")
+            self.logger.error(f"Movie could not be created: {e}")
+            return None
+
+    @staticmethod
+    def get_cast(cast_json):
+        """Method to extract cast names from scraped json"""
+        cast = []
+        for cast_raw in cast_json:
+            try:
+                # Below is to deal with some cast members having only first or last name
+                cast_member = cast_raw["node"]["actor"]
+                first_name = cast_member["firstName"] or ""
+                last_name = cast_member["lastName"] or ""
+                name = " ".join([first_name, last_name]).strip()
+
+                cast.append(name)
+
+            except:
+                continue
+        return cast
+
+    @staticmethod
+    def get_release_date(item):
+        # Find release date - if note available, use production date instead
+        release_date = None
+        for release in item["movie"]["releases"]:
+            if release["__typename"] == "MovieRelease" and release["releaseDate"]:
+                try:
+                    date_str = release["releaseDate"]["date"]
+                    release_date = datetime.strptime(date_str, "%Y-%m-%d")
+                    break
+                except:
+                    continue
+        if not release_date:
+            try:
+                date_str = str(item["movie"]["data"]["productionYear"]) + ("-01-01")
+                release_date = datetime.strptime(date_str, "%Y-%m-%d")
+            except:
+                pass
+        return release_date
 
     @connect_to_database
     def add_new_movies_to_database(self, db=None, cursor=None) -> None:
         """Add new movies to the database."""
         if self.new_movies:
 
-            movie_values_list = [movie.__dict__ for movie in self.new_movies]
+            movie_values_list = [movie.database_format() for movie in self.new_movies]
 
             columns = Movie.get_columns()
             placeholders = ", ".join(f"%({key})s" for key in columns)
@@ -357,4 +367,4 @@ class MovieManager:
             return "No new movies found."
 
 
-# TODO Consider changing to INSERT OR IGNORE to prevent individual errors stopping the entire batch insert
+# TODO Catch warnings from INSERT IGNORE SQL
