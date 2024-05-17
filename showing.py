@@ -2,6 +2,7 @@ from datetime import datetime
 import hashlib
 from pprint import pprint
 from pydantic import ValidationError
+from logging import Logger
 
 from db_utilities import connect_to_database
 from models.showing_model import ShowingModel
@@ -18,6 +19,7 @@ class Showing:
 
     def __init__(
         self,
+        logger: Logger,
         movie_id: str,
         cinema_id: str,
         start_time: datetime,
@@ -30,6 +32,7 @@ class Showing:
             cinema_id (str): The ID of the cinema.
             start_time (datetime): The start time of the showing.
         """
+        self.logger = logger
         try:
             data = {
                 "movie_id": movie_id,
@@ -38,9 +41,12 @@ class Showing:
             }
             # Validate input data by creating ShowingModel object
             showing_model = ShowingModel(**data)
+
         except ValidationError as e:
+            logger.error(f"Validation error: {e}", exc_info=True)
             raise ValidationError(f"Validation error: {e}")
         except Exception as e:
+            logger.error(f"Exception: {e}", exc_info=True)
             raise Exception(f"Exception: {e}")
 
         self.movie_id = showing_model.movie_id
@@ -69,6 +75,15 @@ class Showing:
 
         return hash_value
 
+    def database_format(self):
+        """Return object in a format to be inserted into database"""
+        return {
+            "movie_id": self.movie_id,
+            "cinema_id": self.cinema_id,
+            "start_time": self.start_time,
+            "hash_id": self.hash_id,
+        }
+
     def __str__(self) -> str:
         """Return a string representation of the Showing object."""
         return f"\nMovie ID: {self.movie_id} \nCinema ID: {self.cinema_id} \nStart Time: {self.start_time} \nHash ID: {self.hash_id}"
@@ -79,10 +94,17 @@ class Showing:
 
 
 class ShowingsManager:
-    def __init__(self) -> None:
+    def __init__(self, logger: Logger) -> None:
         """Initialize a ShowingsManager object."""
-        self.current_showings = set(self.retrieve_showings())
+        self.logger = logger
         self.new_showings = []
+
+        try:
+            current_showings = self.retrieve_showings()
+            self.current_showings = set(current_showings)
+        except Exception as e:
+            self.logger.error("Unable to retrieve showings: %s", e, exc_info=True)
+            raise ShowingManagerInitializationError
 
     @staticmethod
     @connect_to_database
@@ -93,17 +115,13 @@ class ShowingsManager:
         Returns:
             list: List of hash_id values.
         """
-        try:
-            cursor = db.cursor()
-            query = f"SELECT hash_id FROM {TABLE_NAME};"
-            cursor.execute(query)
-            results = cursor.fetchall()
+        cursor = db.cursor()
+        query = f"SELECT hash_id FROM {TABLE_NAME};"
+        cursor.execute(query)
+        results = cursor.fetchall()
 
-            # results has a list of tuples, the line below extracts the string from each tuple.
-            return [result[0] for result in results]
-
-        except Exception as e:
-            print(f"ShowingsManager.retrieve_showings: An error occurred: {str(e)}")
+        # results has a list of tuples, the line below extracts the string from each tuple.
+        return [result[0] for result in results]
 
     def showing_already_in_database(self, hash_id: str) -> bool:
         """
@@ -132,12 +150,14 @@ class ShowingsManager:
                     date_str = showing["startsAt"]
                     start_time = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
                     # Create new Showing object, to create hash_id for comparison with current showings
-                    new_showing = Showing(movie_id, cinema_id, start_time)
+                    new_showing = Showing(self.logger, movie_id, cinema_id, start_time)
                     # Check if new showing is already in database by comparing hash_id, if not add to list to new showings to be added to database
                     if not self.showing_already_in_database(new_showing.hash_id):
                         self.add_new_showing(new_showing)
                 except Exception as e:
-                    print(f"Showing could not be created: {e}")
+                    self.logger.error(
+                        f"Showing could not be processed: {e}", exc_info=True
+                    )
 
     def add_new_showing(self, new_showing: Showing) -> None:
         """Add new showing to new_showings list to be added to database, and add hash_id to set.
@@ -153,7 +173,11 @@ class ShowingsManager:
             """Run this to add all new showings stored in self.new_showings to database."""
 
             # List of dicts of values for each new showing to be inserted into {TABLE_NAME} table
-            showing_values_list = [showing.__dict__ for showing in self.new_showings]
+            showing_values_list = [
+                showing.database_format() for showing in self.new_showings
+            ]
+
+            self.logger.debug("Adding new showings to database")
 
             columns = Showing.get_columns()
             placeholders = ", ".join(f"%({key})s" for key in columns)
@@ -161,6 +185,12 @@ class ShowingsManager:
             cursor.executemany(insert_query, showing_values_list)
             # Commit changes to database
             db.commit()
+            warnings = cursor.fetchwarnings()
+            if warnings:
+                self.logger.warning(
+                    f"Warning(s) while inserting showings into database: {warnings}"
+                )
+            self.logger.info(f"{len(self.new_showings)} new showings added to database")
 
     def __str__(self):
         """Return a string showing how many new showings have been found this run."""
@@ -168,3 +198,11 @@ class ShowingsManager:
             return f"{len(self.new_showings)} new showings found."
         else:
             return "No new showings"
+
+
+class ShowingManagerInitializationError(Exception):
+    """Exception to be raised if the Showing Manager instantiation fails"""
+
+    def __init__(self, message: str):
+        self.message = message
+        super().__init__(message)
