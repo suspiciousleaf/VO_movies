@@ -77,12 +77,7 @@ class Showing:
 
     def database_format(self):
         """Return object in a format to be inserted into database"""
-        return {
-            "movie_id": self.movie_id,
-            "cinema_id": self.cinema_id,
-            "start_time": self.start_time,
-            "hash_id": self.hash_id,
-        }
+        return {attr: self.__dict__.get(attr) for attr in self.get_columns()}
 
     def __str__(self) -> str:
         """Return a string representation of the Showing object."""
