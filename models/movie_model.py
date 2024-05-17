@@ -1,7 +1,6 @@
 from base64 import b64decode
-from typing_extensions import Annotated
 from typing import List
-from pydantic import BaseModel, StringConstraints, validator
+from pydantic import BaseModel, validator, Field
 from datetime import datetime
 
 
@@ -44,9 +43,9 @@ class RatingError(Exception):
 class MovieModel(BaseModel):
     """Model to ensure the movie data is in the correct format before inserting into the database"""
 
-    movie_id: Annotated[str, StringConstraints(min_length=12, max_length=191)]
-    original_title: Annotated[str, StringConstraints(min_length=2, max_length=191)]
-    french_title: Annotated[str, StringConstraints(min_length=2, max_length=191)]
+    movie_id: str = Field(..., min_length=12, max_length=191)
+    original_title: str = Field(..., min_length=2, max_length=191)
+    french_title: str = Field(..., min_length=2, max_length=191)
     cast: List[str] | None = None
     languages: List[str] | None = None
     genres: List[str] | None = None
@@ -85,15 +84,15 @@ class MovieModel(BaseModel):
 class AdditionalDataMovieModel(BaseModel):
     """Model to ensure the additional movie data from TMDB is in the correct format before inserting into the database"""
 
-    origin_country: Annotated[str, StringConstraints(max_length=191)] | None = None
+    origin_country: str | None = Field(None, max_length=191)
     rating: float | None = None
-    tagline: Annotated[str, StringConstraints(max_length=255)] | None = None
+    tagline: str | None = Field(None, max_length=255)
     runtime: int | None = None
-    synopsis: Annotated[str, StringConstraints(max_length=1000)] | None = None
-    imdb_url: Annotated[str, StringConstraints(max_length=255)] | None = None
-    poster_lo_res: Annotated[str, StringConstraints(max_length=255)] | None = None
-    poster_hi_res: Annotated[str, StringConstraints(max_length=255)] | None = None
-    homepage: Annotated[str, StringConstraints(max_length=255)] | None = None
+    synopsis: str | None = Field(None, max_length=1000)
+    imdb_url: str | None = Field(None, max_length=255)
+    poster_lo_res: str | None = Field(None, max_length=255)
+    poster_hi_res: str | None = Field(None, max_length=255)
+    homepage: str | None = Field(None, max_length=255)
     tmdb_id: int | None = None
 
     @validator("runtime")
