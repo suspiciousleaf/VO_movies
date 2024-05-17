@@ -2,6 +2,7 @@
 creds.py
 raw_data*
 test*
+*.log*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
