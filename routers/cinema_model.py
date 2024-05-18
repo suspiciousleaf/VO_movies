@@ -36,7 +36,7 @@ class CinemaDelete(BaseModel):
     ]
 
 
-class GPSInvalidError(Exception):
+class GPSInvalidError(ValueError):
     """Custom error that is raised when GPS coordinates provided are not valid"""
 
     def __init__(self, value: str, message: str):

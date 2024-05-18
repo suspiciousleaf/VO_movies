@@ -4,7 +4,6 @@ from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
-from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
 
 from routers.cinema_router import router as cinema_router
 from routers.showings_router import router as showings_router
@@ -12,7 +11,6 @@ from routers.limiter import limiter
 from search import Search
 from logging import getLogger
 from logs.setup_logger import setup_logging
-from routers.cinema_model import GPSInvalidError
 
 
 # Initialize logger and run setup
@@ -20,14 +18,12 @@ logger = getLogger(__name__)
 setup_logging()
 
 
-def validation_exception_handler(request: Request, exc: GPSInvalidError):
+def validation_exception_handler(request: Request, exc: RequestValidationError):
     client_ip = request.client.host
-    logger.error(f"Validation error from IP {client_ip}:")  # {exc.errors()}")
+    logger.error(f"Validation error from IP {client_ip}: {exc.errors()}")
     return JSONResponse(
-        status_code=HTTP_422_UNPROCESSABLE_ENTITY,
-        content=jsonable_encoder(
-            {"detail": exc.message}
-        ),  # ({"detail": exc.errors()}),
+        status_code=422,
+        content=jsonable_encoder({"detail": exc.errors()}),
     )
 
 
@@ -43,7 +39,7 @@ app.include_router(cinema_router)
 app.include_router(showings_router)
 
 # Add custom exception handler
-app.add_exception_handler(GPSInvalidError, validation_exception_handler)
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
 
 # Add rate limiter and exception handler
 app.state.limiter = limiter
