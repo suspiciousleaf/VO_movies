@@ -133,7 +133,7 @@ class ScraperManager:
             raise ScraperManagerInitializationError(error_message)
 
         logger.debug("Initializing  cinema, movie, and showing managers")
-        self.cinema_man = CinemaManager()  # logger)
+        self.cinema_man = CinemaManager(logger)
         self.show_man = ShowingsManager(logger)
         self.movie_man = MovieManager(logger)
 
