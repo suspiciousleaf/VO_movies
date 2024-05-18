@@ -104,14 +104,15 @@ class Cinema:
 class CinemaManager:
     """To access `cinema_id`s, iterate over the `CinemaManager` class instance"""
 
-    def __init__(self):
+    def __init__(self, logger):
         """Initialize a CinemaManager object."""
-        self.cinemas = self.retrieve_cinemas()
+        self.logger = logger
+        self.cinemas = self.retrieve_cinemas(logger=logger)
         self.cinema_ids = set(cinema.cinema_id for cinema in self.cinemas)
 
     @staticmethod
     @connect_to_database
-    def retrieve_cinemas(db, cursor) -> list[str]:
+    def retrieve_cinemas(db, cursor, logger) -> list[str]:
         """
         Retrieve cinema information for all cinemas in the database.
 
@@ -119,6 +120,7 @@ class CinemaManager:
             list[Cinema]: List of Cinema objects.
         """
         try:
+            logger.debug(f"Retrieving cinemas from databse")
             cursor = db.cursor(dictionary=True)
             query = f"SELECT cinema_id, name, address, info, ST_AsText(gps) AS gps, town FROM {TABLE_NAME};"
             cursor.execute(query)
@@ -129,7 +131,11 @@ class CinemaManager:
             return cinema_objects
 
         except Exception as e:
-            print(f"ShowingsManager.retrieve_showings: An error occurred: {str(e)}")
+            logger.critical(
+                f"CinemaManager.retrieve_cinemas: An error occurred: {str(e)}",
+                exc_info=True,
+            )
+            raise e
 
     @staticmethod
     async def get_gps(cinema: dict) -> Location | None:
@@ -168,7 +174,7 @@ class CinemaManager:
 
         Note: "cinema_id" is obligatory, "gps" will attempt to be found if not provided.
         """
-        if cinema["cinema_id"] in self.cinema_ids:
+        if cinema.get("cinema_id") in self.cinema_ids:
             return {"ok": False, "code": 409, "info": "Cinema ID already in database"}
         else:
             try:
@@ -190,8 +196,8 @@ class CinemaManager:
 
             except Exception as e:
                 resp_dict = {"ok": False, "code": 400, "info": [f"Bad request: {e}"]}
-                if response:
-                    resp_dict["info"].append(response["info"])
+                if response is not None:
+                    resp_dict["info"].append(response.get("info"))
                 return resp_dict
 
     @connect_to_database

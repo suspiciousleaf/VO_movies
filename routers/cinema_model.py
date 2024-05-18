@@ -1,5 +1,5 @@
 from typing_extensions import Annotated
-from pydantic import BaseModel, StringConstraints, validator
+from pydantic import BaseModel, StringConstraints, field_validator
 
 
 class CinemaModel(BaseModel):
@@ -13,16 +13,18 @@ class CinemaModel(BaseModel):
     gps: list[float] | None = None
     town: Annotated[str, StringConstraints(min_length=3, max_length=191)]
 
-    @validator("gps")
+    @field_validator("gps")
     def check_gps(cls, gps):
         if gps is None:
-            return gps
+            return None
         if len(gps) != 2:
-            raise ValueError("gps coordinates must have exactly two elements")
+            raise GPSInvalidError(
+                gps, f"GPS coordinates must have two elements, not {len(gps)}"
+            )
         if not all(isinstance(coord, float) for coord in gps):
-            raise ValueError("gps coordinates must be floats")
-        if not all(abs(gps[0]) <= 90 and abs(gps[1]) <= 180):
-            raise ValueError("gps coordinates outside valid range")
+            raise GPSInvalidError(gps, "GPS coordinates must be floats")
+        if not abs(gps[0]) <= 90 or not abs(gps[1]) <= 180:
+            raise GPSInvalidError(gps, "GPS coordinates outside valid range")
         return gps
 
 
@@ -32,3 +34,12 @@ class CinemaDelete(BaseModel):
     cinema_id: Annotated[
         str, StringConstraints(min_length=5, max_length=5, pattern=r"^[A-Z]\d{4}$")
     ]
+
+
+class GPSInvalidError(Exception):
+    """Custom error that is raised when GPS coordinates provided are not valid"""
+
+    def __init__(self, value: str, message: str):
+        self.value = value
+        self.message = message
+        super().__init__(message)
