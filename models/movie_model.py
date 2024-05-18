@@ -5,7 +5,7 @@ from datetime import datetime
 from logging import Logger
 
 
-class Base64FormatError(Exception):
+class Base64FormatError(ValueError):
     """Custom error that is raised when an invalid Base64 string is checked"""
 
     def __init__(self, value: str, message: str):
@@ -14,7 +14,7 @@ class Base64FormatError(Exception):
         super().__init__(message)
 
 
-class ListStringError(Exception):
+class ListStringError(ValueError):
     """Custom error that is raised when the value checked isn't a list of strings"""
 
     def __init__(self, value: List[str], message: str):
@@ -23,7 +23,7 @@ class ListStringError(Exception):
         super().__init__(message)
 
 
-class IntError(Exception):
+class IntError(ValueError):
     """Custom error that is raised when the value is not a valid number in the permissable range"""
 
     def __init__(self, value: int, message: str):
@@ -32,7 +32,7 @@ class IntError(Exception):
         super().__init__(message)
 
 
-class RatingError(Exception):
+class RatingError(ValueError):
     """Custom error that is raised when the value is not a valid rating (float 0-10)"""
 
     def __init__(self, value: float, message: str):
@@ -85,7 +85,7 @@ class MovieModel(BaseModel, arbitrary_types_allowed=True):
                 )
 
             return ",".join(input_list)
-        except Exception as e:
+        except (ValueError, Exception) as e:
             logger = values.data.get("logger")
             if logger:
                 logger.warning(
@@ -126,7 +126,7 @@ class AdditionalDataMovieModel(BaseModel, arbitrary_types_allowed=True):
                 )
             return input
 
-        except Exception as e:
+        except (ValueError, Exception) as e:
             logger = values.data.get("logger")
             if logger:
                 logger.warning(e)
@@ -149,7 +149,7 @@ class AdditionalDataMovieModel(BaseModel, arbitrary_types_allowed=True):
                 )
             return input
 
-        except Exception as e:
+        except (ValueError, Exception) as e:
             logger = values.data.get("logger")
             if logger:
                 logger.warning(e)
@@ -173,7 +173,7 @@ class AdditionalDataMovieModel(BaseModel, arbitrary_types_allowed=True):
                 )
             return input
 
-        except Exception as e:
+        except (ValueError, Exception) as e:
             logger = values.data.get("logger")
             if logger:
                 logger.warning(e)
