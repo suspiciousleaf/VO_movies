@@ -1,4 +1,5 @@
 from pprint import pprint
+from logging import Logger
 
 from db_utilities import connect_to_database
 
@@ -11,8 +12,9 @@ class Search:
     results (list): A list to store the search results.
     """
 
-    def __init__(self):
+    def __init__(self, logger: Logger):
         """Initialize the Search object."""
+        self.logger = logger
         self.results = []
 
     def search(self, towns: list[str] | None = None):
@@ -44,10 +46,17 @@ class Search:
 
         try:
             cursor = db.cursor(dictionary=True)
-            columns_required = "start_time, original_title, french_title, image_poster, runtime, synopsis, cast, languages, genres, release_date, name, town"
+            columns_required = "start_time, original_title, french_title, runtime, synopsis, cast, languages, genres, release_date, rating, homepage, imdb_url, origin_country, poster_hi_res, poster_lo_res, tagline, name, town"
             search_query = f"SELECT {columns_required} FROM showtimes LEFT JOIN movies ON showtimes.movie_id = movies.movie_id LEFT JOIN cinemas ON showtimes.cinema_id = cinemas.cinema_id WHERE start_time > DATE(NOW())"
 
             if towns:
+                try:
+                    assert all(isinstance(town, str) for town in towns)
+                except:
+                    raise ValueError(
+                        f"All 'town' values must be strings, towns={towns}"
+                    )
+
                 placeholders = ", ".join(f"%s" for _ in towns)
                 search_query += f" AND town IN ({placeholders})"
                 cursor.execute(search_query, towns)
@@ -58,11 +67,19 @@ class Search:
             return results
 
         except Exception as e:
-            print(f"Search failed: {e}")
+            self.logger.error(f"Search.search_showings() failed: {e}")
             return []
 
 
 if __name__ == "__main__":
-    search = Search()
-    results = search.search(["Quillan"])
-    print(len(results))
+    # Test search behaviour
+    from logging import getLogger
+    from logs.setup_logger import setup_logging
+
+    logger = getLogger(__name__)
+    setup_logging()
+    search = Search(logger)
+    results = search.search([1, 2])
+    logger.info(f"Number of results: {len(results)}")
+    if results:
+        pprint(results[0])
