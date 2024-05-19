@@ -85,7 +85,7 @@ class MovieModel(BaseModel, arbitrary_types_allowed=True):
                 )
 
             return ",".join(input_list)
-        except (ValueError, Exception) as e:
+        except Exception as e:
             logger = values.data.get("logger")
             if logger:
                 logger.warning(
@@ -126,7 +126,7 @@ class AdditionalDataMovieModel(BaseModel, arbitrary_types_allowed=True):
                 )
             return input
 
-        except (ValueError, Exception) as e:
+        except Exception as e:
             logger = values.data.get("logger")
             if logger:
                 logger.warning(e)
@@ -149,7 +149,7 @@ class AdditionalDataMovieModel(BaseModel, arbitrary_types_allowed=True):
                 )
             return input
 
-        except (ValueError, Exception) as e:
+        except Exception as e:
             logger = values.data.get("logger")
             if logger:
                 logger.warning(e)
@@ -173,7 +173,7 @@ class AdditionalDataMovieModel(BaseModel, arbitrary_types_allowed=True):
                 )
             return input
 
-        except (ValueError, Exception) as e:
+        except Exception as e:
             logger = values.data.get("logger")
             if logger:
                 logger.warning(e)
