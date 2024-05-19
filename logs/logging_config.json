@@ -20,11 +20,26 @@
       }
     }
   },
+  "filters": {
+    "max_info": {
+      "()": "logs.log_model.NonErrorFilter",
+      "level": "INFO"
+    },
+    "no_mysql_info": {
+      "()": "logs.log_model.MySQLConnectorAntiVerbosityFilter",
+      "level": "WARNING",
+      "logger_name": "mysql.connector"
+    }
+  },
   "handlers": {
     "stdout": {
       "class": "logging.StreamHandler",
-      "level": "DEBUG",
+      "level": "INFO",
       "formatter": "simple",
+      "filters": [
+        "max_info",
+        "no_mysql_info"
+      ],
       "stream": "ext://sys.stdout"
     },
     "stderr": {
@@ -44,6 +59,7 @@
     "queue_handler": {
       "class": "logging.handlers.QueueHandler",
       "handlers": [
+        "stdout",
         "stderr",
         "file"
       ],
@@ -52,9 +68,8 @@
   },
   "loggers": {
     "root": {
-      "level": "INFO",
+      "level": "DEBUG",
       "handlers": [
-        "stdout",
         "queue_handler"
       ]
     }

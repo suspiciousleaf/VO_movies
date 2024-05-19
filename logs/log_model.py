@@ -75,7 +75,26 @@ class MyJSONFormatter(logging.Formatter):
 
 
 # This can be used to filter logs below a certain threshold rather than above it
-# class NonErrorFilter(logging.Filter):
-#     @override
-#     def filter(self, record: logging.LogRecord) -> bool | logging.LogRecord:
-#         return record.levelno <= logging.INFO
+class NonErrorFilter(logging.Filter):
+
+    def __init__(self, level):
+        self.max_level = logging.getLevelName(level.upper())
+
+    @override
+    def filter(self, record: logging.LogRecord) -> bool | logging.LogRecord:
+        return record.levelno <= self.max_level
+
+
+# This is used to prevent INFO level messages from MySQL Connector going to stdout. They are still sent to log files
+class MySQLConnectorAntiVerbosityFilter(logging.Filter):
+
+    def __init__(self, level, logger_name):
+        self.min_level = logging.getLevelName(level.upper())
+        self.logger_name = logger_name
+
+    @override
+    def filter(self, record: logging.LogRecord) -> bool | logging.LogRecord:
+        if record.name == self.logger_name:
+            return record.levelno >= self.min_level
+        else:
+            return True
