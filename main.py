@@ -19,8 +19,7 @@ setup_logging()
 
 
 def validation_exception_handler(request: Request, exc: RequestValidationError):
-    client_ip = request.client.host
-    logger.error(f"Validation error from IP {client_ip}: {exc.errors()}")
+    logger.error(f"Validation error: {exc.errors()}")
     return JSONResponse(
         status_code=422,
         content=jsonable_encoder({"detail": exc.errors()}),
