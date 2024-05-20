@@ -1,4 +1,3 @@
-from pprint import pprint
 from logging import Logger
 
 from db_utilities import connect_to_database
@@ -82,4 +81,4 @@ if __name__ == "__main__":
     results = search.search([1, 2])
     logger.info(f"Number of results: {len(results)}")
     if results:
-        pprint(results[0])
+        logger.info(results[0])

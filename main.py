@@ -28,7 +28,7 @@ def validation_exception_handler(request: Request, exc: RequestValidationError):
 
 # Initialize app and search
 app = FastAPI()
-search = Search()
+search = Search(logger)
 
 # Add logger to app state
 app.state.logger = logger
@@ -50,3 +50,32 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 @limiter.limit("1/second")
 def ping(request: Request) -> str:
     return "The server is running."
+
+
+@app.get("/run")
+def run_scraper():
+    import time
+    from logging import getLogger
+
+    from scraper import ScraperManager
+    from logs.setup_logger import setup_logging
+
+    t0 = time.perf_counter()
+
+    logger = getLogger(__name__)
+    setup_logging()
+    # logger.setLevel("DEBUG")
+
+    try:
+        scraper_man = ScraperManager(
+            1,
+            3,
+            save_raw_json_data=True,
+            # local_data_filename="raw_data_2024-05-19_17-55-16.json",
+            logger=logger,
+        )
+        logger.info(f"Time taken: {time.perf_counter() - t0:.2f}s")
+        return "Running scraper"
+    except Exception as e:
+        logger.error(e)
+        raise HTTPException(status_code=500, detail={"message": "Server Error"})
