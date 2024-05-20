@@ -2,6 +2,15 @@ import mysql.connector
 from creds import *
 
 
+class DatabaseConnectionError(Exception):
+    """Custom error that is raised when connecting to the database fails"""
+
+    def __init__(self, value: str, message: str):
+        self.value = value
+        self.message = message
+        super().__init__(message)
+
+
 # Decorator function
 def connect_to_database(original_func):
     """Decorator function to connect to the database, run the function, and then close the connection
@@ -26,7 +35,8 @@ def connect_to_database(original_func):
             results = original_func(db=db, cursor=cursor, *args, **kwargs)
 
         except Exception as e:
-            print(f"An error occurred: {str(e)}")
+            raise DatabaseConnectionError(e)
+
         finally:
             if "cursor" in locals() and cursor:
                 cursor.close()
