@@ -1,11 +1,9 @@
 from datetime import datetime
-from pprint import pprint
 from requests import Session
 from pydantic import ValidationError
 from logging import Logger
 
 from models.movie_model import MovieModel, AdditionalDataMovieModel
-
 from db_utilities import connect_to_database
 from creds import tmdb_api_token
 
@@ -179,17 +177,21 @@ class Movie:
                 else:
                     extra_movie_data[detail] = info
 
+            poster_slug = extra_movie_data.get("poster_slug")
+
             extra_movie_data["poster_hi_res"] = (
-                f"https://image.tmdb.org/t/p/w780{extra_movie_data.get('poster_slug')}"
+                f"https://image.tmdb.org/t/p/w780{poster_slug}" if poster_slug else None
             )
+
             extra_movie_data["poster_lo_res"] = (
-                f"https://image.tmdb.org/t/p/w342{extra_movie_data.get('poster_slug')}"
+                f"https://image.tmdb.org/t/p/w342{poster_slug}" if poster_slug else None
             )
+
             extra_movie_data.pop("poster_slug")
 
-            extra_movie_data["imdb_url"] = (
-                f"https://www.imdb.com/title/{extra_movie_data.get('imdb_url')}"
-            )
+            imdb_slug = extra_movie_data.get("imdb_url")
+            if imdb_slug is not None:
+                extra_movie_data["imdb_url"] = f"https://www.imdb.com/title/{imdb_slug}"
 
         except Exception as e:
             self.logger.warning(
@@ -289,8 +291,8 @@ class MovieManager:
             """Create a Movie object from raw JSON data."""
             movie_details = {
                 "movie_id": item["movie"]["id"],
-                "original_title": item["movie"]["originalTitle"],
-                "french_title": item["movie"]["title"],
+                "original_title": item["movie"]["originalTitle"].strip(),
+                "french_title": item["movie"]["title"].strip(),
                 "genres": [genre["tag"].title() for genre in item["movie"]["genres"]],
                 "languages": [
                     language.title() for language in item["movie"]["languages"]
