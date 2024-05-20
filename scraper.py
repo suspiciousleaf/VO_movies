@@ -1,5 +1,4 @@
 import json
-from pprint import pprint
 import datetime
 from logging import Logger
 
@@ -10,10 +9,6 @@ from creds import *
 from cinema import CinemaManager
 from showing import ShowingsManager
 from movie import MovieManager
-
-# cinema_man = CinemaManager()
-# show_man = ShowingsManager()
-# movie_man = MovieManager()
 
 
 class Scraper:
@@ -44,7 +39,7 @@ class Scraper:
             self.scrape_urls()
         except Exception:
             self.logger.error(
-                "Scraper failed for cinema_id: %s", self.cinema_id, exc_info=True
+                f"Scraper failed for cinema_id: {self.cinema_id}", exc_info=True
             )
 
     def create_url_list(self, start_day: int, end_day: int):
@@ -125,6 +120,8 @@ class ScraperManager:
             end_day (int): The ending day for scraping.
             save_raw_json_data (bool, optional): Whether to save raw JSON data. Defaults to False.
         """
+        self.start_day = start_day
+        self.end_day = end_day
         self.logger = logger
         self.all_scraped_json_data = {}
         self.local_data_filename = local_data_filename
@@ -140,7 +137,7 @@ class ScraperManager:
         logger.debug(
             "ScraperManager initialized successfully, checking new movie & showing info."
         )
-        self.run_scrapers(start_day, end_day)
+        self.run_scrapers()
         self.movie_man.add_new_movies_to_database()
         self.show_man.add_new_showings_to_database()
         logger.info(self.movie_man)
@@ -149,18 +146,21 @@ class ScraperManager:
         if save_raw_json_data:
             self.save_raw_data()
 
-    def run_scrapers(self, start_day, end_day):
+    def run_scrapers(self):
         """
         Run all scrapers for specified days and process the data.
 
-        Args:
-            start_day (int): The starting day for scraping. Today is day 0.
-            end_day (int): The ending day for scraping.
         """
         if self.local_data_filename is None:
             with requests.Session() as session:
                 for cinema in tqdm(self.cinema_man.cinema_ids, unit="Cinema"):
-                    scraper = Scraper(session, cinema, start_day, end_day)
+                    scraper = Scraper(
+                        logger=self.logger,
+                        session=session,
+                        cinema_id=cinema,
+                        start_day=self.start_day,
+                        end_day=self.end_day,
+                    )
                     data = scraper.return_data()
                     self.all_scraped_json_data[cinema] = data
                     self.process_data(cinema, data)
