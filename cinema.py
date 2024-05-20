@@ -1,4 +1,4 @@
-from pprint import pprint
+from logging import Logger
 from db_utilities import connect_to_database
 
 from geopy.adapters import AioHTTPAdapter
@@ -18,6 +18,7 @@ class Cinema:
         info: str,
         gps: str | list[float],
         town: str,
+        logger: Logger,
     ) -> None:
         """
         Initialize a Cinema object.
@@ -29,6 +30,7 @@ class Cinema:
             info (str): Additional information about the cinema.
             gps (str): The GPS coordinates of the cinema in raw format.
             town (str): The town where the cinema is located.
+            logger(Logger): Logger
         """
         self.cinema_id = cinema_id
         self.name = name
@@ -36,6 +38,7 @@ class Cinema:
         self.info = info
         self.gps = self.parse_gps(gps)
         self.town = town
+        self.logger = logger
 
     def parse_gps(self, gps: str | list[float] | None) -> list[float] | None:
         """
@@ -50,7 +53,6 @@ class Cinema:
             list[float] | None: The parsed GPS coordinates or None if input is None.
         """
 
-        # gps = None
         if isinstance(gps, str):
             try:
                 gps = [
@@ -62,7 +64,7 @@ class Cinema:
         return gps or None
 
     @connect_to_database
-    def add_to_database(self, db, cursor):
+    def add_to_database(self, db, cursor, logger: Logger):
         """Adds cinema object to the database if not already present"""
         try:
             columns = list(self.__dict__.keys())
@@ -88,10 +90,10 @@ class Cinema:
             return {"ok": True, "info": None}
 
         except Exception as e:
-            print(f"CinemaManager.add_to_database: An error occurred: {str(e)}")
+            logger.error(f"CinemaManager.add_to_database:  {e}")
             return {
                 "ok": False,
-                "info": f"cinema.add_to_database: An error occurred: {e}",
+                "info": f"cinema.add_to_database: {e}",
             }
 
     def __str__(self):
@@ -104,7 +106,7 @@ class Cinema:
 class CinemaManager:
     """To access `cinema_id`s, iterate over the `CinemaManager` class instance"""
 
-    def __init__(self, logger):
+    def __init__(self, logger: Logger):
         """Initialize a CinemaManager object."""
         self.logger = logger
         self.cinemas = self.retrieve_cinemas(logger=logger)
@@ -126,7 +128,7 @@ class CinemaManager:
             cursor.execute(query)
             results = cursor.fetchall()
 
-            cinema_objects = [Cinema(**cinema) for cinema in results]
+            cinema_objects = [Cinema(**cinema, logger=logger) for cinema in results]
 
             return cinema_objects
 
@@ -185,8 +187,7 @@ class CinemaManager:
                 ):
                     cinema["gps"] = await self.get_gps(cinema)
                 # Create new Cinema object and add it to the database
-                new_cinema = Cinema(**cinema)
-                # print(new_cinema)
+                new_cinema = Cinema(**cinema, logger=self.logger)
                 response = new_cinema.add_to_database()
                 if response["ok"]:
                     self.cinema_ids.add(new_cinema.cinema_id)
