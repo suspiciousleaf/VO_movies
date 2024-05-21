@@ -53,7 +53,7 @@ def ping(request: Request) -> str:
 
 
 @app.get("/run")
-def run_scraper():
+def run_scraper(start: int = 0, end: int = 14):
     import time
     from logging import getLogger
 
@@ -68,14 +68,14 @@ def run_scraper():
 
     try:
         scraper_man = ScraperManager(
-            1,
-            3,
+            start,
+            end,
             save_raw_json_data=True,
             # local_data_filename="raw_data_2024-05-19_17-55-16.json",
             logger=logger,
         )
         logger.info(f"Time taken: {time.perf_counter() - t0:.2f}s")
-        return "Running scraper"
+        return f"Scraper ran successfully, days {start} - {end}"
     except Exception as e:
         logger.error(e)
         raise HTTPException(status_code=500, detail={"message": "Server Error"})
