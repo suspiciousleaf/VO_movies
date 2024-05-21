@@ -1,6 +1,6 @@
 # Project specific additions
 creds.py
-raw_data*
+raw_data_*
 test*
 *.log*
 response.html
