@@ -7,11 +7,11 @@ import mysql.connector
 load_dotenv()
 
 # Read environment variables
-DB_USER = getenv("db_user")
-DB_PASSWORD = getenv("db_password")
-DB_HOST = getenv("db_host")
-DB_PORT = int(getenv("db_port"))
-DB_NAME = getenv("db_name")
+DB_USER = getenv("DB_USER")
+DB_PASSWORD = getenv("DB_PASSWORD")
+DB_HOST = getenv("DB_HOST")
+DB_PORT = int(getenv("DB_PORT"))
+DB_NAME = getenv("DB_NAME")
 
 
 class DatabaseConnectionError(Exception):

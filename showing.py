@@ -109,7 +109,6 @@ class ShowingsManager:
         Returns:
             list: List of hash_id values.
         """
-        cursor = db.cursor()
         query = f"SELECT hash_id FROM {TABLE_NAME};"
         cursor.execute(query)
         results = cursor.fetchall()
