@@ -1,14 +1,23 @@
+from os import getenv
 import json
 import datetime
 from logging import Logger
 
+from dotenv import load_dotenv
 import requests
 from tqdm import tqdm
 
-from creds import *
 from cinema import CinemaManager
 from showing import ShowingsManager
 from movie import MovieManager
+
+# take environment variables from .env
+load_dotenv()
+
+# Read environment variables
+SCRAPING_ANT_API_KEY = getenv("scraping_ant_api_key")
+BASE_PREFIX = getenv("base_prefix")
+PAYLOAD = json.loads(getenv("payload"))
 
 
 class Scraper:
@@ -54,7 +63,7 @@ class Scraper:
             list: List of URLs.
         """
         url_list = [
-            f"{base_prefix}{self.cinema_id}/d-{i}/" for i in range(start_day, end_day)
+            f"{BASE_PREFIX}{self.cinema_id}/d-{i}/" for i in range(start_day, end_day)
         ]
         self.logger.debug(
             f"Scraper.create_url_list() for {self.cinema_id=} ran successfully"
@@ -81,13 +90,13 @@ class Scraper:
             base_url = "https://api.scrapingant.com/v2/general"
             params = {
                 "url": target_url,
-                "x-api-key": scraping_ant_api_key,
+                "x-api-key": SCRAPING_ANT_API_KEY,
                 "proxy_country": "FR",
                 "browser": "false",
             }
 
             try:
-                response = self.session.post(base_url, params=params, json=payload)
+                response = self.session.post(base_url, params=params, json=PAYLOAD)
                 response.raise_for_status()
 
                 if response.status_code == 200:

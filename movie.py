@@ -1,12 +1,20 @@
+from os import getenv
 from datetime import datetime
 from requests import Session
 from pydantic import ValidationError
 from logging import Logger
 
+from dotenv import load_dotenv
+
 from models.movie_model import MovieModel, AdditionalDataMovieModel
 from db_utilities import connect_to_database
-from creds import tmdb_api_token
 
+
+# take environment variables from .env.
+load_dotenv()
+
+# Read environment variables
+TMDB_API_TOKEN = getenv("tmdb_api_token")
 TABLE_NAME = "movies"
 
 # We have a list of movie_id's from the database. We get a list of (movie, showings) from the scraper. We want to loop through the list. For each movie, we want to see if that movie_id is in the database, and if not, add that new movie to movies table. We also want to view all showings for that item in the list, see which aren't in the showings table, and add them.
@@ -133,7 +141,7 @@ class Movie:
         s = Session()
         headers = {
             "accept": "application/json",
-            "Authorization": f"Bearer {tmdb_api_token}",
+            "Authorization": f"Bearer {TMDB_API_TOKEN}",
         }
 
         try:
