@@ -10,8 +10,9 @@ from models.movie_model import MovieModel, AdditionalDataMovieModel
 from db_utilities import connect_to_database
 
 
-# take environment variables from .env.
-load_dotenv()
+# Check of environment variables are loaded, and if not load them from .env
+if getenv("DB_USER") is None:
+    load_dotenv()
 
 # Read environment variables
 TMDB_API_TOKEN = getenv("tmdb_api_token")

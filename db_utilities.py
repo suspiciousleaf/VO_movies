@@ -3,8 +3,9 @@ from os import getenv
 from dotenv import load_dotenv
 import mysql.connector
 
-# take environment variables from .env.
-load_dotenv()
+# Check of environment variables are loaded, and if not load them from .env
+if getenv("DB_USER") is None:
+    load_dotenv()
 
 # Read environment variables
 DB_USER = getenv("DB_USER")

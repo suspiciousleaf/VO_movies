@@ -11,8 +11,9 @@ from cinema import CinemaManager
 from showing import ShowingsManager
 from movie import MovieManager
 
-# take environment variables from .env
-load_dotenv()
+# Check of environment variables are loaded, and if not load them from .env
+if getenv("DB_USER") is None:
+    load_dotenv()
 
 # Read environment variables
 SCRAPING_ANT_API_KEY = getenv("scraping_ant_api_key")
