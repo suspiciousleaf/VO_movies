@@ -89,7 +89,6 @@ class Movie:
             "synopsis": ("overview"),
             "imdb_url": ("imdb_id"),
             "poster_slug": ("poster_path"),
-            "homepage": ("homepage"),
         }
 
         try:
@@ -113,7 +112,6 @@ class Movie:
         self.imdb_url = additional_details_movie_model.imdb_url
         self.poster_hi_res = additional_details_movie_model.poster_hi_res
         self.poster_lo_res = additional_details_movie_model.poster_lo_res
-        self.homepage = additional_details_movie_model.homepage
         self.tmdb_id = additional_details_movie_model.tmdb_id
         self.runtime = additional_details_movie_model.runtime
 
@@ -130,7 +128,6 @@ class Movie:
                 - imdb_url (str): The IMDB URL of the movie.
                 - poster_hi_res (str): The URL to the high-resolution poster image of the movie.
                 - poster_lo_res (str): The URL to the low-resolution poster image of the movie.
-                - homepage (str): The URL to the official homepage of the movie.
 
         Raises:
             Exception: If additional movie details are not found.
@@ -229,7 +226,6 @@ class Movie:
             "imdb_url",
             "poster_hi_res",
             "poster_lo_res",
-            "homepage",
             "tmdb_id",
         )
 
