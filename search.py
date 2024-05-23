@@ -45,7 +45,7 @@ class Search:
 
         try:
             cursor = db.cursor(dictionary=True)
-            columns_required = "start_time, original_title, french_title, runtime, synopsis, cast, languages, genres, release_date, rating, homepage, imdb_url, origin_country, poster_hi_res, poster_lo_res, tagline, name, town"
+            columns_required = "start_time, original_title, french_title, runtime, synopsis, cast, languages, genres, release_date, rating, homepage, imdb_url, origin_country, poster_hi_res, poster_lo_res, tagline, name AS cinema_name, town AS cinema_town"
             search_query = f"SELECT {columns_required} FROM showtimes LEFT JOIN movies ON showtimes.movie_id = movies.movie_id LEFT JOIN cinemas ON showtimes.cinema_id = cinemas.cinema_id WHERE start_time > DATE(NOW())"
 
             if towns:
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     logger = getLogger(__name__)
     setup_logging()
     search = Search(logger)
-    results = search.search([1, 2])
+    results = search.search()
     logger.info(f"Number of results: {len(results)}")
     if results:
         logger.info(results[0])
