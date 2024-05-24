@@ -1,3 +1,4 @@
+import datetime
 from logging import Logger
 
 from db_utilities import connect_to_database
@@ -45,7 +46,7 @@ class Search:
 
         try:
             cursor = db.cursor(dictionary=True)
-            columns_required = "start_time, original_title, french_title, runtime, synopsis, cast, languages, genres, release_date, rating, homepage, imdb_url, origin_country, poster_hi_res, poster_lo_res, tagline, name AS cinema_name, town AS cinema_town"
+            columns_required = "start_time, original_title, french_title, runtime, synopsis, cast, languages, genres, release_date, rating, imdb_url, origin_country, poster_hi_res, poster_lo_res, tagline, name AS cinema_name, town AS cinema_town, address AS cinema_address"
             search_query = f"SELECT {columns_required} FROM showtimes LEFT JOIN movies ON showtimes.movie_id = movies.movie_id LEFT JOIN cinemas ON showtimes.cinema_id = cinemas.cinema_id WHERE start_time > DATE(NOW())"
 
             if towns:
@@ -63,11 +64,28 @@ class Search:
                 cursor.execute(search_query)
 
             results = cursor.fetchall()
+            if results:
+                for result in results:
+                    d_t = result["start_time"]
+                    result["start_time"] = {
+                        "time": d_t.strftime("%#H:%M"),
+                        "date": f"{self.date_with_suffix(d_t.strftime('%#d'))} {d_t.strftime('%B')}",
+                    }
             return results
 
         except Exception as e:
             self.logger.error(f"Search.search_showings() failed: {e}")
             return []
+
+    @staticmethod
+    def date_with_suffix(n: str) -> str:
+        """Function to get the date suffix"""
+        n = int(n)
+        if 11 <= n % 100 <= 13:
+            suffix = "th"
+        else:
+            suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+        return f"{n}{suffix}"
 
 
 if __name__ == "__main__":
