@@ -29,4 +29,3 @@ services:
 
 volumes:
   db_data:
-#! Add data storage back in, or maybe add an endpoint so the database will populate itself. Also just check if backend can connect to database.
