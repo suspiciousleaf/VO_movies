@@ -3,7 +3,6 @@ import json
 import datetime
 from logging import Logger
 
-from dotenv import load_dotenv
 import requests
 from tqdm import tqdm
 
@@ -11,14 +10,20 @@ from cinema import CinemaManager
 from showing import ShowingsManager
 from movie import MovieManager
 
-# Check of environment variables are loaded, and if not load them from .env
+# Check of environment variables are loaded, and if not load them from .env.
 if getenv("DB_USER") is None:
+    from dotenv import load_dotenv
+
     load_dotenv()
 
 # Read environment variables
-SCRAPING_ANT_API_KEY = getenv("scraping_ant_api_key")
-BASE_PREFIX = getenv("base_prefix")
-PAYLOAD = json.loads(getenv("payload"))
+SCRAPING_ANT_API_KEY = getenv("SCRAPING_ANT_API_KEY")
+BASE_PREFIX = getenv("BASE_PREFIX")
+try:
+    PAYLOAD = json.loads(getenv("PAYLOAD"))
+except:
+    print("json.loads failed")
+    PAYLOAD = {"filters": [{"showtimes.version": ["ORIGINAL"]}]}
 
 
 class Scraper:
