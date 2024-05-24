@@ -4,6 +4,9 @@ raw_data_*
 test*
 *.log*
 response.html
+backup.sql
+docker_commands.txt
+build_db.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
