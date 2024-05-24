@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 
 from models.movie_model import MovieModel, AdditionalDataMovieModel
 from db_utilities import connect_to_database
+from data.country_info import country_codes
 
 
 # Check of environment variables are loaded, and if not load them from .env
@@ -15,7 +16,7 @@ if getenv("DB_USER") is None:
     load_dotenv()
 
 # Read environment variables
-TMDB_API_TOKEN = getenv("tmdb_api_token")
+TMDB_API_TOKEN = getenv("TMDB_API_TOKEN")
 TABLE_NAME = "movies"
 
 # We have a list of movie_id's from the database. We get a list of (movie, showings) from the scraper. We want to loop through the list. For each movie, we want to see if that movie_id is in the database, and if not, add that new movie to movies table. We also want to view all showings for that item in the list, see which aren't in the showings table, and add them.
@@ -80,6 +81,9 @@ class Movie:
         self.genres = movie_model.genres
         self.release_date = movie_model.release_date
 
+        if isinstance(self.genres, str):
+            self.genres = self.genres.replace("_", " ")
+
         # The info below is not available from the initial source, so it is aquired from TBDM on instantiation. Dict below holds the attribute name for the Movie object, and the key value that stores the information in the json from the API.
         additional_required_details = {
             "origin_country": ("origin_country"),
@@ -105,7 +109,16 @@ class Movie:
             self.logger.error(f"Unable to create Movie instance: {e}")
             raise e
 
-        self.origin_country = additional_details_movie_model.origin_country
+        # Origin countries are given as a csv of ISO 3166-1 alpha-2 codes. This will convert that into a csv of full country names
+        if additional_details_movie_model.origin_country is not None:
+            try:
+                country_list = additional_details_movie_model.origin_country.split(",")
+                self.origin_country = ",".join(
+                    [country_codes.get(country, "") for country in country_list]
+                )
+            except:
+                self.origin_country = None
+
         self.rating = additional_details_movie_model.rating
         self.tagline = additional_details_movie_model.tagline
         self.synopsis = additional_details_movie_model.synopsis
