@@ -6,7 +6,7 @@ test*
 response.html
 backup.sql
 docker_commands.txt
-build_db.py
+cinema_info.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
