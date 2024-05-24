@@ -1,17 +1,21 @@
 from os import getenv
-
-from dotenv import load_dotenv
 import mysql.connector
 
-# Check of environment variables are loaded, and if not load them from .env
+# Check of environment variables are loaded, and if not load them from .env. Also check if running locally or not, which changes the port number required.
+
 if getenv("DB_USER") is None:
+
+    from dotenv import load_dotenv
+
     load_dotenv()
+    DB_PORT = 3333
+else:
+    DB_PORT = int(getenv("DB_PORT"))
 
 # Read environment variables
 DB_USER = getenv("DB_USER")
 DB_PASSWORD = getenv("DB_PASSWORD")
 DB_HOST = getenv("DB_HOST")
-DB_PORT = int(getenv("DB_PORT"))
 DB_NAME = getenv("DB_NAME")
 
 
