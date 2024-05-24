@@ -10,7 +10,6 @@ CREATE TABLE movies (
     languages VARCHAR(191),
     genres VARCHAR(191),
     release_date DATE,
-    homepage VARCHAR(255),
     imdb_url VARCHAR(255),
     origin_country VARCHAR(191),
     poster_hi_res VARCHAR(255),
