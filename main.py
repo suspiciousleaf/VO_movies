@@ -7,6 +7,7 @@ from slowapi.errors import RateLimitExceeded
 
 from routers.cinema_router import router as cinema_router
 from routers.search_router import router as search_router
+from routers.db_router import router as db_router
 from routers.limiter import limiter
 from search import Search
 from logging import getLogger
@@ -36,6 +37,7 @@ app.state.logger = logger
 # Add routers
 app.include_router(cinema_router)
 app.include_router(search_router)
+app.include_router(db_router)
 
 # Add custom exception handler
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
