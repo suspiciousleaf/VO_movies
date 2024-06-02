@@ -57,23 +57,15 @@ def ping(request: Request) -> str:
 @app.get("/run")
 def run_scraper(start: int = 0, end: int = 14):
     import time
-    from logging import getLogger
 
     from scraper import ScraperManager
-    from logs.setup_logger import setup_logging
 
     t0 = time.perf_counter()
 
-    logger = getLogger(__name__)
-    setup_logging()
-    # logger.setLevel("DEBUG")
-
     try:
         scraper_man = ScraperManager(
-            start,
-            end,
-            save_raw_json_data=True,
-            # local_data_filename="raw_data_2024-05-19_17-55-16.json",
+            start=start,
+            end=end,
             logger=logger,
         )
         logger.info(f"Time taken: {time.perf_counter() - t0:.2f}s")
