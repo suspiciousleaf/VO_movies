@@ -121,9 +121,9 @@ class Scraper:
 class ScraperManager:
     def __init__(
         self,
-        start_day,
-        end_day,
         logger: Logger,
+        start_day: int = 0,
+        end_day: int = 15,
         save_raw_json_data=False,
         local_data_filename: str | None = None,
     ):
