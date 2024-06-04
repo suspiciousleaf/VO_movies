@@ -10,7 +10,7 @@ router = APIRouter(
 )
 
 
-@router.get("/", status_code=200)
+@router.get("", status_code=200)
 @limiter.limit("1/second")
 def find_showings(
     request: Request,
