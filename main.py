@@ -77,8 +77,8 @@ def run_scraper(start: int = 0, end: int = 14):
 
     try:
         scraper_man = ScraperManager(
-            start=start,
-            end=end,
+            start_day=start,
+            end_day=end,
             logger=logger,
         )
         logger.info(f"Time taken: {time.perf_counter() - t0:.2f}s")
