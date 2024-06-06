@@ -1,33 +1,26 @@
 services:
   web:
     image: suspiciousleaf/vo_movies:web
-    container_name: web_container
+    container_name: vo_movies_container
     # build: .
     ports:
-      - "8000:8000"
+      - "80:8000"
     depends_on:
       - db
-    environment:
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_HOST=db
-      - DB_NAME=${DB_NAME}
-      - DB_PORT=${DB_PORT}
-      - SCRAPING_ANT_API_KEY=${SCRAPING_ANT_API_KEY}
-      - BASE_PREFIX=${BASE_PREFIX}
-      - PAYLOAD=${PAYLOAD}
-      - TMDB_API_KEY=${TMDB_API_KEY}
-      - TMDB_API_TOKEN=${TMDB_API_TOKEN}
+    env_file:
+      - .env
 
   db:
-    image: mysql:8.0
+    image: mysql:latest
+    env_file:
+      - .env
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
-    # ports:
-    #   - "3306:3306" # 3306 local to 3306 in container. If uncommented this allows external access to the database.
 
 volumes:
   db_data:
