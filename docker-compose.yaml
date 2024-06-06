@@ -9,6 +9,7 @@ services:
       - db
     env_file:
       - .env
+    restart: unless-stopped
 
   db:
     image: mysql:latest
@@ -21,6 +22,7 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
+    restart: unless-stopped
 
 volumes:
   db_data:
