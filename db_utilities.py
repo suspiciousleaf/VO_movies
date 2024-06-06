@@ -22,15 +22,14 @@ DB_NAME = getenv("DB_NAME")
 class DatabaseConnectionError(Exception):
     """Custom error that is raised when connecting to the database fails"""
 
-    def __init__(self, value: str, message: str):
-        self.value = value
+    def __init__(self, message: str):
         self.message = message
         super().__init__(message)
 
 
 # Decorator function
 def connect_to_database(original_func):
-    """Decorator function to connect to the database, run the function, and then close the connection
+    """Decorator function to connect to the database and run the function.
 
     Args:
         original_func (function): Function to run on the database
@@ -39,26 +38,24 @@ def connect_to_database(original_func):
     def make_connection(*args, **kwargs):
         results = None
         try:
-            db = mysql.connector.connect(
+            with mysql.connector.connect(
                 user=DB_USER,
                 password=DB_PASSWORD,
                 host=DB_HOST,
                 port=DB_PORT,
                 database=DB_NAME,
                 use_pure=True,
-            )
-            cursor = db.cursor()
-            # kwargs for db and cursor to avoid conflicts with self
-            results = original_func(db=db, cursor=cursor, *args, **kwargs)
+            ) as db:
+                with db.cursor() as cursor:
+                    # kwargs for db and cursor to avoid conflicts with self
+                    results = original_func(db=db, cursor=cursor, *args, **kwargs)
 
         except Exception as e:
-            raise DatabaseConnectionError(e)
+            # raise DatabaseConnectionError(e)
+            return e
 
-        finally:
-            if "cursor" in locals() and cursor:
-                cursor.close()
-            if "db" in locals() and db:
-                db.close()
-            return results
+        if results is None:
+            results = ["Database connection failed"]
+        return results
 
     return make_connection

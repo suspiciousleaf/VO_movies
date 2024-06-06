@@ -11,18 +11,30 @@ DB_NAME = getenv("DB_NAME")
 @connect_to_database
 def test_db_connection(db, cursor, logger):
     """Test if back end can connect to database"""
-    query = "SELECT DATABASE();"
-    cursor.execute(query)
-    results = cursor.fetchall()
+    try:
+        query = "SELECT DATABASE();"
+        cursor.execute(query)
+        results = cursor.fetchall()
 
-    if DB_NAME == results[0][0]:
-        logger.info(f"Database connection successful")
-        return f"Database connection successful"
-    else:
-        logger.warning(
-            f"Database connection validation failed, the following should match: {DB_NAME=} {results[0][0]=}"
-        )
-        return f"Database connection failed"
+        if results:
+            current_db = results[0][0]
+            if DB_NAME == current_db:
+                logger.info("Database connection successful")
+                return "Database connection successful"
+            else:
+                logger.warning(
+                    f"Database connection validation failed, expected: {DB_NAME}, got: {current_db}"
+                )
+                return f"Database connection validation failed, expected: {DB_NAME}, got: {current_db}"
+                # return "Database connection failed"
+        else:
+            logger.error("No results returned from database query")
+            return "No results returned from database query"
+            # return "Database connection failed"
+    except Exception as e:
+        logger.error(f"Exception during database connection test: {e}", exc_info=True)
+        return f"Exception during database connection test: {e}"
+        # return "Database connection failed"
 
 
 def create_tables(db, cursor, logger):
@@ -43,8 +55,11 @@ def create_tables(db, cursor, logger):
         if query not in tables_present:
             cursor.execute(queries[query])
             logger.info(f"Table {query} created")
+            tables_present.add(query)
         else:
             logger.info(f"Table {query} already exists")
+
+    return tables_present
 
 
 def add_cinemas(db, cursor, logger):
@@ -72,5 +87,6 @@ def add_cinemas(db, cursor, logger):
 
 @connect_to_database
 def build_db(db, cursor, logger):
-    create_tables(db, cursor, logger=logger)
+    tables_present = create_tables(db, cursor, logger=logger)
     add_cinemas(db, cursor, logger=logger)
+    return f"Tables in databse: {tables_present}"

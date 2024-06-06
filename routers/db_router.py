@@ -13,13 +13,16 @@ router = APIRouter(
 @router.get("/", status_code=200)
 @limiter.limit("1/second")
 def test_db(request: Request, logger=Depends(get_logger)):
+    logger.info("Received request to test database connection")
     try:
-        return test_db_connection(logger=logger)
+        result = test_db_connection(logger=logger)
+        logger.info(f"Database connection test result: {result}")
+        return result
     except Exception as e:
         logger.error(f"Database connection test failed: {e}", exc_info=True)
         raise HTTPException(
             status_code=500,
-            detail="Database connection test failed, please try again later",
+            detail=f"Database connection test failed, please try again later: {e}",
         )
 
 
@@ -27,8 +30,8 @@ def test_db(request: Request, logger=Depends(get_logger)):
 @limiter.limit("1/second")
 def get_build_db(request: Request, logger=Depends(get_logger)):
     try:
-        build_db(logger=logger)
-        return "Database structure is correct"
+        result = build_db(logger=logger)
+        return result
     except Exception as e:
         logger.error(e)
         raise HTTPException(status_code=500, detail={"message": e})
