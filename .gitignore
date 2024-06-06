@@ -7,6 +7,7 @@ response.html
 backup.sql
 docker_commands.txt
 cinema_info.py
+docker_db_init_logs.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
