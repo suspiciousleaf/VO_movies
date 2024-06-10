@@ -229,3 +229,14 @@ class CinemaManager:
         Return a string representation of the CinemaManager object showing how many cinemas it contains.
         """
         return f"\nTotal cinemas: {len(self.cinemas)}"
+
+
+if __name__ == "__main__":
+    from logging import getLogger
+    from logs.setup_logger import setup_logging
+
+    logger = getLogger(__name__)
+    setup_logging()
+
+    cinema_man = CinemaManager(logger)
+    print(cinema_man)
