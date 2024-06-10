@@ -8,15 +8,19 @@ if getenv("DB_USER") is None:
     from dotenv import load_dotenv
 
     load_dotenv()
-    DB_PORT = 3333
+    DB_PORT = getenv("DB_PORT_LOCAL")
+    DB_USER = getenv("DB_USER_LOCAL")
+    DB_PASSWORD = getenv("DB_PASSWORD_LOCAL")
+    DB_HOST = getenv("DB_HOST_LOCAL")
+    DB_NAME = getenv("DB_NAME_LOCAL")
 else:
     DB_PORT = int(getenv("DB_PORT"))
 
-# Read environment variables
-DB_USER = getenv("DB_USER")
-DB_PASSWORD = getenv("DB_PASSWORD")
-DB_HOST = getenv("DB_HOST")
-DB_NAME = getenv("DB_NAME")
+    # Read environment variables
+    DB_USER = getenv("DB_USER")
+    DB_PASSWORD = getenv("DB_PASSWORD")
+    DB_HOST = getenv("DB_HOST")
+    DB_NAME = getenv("DB_NAME")
 
 
 class DatabaseConnectionError(Exception):
