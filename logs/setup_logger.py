@@ -9,7 +9,7 @@ def setup_logging():
         config = json.load(f)
     config["handlers"]["syslog"]["address"] = (
         getenv("PT_HOST"),
-        getenv("PT_PORT"),
+        int(getenv("PT_PORT")),
     )
     logging.config.dictConfig(config)
     queue_handler = logging.getHandlerByName("queue_handler")
