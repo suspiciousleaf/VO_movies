@@ -1,3 +1,5 @@
+from os import getenv
+
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
@@ -33,7 +35,7 @@ app = FastAPI()
 
 # CORS permissions
 
-origins = ["*"]
+origins = [getenv("PROD_URL"), getenv("TEST_URL")]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
