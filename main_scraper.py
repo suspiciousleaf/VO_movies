@@ -32,7 +32,7 @@ if __name__ == "__main__":
                 logger=logger,
             )
             logger.info(
-                f"Ran scraper. Time taken: {time.perf_counter() - t0:.2f}s, dates = {start_date_str} - {end_date_str}"
+                f"Ran scraper. Time taken: {time.perf_counter() - t0:.2f}s, dates: {start_date_str} - {end_date_str}"
             )
         except Exception as e:
             logger.exception(e)
