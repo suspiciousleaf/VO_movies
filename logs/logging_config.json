@@ -56,12 +56,21 @@
       "maxBytes": 1000000,
       "backupCount": 3
     },
+    "syslog": {
+      "class": "logging.handlers.SysLogHandler",
+      "level": "INFO",
+      "formatter": "json",
+      "filters": [
+        "no_mysql_info"
+      ]
+    },
     "queue_handler": {
       "class": "logging.handlers.QueueHandler",
       "handlers": [
         "stdout",
         "stderr",
-        "file"
+        "file",
+        "syslog"
       ],
       "respect_handler_level": true
     }
