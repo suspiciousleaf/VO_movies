@@ -157,20 +157,30 @@ class Movie:
 
         try:
             id_url = f"https://api.themoviedb.org/3/search/movie"
-            queryparams = {
-                "query": self.original_title,
-                "year": self.release_date.year,
-            }
 
-            # TMDB ID must be identified first, then other details can be retrieved
-            response = s.get(id_url, params=queryparams, headers=headers)
-            response.raise_for_status()
-            results = response.json().get("results")
-            if results:
-                extra_movie_data["tmdb_id"] = results[0]["id"]
+            if isinstance(self.release_date, datetime):
+                # production year can lag behind listed year, so search the production year then the two following years
+                for year in range(self.release_date.year, self.release_date.year + 3):
+                    queryparams = {
+                        "query": self.original_title,
+                        "primary_release_year": year,
+                    }
+
+                    # TMDB ID must be identified first, then other details can be retrieved
+                    response = s.get(id_url, params=queryparams, headers=headers)
+                    response.raise_for_status()
+                    results = response.json().get("results")
+                    if results:
+                        extra_movie_data["tmdb_id"] = results[0]["id"]
+                        break
+
             # If no results found using title and year, try again without the year.
-            else:
-                queryparams.pop("year")
+            if "tmdb_id" not in extra_movie_data.keys():
+
+                queryparams = {
+                    "query": self.original_title,
+                }
+
                 response = s.get(id_url, params=queryparams, headers=headers)
                 response.raise_for_status()
                 results = response.json().get("results")
@@ -195,6 +205,11 @@ class Movie:
                     extra_movie_data[detail] = ",".join(info)
                 else:
                     extra_movie_data[detail] = info
+
+            # Overwrite production year data with release data from TMDB
+            self.release_date = datetime.strptime(
+                response_data.get("release_date"), "%Y-%m-%d"
+            )
 
             poster_slug = extra_movie_data.get("poster_slug")
 
@@ -346,22 +361,11 @@ class MovieManager:
 
     @staticmethod
     def get_release_date(item):
-        # Find release date - if note available, use production date instead
-        release_date = None
-        for release in item["movie"]["releases"]:
-            if release["__typename"] == "MovieRelease" and release["releaseDate"]:
-                try:
-                    date_str = release["releaseDate"]["date"]
-                    release_date = datetime.strptime(date_str, "%Y-%m-%d")
-                    break
-                except:
-                    continue
-        if not release_date:
-            try:
-                date_str = str(item["movie"]["data"]["productionYear"]) + ("-01-01")
-                release_date = datetime.strptime(date_str, "%Y-%m-%d")
-            except:
-                pass
+        try:
+            date_str = str(item["movie"]["data"]["productionYear"]) + ("-01-01")
+            release_date = datetime.strptime(date_str, "%Y-%m-%d")
+        except:
+            release_date = None
         return release_date
 
     @connect_to_database
