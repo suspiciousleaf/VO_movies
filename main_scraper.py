@@ -1,9 +1,19 @@
+import argparse
 import time
 import datetime
 from logging import getLogger
 
 from scraper import ScraperManager
 from logs.setup_logger import setup_logging
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "start", type=int, default=11, help="Start day offset (default=11)"
+    )
+    parser.add_argument("end", type=int, default=15, help="End day offset (default=15)")
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
@@ -13,13 +23,15 @@ if __name__ == "__main__":
         logger = getLogger(__name__)
         setup_logging()
 
-        start = 11
-        end = 15
+        # Parse command-line arguments
+        args = parse_arguments()
+        start = args.start
+        end = args.end
 
         # Calculate the dates
         today = datetime.date.today()
-        start_date = today + datetime.timedelta(days=start)
-        end_date = today + datetime.timedelta(days=end)
+        start_date = today + datetime.timedelta(days=args.start)
+        end_date = today + datetime.timedelta(days=args.end)
 
         # Format the dates
         start_date_str = start_date.strftime("%d-%m-%Y")
