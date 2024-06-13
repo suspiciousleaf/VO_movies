@@ -24,7 +24,7 @@ def find_showings(
         else:
             towns = towns.split(",")
             data = search.search(towns)
-            logger.info(f"Search.search() called, returned {len(data)} results")
+        logger.info(f"Search.search() called, returned {len(data)} results. {towns=}")
         return data
 
     except Exception as e:
