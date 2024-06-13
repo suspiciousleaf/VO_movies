@@ -112,9 +112,14 @@ class Scraper:
                             if showing["showtimes"]["original"]:
                                 self.raw_json_data.append(showing)
 
-            except Exception:
+            except Exception as e:
                 self.logger.error(
-                    f"Request failed: {response.status_code=}", exc_info=True
+                    f"Request failed: {response.status_code=}",
+                    extra={
+                        "extra_info": str(e).replace(
+                            SCRAPING_ANT_API_KEY, "SCRAPING_ANT_API_KEY"
+                        )
+                    },
                 )
 
 
