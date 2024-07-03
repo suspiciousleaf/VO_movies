@@ -1,13 +1,15 @@
 services:
   voflix_api:
-    image: ${VOFLIX_IMAGE}
+    # image: ${VOFLIX_IMAGE}
     container_name: voflix
-    # build: .
+    build: .
     depends_on:
       - db
     env_file:
       - .env
     restart: unless-stopped
+    ports:
+      - "8000:8000"
     # networks:
     #   - caddy
 
