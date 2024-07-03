@@ -10,7 +10,7 @@ RUN pip install --no-cache-dir --upgrade -r requirements.txt
 # Copy the files to the directory
 COPY . /app
 
-# Expose the port
+# Expose port 8000
 EXPOSE 8000
 
 # Start the server
