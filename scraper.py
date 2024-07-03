@@ -19,11 +19,7 @@ if getenv("DB_USER") is None:
 # Read environment variables
 SCRAPING_ANT_API_KEY = getenv("SCRAPING_ANT_API_KEY")
 BASE_PREFIX = getenv("BASE_PREFIX")
-try:
-    PAYLOAD = json.loads(getenv("PAYLOAD"))
-except:
-    print("json.loads failed")
-    PAYLOAD = {"filters": [{"showtimes.version": ["ORIGINAL"]}]}
+PAYLOAD = json.loads(getenv("PAYLOAD"))
 
 
 class Scraper:
@@ -219,3 +215,6 @@ class ScraperManagerInitializationError(Exception):
     def __init__(self, message: str):
         self.message = message
         super().__init__(message)
+
+
+#! Consider scraping age ratings, probably in https://developer.themoviedb.org/reference/movie-release-dates

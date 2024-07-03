@@ -7,6 +7,7 @@ from scraper import ScraperManager
 from logs.setup_logger import setup_logging
 
 
+# Run this file to initialize the scraper, can also be done with CRON jobs for automation
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -55,5 +56,3 @@ if __name__ == "__main__":
         )
     except Exception as e:
         logger.exception(e)
-
-#! Scrape age ratings, probably in https://developer.themoviedb.org/reference/movie-release-dates
