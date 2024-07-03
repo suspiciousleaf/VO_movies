@@ -75,12 +75,22 @@ def ping(request: Request) -> str:
 
 
 @app.get("/run")
-def run_scraper(start: int = 0, end: int = 14):
+def run_scraper(start: int = 0, end: int = 14, scraper_code=None):
+    """Endpoint that can be used to initialize the scraper"""
+    SCRAPER_CODE = getenv("SCRAPER_CODE")
     import time
 
     from scraper import ScraperManager
 
     t0 = time.perf_counter()
+
+    # Check if code supplied matches .env, used to prevent unwanted scraper initializations
+    if scraper_code != SCRAPER_CODE:
+        logger.error("Scraper initialization attempt failed due to incorrect code")
+        raise HTTPException(
+            status_code=500,
+            detail={"message": "Incorrect initialization code supplied."},
+        )
 
     try:
         scraper_man = ScraperManager(
