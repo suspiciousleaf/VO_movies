@@ -1,7 +1,7 @@
 from os import getenv
 import mysql.connector
 
-# Check of environment variables are loaded, and if not load them from .env. Also check if running locally or not, which changes the port number required.
+# Check of environment variables are loaded, and if not load them from .env. Also check if running locally or not, which changes some of the information.
 
 if getenv("DB_USER") is None:
 
@@ -51,12 +51,14 @@ def connect_to_database(original_func):
                 use_pure=True,
             ) as db:
                 with db.cursor() as cursor:
-                    # kwargs for db and cursor to avoid conflicts with self
+                    # kwargs for db and cursor to avoid conflicts with 'self'
                     results = original_func(db=db, cursor=cursor, *args, **kwargs)
 
+        except mysql.connector.Error as e:
+            raise DatabaseConnectionError(f"Database connection error: {e}")
+
         except Exception as e:
-            # raise DatabaseConnectionError(e)
-            return e
+            raise DatabaseConnectionError(f"An unexpected error occurred: {e}")
 
         if results is None:
             results = ["Database connection failed"]
