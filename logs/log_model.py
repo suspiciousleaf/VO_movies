@@ -30,6 +30,7 @@ LOG_RECORD_BUILTIN_ATTRS = {
 }
 
 
+# JSON formatter for log messages
 class MyJSONFormatter(logging.Formatter):
     def __init__(
         self,

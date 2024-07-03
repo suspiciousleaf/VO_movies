@@ -4,6 +4,7 @@ import atexit
 from os import getenv
 
 
+# Setup logging, logs are stored in a rotating file handler, and also send to Papertrail
 def setup_logging():
     with open("logs/logging_config.json", "r") as f:
         config = json.load(f)
