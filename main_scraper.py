@@ -13,6 +13,12 @@ def parse_arguments():
         "start", type=int, default=11, help="Start day offset (default=11)"
     )
     parser.add_argument("end", type=int, default=15, help="End day offset (default=15)")
+    parser.add_argument(
+        "save_raw_json_data",
+        type=bool,
+        default=False,
+        help="Save raw json data (default=False)",
+    )
     return parser.parse_args()
 
 
@@ -27,6 +33,7 @@ if __name__ == "__main__":
         args = parse_arguments()
         start = args.start
         end = args.end
+        save_raw_json_data = args.save_raw_json_data
 
         # Calculate the dates
         today = datetime.date.today()
@@ -40,6 +47,7 @@ if __name__ == "__main__":
         scraper_man = ScraperManager(
             start_day=start,
             end_day=end,
+            save_raw_json_data=save_raw_json_data,
             logger=logger,
         )
         logger.info(
@@ -47,3 +55,5 @@ if __name__ == "__main__":
         )
     except Exception as e:
         logger.exception(e)
+
+#! Scrape age ratings, probably in https://developer.themoviedb.org/reference/movie-release-dates
