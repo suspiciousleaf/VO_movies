@@ -1,5 +1,4 @@
 from os import getenv
-import json
 
 from db_utilities import connect_to_database
 from data.cinema_info import cinema_data
@@ -10,7 +9,7 @@ DB_NAME = getenv("DB_NAME")
 
 @connect_to_database
 def test_db_connection(db, cursor, logger):
-    """Test if back end can connect to database"""
+    """Test the connection to the database and verify the active database."""
     try:
         query = "SELECT DATABASE();"
         cursor.execute(query)
@@ -26,19 +25,18 @@ def test_db_connection(db, cursor, logger):
                     f"Database connection validation failed, expected: {DB_NAME}, got: {current_db}"
                 )
                 return f"Database connection validation failed, expected: {DB_NAME}, got: {current_db}"
-                # return "Database connection failed"
+
         else:
             logger.error("No results returned from database query")
             return "No results returned from database query"
-            # return "Database connection failed"
+
     except Exception as e:
         logger.error(f"Exception during database connection test: {e}", exc_info=True)
         return f"Exception during database connection test: {e}"
-        # return "Database connection failed"
 
 
 def create_tables(db, cursor, logger):
-    """Create tables in new database if not present"""
+    """Create necessary tables in the database if they do not exist."""
     tables_query = "SHOW TABLES;"
     cursor.execute(tables_query)
     tables_present = cursor.fetchall()
@@ -63,7 +61,7 @@ def create_tables(db, cursor, logger):
 
 
 def add_cinemas(db, cursor, logger):
-    """Add cinemas to new database"""
+    """Add cinema records to the cinemas table in the database."""
 
     cinema_ids_query = "SELECT cinema_id FROM cinemas;"
     cursor.execute(cinema_ids_query)
@@ -87,6 +85,7 @@ def add_cinemas(db, cursor, logger):
 
 @connect_to_database
 def build_db(db, cursor, logger):
+    """Initialize the database by creating tables and adding cinema data."""
     tables_present = create_tables(db, cursor, logger=logger)
     add_cinemas(db, cursor, logger=logger)
     return f"Tables in databse: {tables_present}"
