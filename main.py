@@ -75,6 +75,7 @@ def ping(request: Request) -> str:
 
 
 @app.get("/run")
+@limiter.limit("1/30seconds")
 def run_scraper(start: int = 0, end: int = 14, scraper_code=None):
     """Endpoint that can be used to initialize the scraper"""
     SCRAPER_CODE = getenv("SCRAPER_CODE")
