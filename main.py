@@ -71,7 +71,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 @app.get("/")
 @limiter.limit("1/second")
 def ping(request: Request) -> str:
-    return "The server is running."
+    return "Voflix is running."
 
 
 @app.get("/run")

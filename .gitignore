@@ -8,6 +8,8 @@ backup.sql
 docker_commands.txt
 cinema_info.py
 docker_db_init_logs.txt
+*.conf
+*backup*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
