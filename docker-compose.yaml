@@ -1,17 +1,15 @@
 services:
   voflix_api:
-    # image: ${VOFLIX_IMAGE}
+    image: ${VOFLIX_IMAGE}
     container_name: voflix
-    build: .
+    # build: .
     depends_on:
       - db
     env_file:
       - .env
     restart: unless-stopped
     ports:
-      - "8000:8000"
-    # networks:
-    #   - caddy
+      - "127.0.0.1:8000:8000"
 
   db:
     image: mysql:latest
@@ -26,14 +24,8 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     restart: unless-stopped
-    # networks:
-    #   - caddy
     ports:
       - "127.0.0.1:3306:3306"
 
 volumes:
   db_data:
-# networks:
-#   caddy:
-#     external: true
-#     name: caddy
