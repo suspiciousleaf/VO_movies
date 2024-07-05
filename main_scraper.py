@@ -15,9 +15,8 @@ def parse_arguments():
     )
     parser.add_argument("end", type=int, default=15, help="End day offset (default=15)")
     parser.add_argument(
-        "save_raw_json_data",
-        type=bool,
-        default=False,
+        "--save_raw_json_data",
+        action="store_true",
         help="Save raw json data (default=False)",
     )
     return parser.parse_args()
