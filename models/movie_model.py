@@ -98,6 +98,7 @@ class AdditionalDataMovieModel(BaseModel, arbitrary_types_allowed=True):
     """Model to ensure the additional movie data from TMDB is in the correct format before inserting into the database"""
 
     logger: Logger
+    original_title: str = Field(..., min_length=2, max_length=191)
     origin_country: str | None = Field(None, max_length=191)
     rating: float | None = None
     tagline: str | None = Field(None, max_length=255)

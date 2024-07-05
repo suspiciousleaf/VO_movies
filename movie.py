@@ -87,6 +87,7 @@ class Movie:
 
         # The info below is not available from the initial source, so it is aquired from TBDM on instantiation. Dict below holds the attribute name for the Movie object, and the key value that stores the information in the json from the API.
         additional_required_details = {
+            "original_title": ("original_title"),
             "origin_country": ("origin_country"),
             "rating": ("vote_average"),
             "runtime": ("runtime"),
@@ -120,6 +121,7 @@ class Movie:
             except:
                 self.origin_country = None
 
+        self.original_title = additional_details_movie_model.original_title
         self.rating = additional_details_movie_model.rating
         self.tagline = additional_details_movie_model.tagline
         self.synopsis = additional_details_movie_model.synopsis
@@ -134,6 +136,7 @@ class Movie:
 
         Returns:
             dict: A dictionary containing additional details for the movie:
+                - original_title (str): Original title from TMDB, sometimes not translated in original source.
                 - origin_country (str): The country of origin for the movie.
                 - rating (float): The average rating of the movie.
                 - runtime (int): The runtime of the movie in minutes.
@@ -390,6 +393,3 @@ class MovieManager:
             )
         else:
             return "No new movies found."
-
-
-# TODO Catch warnings from INSERT IGNORE SQL
