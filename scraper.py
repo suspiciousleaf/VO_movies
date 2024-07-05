@@ -22,6 +22,7 @@ BASE_PREFIX = getenv("BASE_PREFIX")
 PAYLOAD = json.loads(getenv("PAYLOAD"))
 
 
+# Scraper class, instantiate once per cinema, scrapes the full date range and stores raw data to be processed.
 class Scraper:
     def __init__(
         self,
@@ -119,6 +120,7 @@ class Scraper:
                 )
 
 
+# Instantiate to initialize scraping across the specified date range, will scrape the data for all cinemas, process the raw data, and add new data to database. Raw data can also be saved, or imported rather than scraping.
 class ScraperManager:
     def __init__(
         self,
@@ -167,6 +169,7 @@ class ScraperManager:
         Run all scrapers for specified days and process the data.
 
         """
+        # If `local_data_filename` is provided, raw data will be imported and processed. If not provided, new raw data will be scraped and processed.
         if self.local_data_filename is None:
             with requests.Session() as session:
                 for cinema in tqdm(self.cinema_man.cinema_ids, unit="Cinema"):
@@ -196,7 +199,7 @@ class ScraperManager:
                 # Process showing
                 self.show_man.process_showing(showing, cinema)
             except Exception as e:
-                self.logger.error(f"Unable to process data: {e}")  # , exc_info=True)
+                self.logger.error(f"Unable to process data: {e}")
 
     def save_raw_data(self):
         """Save raw JSON data to a file."""
@@ -215,6 +218,3 @@ class ScraperManagerInitializationError(Exception):
     def __init__(self, message: str):
         self.message = message
         super().__init__(message)
-
-
-#! Consider scraping age ratings, probably in https://developer.themoviedb.org/reference/movie-release-dates

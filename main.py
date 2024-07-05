@@ -74,6 +74,7 @@ def ping(request: Request) -> str:
     return "Voflix is running."
 
 
+# Endpoint to activate scraper manually
 @app.get("/run")
 @limiter.limit("1/30seconds")
 def run_scraper(request: Request, start: int = 0, end: int = 14, scraper_code=None):

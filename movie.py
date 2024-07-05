@@ -22,6 +22,7 @@ TABLE_NAME = "movies"
 # We have a list of movie_id's from the database. We get a list of (movie, showings) from the scraper. We want to loop through the list. For each movie, we want to see if that movie_id is in the database, and if not, add that new movie to movies table. We also want to view all showings for that item in the list, see which aren't in the showings table, and add them.
 
 
+# Class to create a movie and gather additional details
 class Movie:
     """Represents a movie object with its details. Validates input data using pydantic MovieModel(BaseModel) to ensure it is compatible with database schema.
 
