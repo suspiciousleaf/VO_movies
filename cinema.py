@@ -96,6 +96,17 @@ class Cinema:
                 "info": f"cinema.add_to_database: {e}",
             }
 
+    def to_json(self):
+        """Return a representation of the object as a dict"""
+        return {
+            "Cinema_id": self.cinema_id,
+            "Name": self.name,
+            "Town": self.town,
+            "Additional info": self.info,
+            "Address": self.address,
+            "GPS coordinates": self.gps,
+        }
+
     def __str__(self):
         """
         Return a string representation of the Cinema object.
@@ -219,16 +230,16 @@ class CinemaManager:
 
     def retrieve_cinema_info(self) -> str:
         """Return a string showing info for each cinema in the database"""
-        cinemas_info = (
-            "\n".join(str(cinema) for cinema in self.cinemas) + f"\n{str(self)}"
-        )
+        cinemas_info = [cinema.to_json() for cinema in self.cinemas]
+        cinemas_info.append(f"{str(self)}")
+
         return cinemas_info
 
     def __str__(self):
         """
         Return a string representation of the CinemaManager object showing how many cinemas it contains.
         """
-        return f"\nTotal cinemas: {len(self.cinemas)}"
+        return f"Total cinemas: {len(self.cinemas)}"
 
 
 if __name__ == "__main__":

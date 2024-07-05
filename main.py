@@ -1,6 +1,6 @@
 from os import getenv
 
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, Header
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,6 +16,10 @@ from search import Search
 from logging import getLogger
 from logs.setup_logger import setup_logging
 
+if getenv("SCRAPER_CODE") is None:
+    from dotenv import load_dotenv
+
+    load_dotenv()
 
 # Initialize logger and run setup
 logger = getLogger(__name__)
@@ -71,28 +75,35 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 @app.get("/")
 @limiter.limit("1/second")
 def ping(request: Request) -> str:
-    return "Voflix is running."
+    return "VOFlix is running."
 
 
 # Endpoint to activate scraper manually
 @app.get("/run")
 @limiter.limit("1/30seconds")
-def run_scraper(request: Request, start: int = 0, end: int = 14, scraper_code=None):
+def run_scraper(
+    request: Request,
+    start: int = 0,
+    end: int = 14,
+    authorization: str = Header(None),
+):
     """Endpoint that can be used to initialize the scraper"""
-    SCRAPER_CODE = getenv("SCRAPER_CODE")
     import time
 
     from scraper import ScraperManager
 
-    t0 = time.perf_counter()
+    SCRAPER_CODE = getenv("SCRAPER_CODE")
 
-    # Check if code supplied matches .env, used to prevent unwanted scraper initializations
-    if scraper_code != SCRAPER_CODE:
-        logger.error("Scraper initialization attempt failed due to incorrect code")
-        raise HTTPException(
-            status_code=500,
-            detail={"message": "Incorrect initialization code supplied."},
+    if authorization != SCRAPER_CODE:
+        logger.error(
+            f"Unauthorized access attempt: Initialize scraper days {start} - {end}"
         )
+        raise HTTPException(
+            status_code=401,
+            detail="Unauthorized access",
+        )
+
+    t0 = time.perf_counter()
 
     try:
         scraper_man = ScraperManager(
