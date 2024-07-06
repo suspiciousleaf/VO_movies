@@ -99,12 +99,11 @@ class Cinema:
     def to_json(self):
         """Return a representation of the object as a dict"""
         return {
-            "Cinema_id": self.cinema_id,
-            "Name": self.name,
-            "Town": self.town,
-            "Additional info": self.info,
-            "Address": self.address,
-            "GPS coordinates": self.gps,
+            "name": self.name,
+            "town": self.town,
+            "additional_info": self.info,
+            "address": self.address,
+            "gps_coordinates": self.gps,
         }
 
     def __str__(self):
@@ -230,10 +229,7 @@ class CinemaManager:
 
     def retrieve_cinema_info(self) -> str:
         """Return a string showing info for each cinema in the database"""
-        cinemas_info = [cinema.to_json() for cinema in self.cinemas]
-        cinemas_info.append(f"{str(self)}")
-
-        return cinemas_info
+        return [cinema.to_json() for cinema in self.cinemas]
 
     def __str__(self):
         """
