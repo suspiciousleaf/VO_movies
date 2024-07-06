@@ -20,16 +20,14 @@ if getenv("CINEMA_CODE") is None:
 CINEMA_CODE = getenv("CINEMA_CODE")
 
 
-@router.get("/", status_code=200)
+@router.get("s", status_code=200)
 @limiter.limit("1/second")
 def get_cinemas(
     request: Request,
     logger=Depends(get_logger),
-    authorization: str = Header(None),
 ):
-    check_cinema_code(authorization, logger, "details")
     try:
-        logger.info(f"/get_cinemas endpoint requested")
+        logger.info(f"cinemas endpoint requested")
         cinema_man = CinemaManager(logger)
         return cinema_man.retrieve_cinema_info()
     except Exception as e:
