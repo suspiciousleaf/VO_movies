@@ -39,11 +39,7 @@ app = FastAPI()
 
 # CORS permissions
 
-origins = getenv("PROD_URLS").split(",") + [
-    getenv("TEST_URL"),
-    "http://127.0.0.1:5173",
-    "http://localhost:5173",
-]
+origins = getenv("PROD_URLS").split(",") + getenv("TEST_URLS").split(",")
 
 app.add_middleware(
     CORSMiddleware,
