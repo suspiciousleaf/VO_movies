@@ -23,7 +23,7 @@ V.O.Flix is your one stop shop to find English language cinema showings of movie
 
 ## About the project
 
-### Webscraper and REST API that finds showings of movies in cinemas shown in their original language with subtitles (filtered for English language) in an area of the south of France. Consumed by the front end [here](https://voflix.pages.dev/).
+### Webscraper and REST API that finds showings of movies in cinemas shown in their original language with subtitles (filtered for English language) in an area of the south of France. Consumed by the front end [here](https://www.voflix.org).
 
 This project was built because I like going to the movies, and I don't like watching everything dubbed into French. 
 <br><br>
