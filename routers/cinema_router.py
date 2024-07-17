@@ -21,7 +21,7 @@ CINEMA_CODE = getenv("CINEMA_CODE")
 
 
 @router.get("s", status_code=200)
-@limiter.limit("1/second")
+@limiter.limit("2/second;20/minute")
 def get_cinemas(
     request: Request,
     logger=Depends(get_logger),
@@ -38,7 +38,7 @@ def get_cinemas(
 
 
 @router.post("/add", status_code=201)
-@limiter.limit("1/second")
+@limiter.limit("2/second;20/minute")
 async def add_cinema(
     request: Request,
     cinema: CinemaModel,
@@ -62,7 +62,7 @@ async def add_cinema(
 
 
 @router.delete("/delete")
-@limiter.limit("1/second")
+@limiter.limit("2/second;20/minute")
 async def delete_cinema(
     request: Request,
     cinema_id: CinemaDelete,

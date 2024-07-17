@@ -11,7 +11,7 @@ router = APIRouter(
 
 
 @router.get("", status_code=200)
-@limiter.limit("1/second")
+@limiter.limit("2/second;20/minute")
 def find_showings(
     request: Request,
     towns: str | None = Query(default=None, min_length=3),

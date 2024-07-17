@@ -69,9 +69,9 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Endpoint to ping server
 @app.get("/")
-@limiter.limit("1/second")
+@limiter.limit("2/second;20/minute")
 def ping(request: Request) -> str:
-    return "VOFlix is running."
+    return "V.O.Flix is running."
 
 
 # Endpoint to activate scraper manually
