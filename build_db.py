@@ -7,32 +7,32 @@ from data.cinema_info import cinema_data
 DB_NAME = getenv("DB_NAME")
 
 
-@connect_to_database
-def test_db_connection(db, cursor, logger):
-    """Test the connection to the database and verify the active database."""
-    try:
-        query = "SELECT DATABASE();"
-        cursor.execute(query)
-        results = cursor.fetchall()
+# @connect_to_database
+# def test_db_connection(db, cursor, logger):
+#     """Test the connection to the database and verify the active database."""
+#     try:
+#         query = "SELECT DATABASE();"
+#         cursor.execute(query)
+#         results = cursor.fetchall()
 
-        if results:
-            current_db = results[0][0]
-            if DB_NAME == current_db:
-                logger.info("Database connection successful")
-                return "Database connection successful"
-            else:
-                logger.warning(
-                    f"Database connection validation failed, expected: {DB_NAME}, got: {current_db}"
-                )
-                return f"Database connection validation failed, expected: {DB_NAME}, got: {current_db}"
+#         if results:
+#             current_db = results[0][0]
+#             if DB_NAME == current_db:
+#                 logger.info("Database connection successful")
+#                 return "Database connection successful"
+#             else:
+#                 logger.warning(
+#                     f"Database connection validation failed, expected: {DB_NAME}, got: {current_db}"
+#                 )
+#                 return f"Database connection validation failed, expected: {DB_NAME}, got: {current_db}"
 
-        else:
-            logger.error("No results returned from database query")
-            return "No results returned from database query"
+#         else:
+#             logger.error("No results returned from database query")
+#             return "No results returned from database query"
 
-    except Exception as e:
-        logger.error(f"Exception during database connection test: {e}", exc_info=True)
-        return f"Exception during database connection test: {e}"
+#     except Exception as e:
+#         logger.error(f"Exception during database connection test: {e}", exc_info=True)
+#         return f"Exception during database connection test: {e}"
 
 
 def create_tables(db, cursor, logger):
