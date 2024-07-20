@@ -69,7 +69,8 @@ class Search:
                     d_t = result["start_time"]
                     result["start_time"] = {
                         "time": d_t.strftime("%#H:%M"),
-                        "date": f"{self.date_with_suffix(d_t.strftime('%#d'))} {d_t.strftime('%B')}",
+                        "date": f"{d_t.strftime('%#d')} {d_t.strftime('%B')}",
+                        "year": d_t.strftime("%Y"),
                     }
             return results
 
