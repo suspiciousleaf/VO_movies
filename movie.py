@@ -330,7 +330,9 @@ class MovieManager:
                 "movie_id": item["movie"]["id"],
                 "original_title": item["movie"]["originalTitle"].strip(),
                 "french_title": item["movie"]["title"].strip(),
-                "genres": [genre["tag"].title() for genre in item["movie"]["genres"]],
+                "genres": [
+                    genre.replace("_", " ").title() for genre in item["movie"]["genres"]
+                ],
                 "languages": [
                     language.title() for language in item["movie"]["languages"]
                 ],
