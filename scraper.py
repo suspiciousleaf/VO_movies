@@ -65,8 +65,10 @@ class Scraper:
         Returns:
             list: List of URLs.
         """
+        today_date = datetime.date.today()
         url_list = [
-            f"{BASE_PREFIX}{self.cinema_id}/d-{i}/" for i in range(start_day, end_day)
+            f"{BASE_PREFIX}{self.cinema_id}/d-{today_date + datetime.timedelta(days=i)}/"
+            for i in range(start_day, end_day)
         ]
         self.logger.debug(
             f"Scraper.create_url_list() for {self.cinema_id=} ran successfully"
