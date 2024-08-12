@@ -331,7 +331,8 @@ class MovieManager:
                 "original_title": item["movie"]["originalTitle"].strip(),
                 "french_title": item["movie"]["title"].strip(),
                 "genres": [
-                    genre.replace("_", " ").title() for genre in item["movie"]["genres"]
+                    genre["tag"].replace("_", " ").title()
+                    for genre in item["movie"]["genres"]
                 ],
                 "languages": [
                     language.title() for language in item["movie"]["languages"]
