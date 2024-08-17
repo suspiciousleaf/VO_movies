@@ -47,7 +47,7 @@ class Search:
         try:
             cursor = db.cursor(dictionary=True)
             columns_required = "start_time, original_title, runtime, synopsis, cast, genres, release_date, rating, imdb_url, poster_hi_res, poster_lo_res, name AS cinema_name, town AS cinema_town, address AS cinema_address, showtimes.cinema_id"
-            search_query = f"SELECT {columns_required} FROM showtimes LEFT JOIN movies ON showtimes.movie_id = movies.movie_id LEFT JOIN cinemas ON showtimes.cinema_id = cinemas.cinema_id WHERE start_time > DATE(NOW())"
+            search_query = f"SELECT {columns_required} FROM showtimes LEFT JOIN movies ON showtimes.movie_id = movies.movie_id LEFT JOIN cinemas ON showtimes.cinema_id = cinemas.cinema_id WHERE start_time > DATE(NOW()) ORDER BY start_time ASC"
 
             if towns:
                 try:
