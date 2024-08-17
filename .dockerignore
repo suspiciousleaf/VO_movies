@@ -1,0 +1,11 @@
+.env
+creds.py
+raw_data_*
+test*
+*.log*
+response.html
+backup.sql
+docker_commands.txt
+docker_db_init_logs.txt
+*.conf
+*backup*
