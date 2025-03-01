@@ -1,5 +1,6 @@
-import datetime
+import time
 from logging import Logger
+from creds import DATA_REFRESH_AGE
 
 from db_utilities import connect_to_database
 
@@ -15,33 +16,48 @@ class Search:
     def __init__(self, logger: Logger):
         """Initialize the Search object."""
         self.logger = logger
-        self.results = []
+        self.data: list | None = None
+        self.time_at_data_refresh: float | None = None
+        self.max_data_age = DATA_REFRESH_AGE
+        self.refresh_data()
 
-    def search(self, towns: list[str] | None = None):
+    def search(self) -> list[dict]:
         """
-        Perform a search for showtimes based on specified towns.
-
-        Args:
-        towns (list[str] | None, optional): A list of town names to filter the search. Defaults to None. Case and accent insensitive.
+        Perform a search for showtimes.
 
         Returns:
         list: A list of dictionaries containing search results.
         """
-        self.results = self.search_showings(towns=towns)
-        return self.results
+        data_source = "cache"
+        data_age = time.time() - self.time_at_data_refresh
+        if not self.data or data_age > self.max_data_age:
+            self.refresh_data()
+            data_source = "database"
+
+        #! Uncomment to save json locally
+        # import json
+        # from datetime import date
+
+        # def custom_serializer(obj):
+        #     if isinstance(obj, date):  # Check if obj is a date
+        #         return obj.isoformat()  # Convert to string (e.g., "2025-03-01")
+        #     raise TypeError(
+        #         f"Object of type {obj.__class__.__name__} is not JSON serializable"
+        #     )
+
+        # with open("test.json", "w", encoding="utf8") as f:
+        #     json.dump(self.data, f, default=custom_serializer)
+
+        return self.data
 
     @connect_to_database
-    def search_showings(self, db, cursor, towns: list[str] | None = None):
+    def refresh_data(self, db, cursor):
         """
-        Execute the SQL query to search for showtimes in the database.
+        Update the cached data from the database
 
         Args:
         db: Database connection object.
         cursor: Database cursor object. This is passed by the decorator, but overridden in this method to return as dictionary.
-        towns (list[str] | None, optional): A list of town names to filter the search. Defaults to None.
-
-        Returns:
-        list: A list of dictionaries containing search results.
         """
 
         try:
@@ -49,19 +65,7 @@ class Search:
             columns_required = "start_time, original_title, runtime, synopsis, cast, genres, release_date, rating, imdb_url, poster_hi_res, poster_lo_res, name AS cinema_name, town AS cinema_town, address AS cinema_address, showtimes.cinema_id"
             search_query = f"SELECT {columns_required} FROM showtimes LEFT JOIN movies ON showtimes.movie_id = movies.movie_id LEFT JOIN cinemas ON showtimes.cinema_id = cinemas.cinema_id WHERE start_time > DATE(NOW()) ORDER BY start_time ASC"
 
-            if towns:
-                try:
-                    assert all(isinstance(town, str) for town in towns)
-                except:
-                    raise ValueError(
-                        f"All 'town' values must be strings, towns={towns}"
-                    )
-
-                placeholders = ", ".join(f"%s" for _ in towns)
-                search_query += f" AND town IN ({placeholders})"
-                cursor.execute(search_query, towns)
-            else:
-                cursor.execute(search_query)
+            cursor.execute(search_query)
 
             results = cursor.fetchall()
             if results:
@@ -72,11 +76,12 @@ class Search:
                         "date": f"{d_t.strftime('%#d')} {d_t.strftime('%B')}",
                         "year": d_t.strftime("%Y"),
                     }
-            return results
+            self.data = self.process_data_from_db(results)
+            self.time_at_data_refresh = time.time()
 
         except Exception as e:
             self.logger.error(f"Search.search_showings() failed: {e}")
-            return []
+            # return []
 
     @staticmethod
     def date_with_suffix(n: str) -> str:
@@ -88,6 +93,42 @@ class Search:
             suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
         return f"{n}{suffix}"
 
+    @staticmethod
+    def process_data_from_db(showings):
+        processed_data = {"movies": {}, "showings": []}
+        movie_names = set()
+        showings_set = set()
+
+        for showing in showings:
+            if showing.get("original_title") not in movie_names:
+                movie_names.add(showing.get("original_title"))
+                processed_data["movies"][showing.get("original_title")] = {
+                    "runtime": showing.get("runtime"),
+                    "synopsis": showing.get("synopsis"),
+                    "cast": showing.get("cast"),
+                    "genres": showing.get("genres"),
+                    "release_date": showing.get("release_date"),
+                    "rating": showing.get("rating"),
+                    "imdb_url": showing.get("imdb_url"),
+                    "poster_hi_res": showing.get("poster_hi_res"),
+                    "poster_lo_res": showing.get("poster_lo_res"),
+                }
+            cinema = f"{showing['cinema_name']},{showing['cinema_town']}"
+            original_title = showing.get("original_title")
+            start_time = f"{showing.get('start_time', {}).get('time')},{showing.get('start_time', {}).get('date')},{showing.get('start_time', {}).get('year')}"
+            showing_string = f"{start_time},{original_title},{cinema}"
+
+            if showing_string not in showings_set:
+                showings_set.add(showing_string)
+                processed_data["showings"].append(
+                    {
+                        "cinema": cinema,
+                        "original_title": original_title,
+                        "start_time": showing.get("start_time"),
+                    }
+                )
+        return processed_data
+
 
 if __name__ == "__main__":
     # Test search behaviour
@@ -97,7 +138,13 @@ if __name__ == "__main__":
     logger = getLogger(__name__)
     setup_logging()
     search = Search(logger)
+    # while True:
+    #     x = input("Enter anything to continue")
+    #     t0 = time.perf_counter()
     results = search.search()
-    logger.info(f"Number of results: {len(results)}")
-    if results:
-        logger.info(results[0])
+    # t1 = time.perf_counter() - t0
+    # logger.info(f"Number of results: {len(results)}")
+    # if results:
+    #     logger.info(
+    #         f"{results['data_source']}, {results['data_age']:.2f} s, took {t1 * 1000:.2f} ms"
+    #     )

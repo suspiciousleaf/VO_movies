@@ -30,7 +30,7 @@ CREATE TABLE cinemas (
 -- hash_id is used to compare showings in database with newly scrapes showings to identify unknown ones, using SHA256
 CREATE TABLE showtimes (
     showtime_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    movie_id CHAR(16),
+    movie_id VARCHAR(191),
     cinema_id CHAR(5),
     start_time DATETIME,
     hash_id CHAR(64),

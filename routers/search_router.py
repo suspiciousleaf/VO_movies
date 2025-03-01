@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Query, HTTPException, Request, Depends
+from fastapi import APIRouter, HTTPException, Request, Depends
 
 from search import Search
 from routers.limiter import limiter
@@ -10,21 +10,23 @@ router = APIRouter(
 )
 
 
-@router.get("", status_code=200)
+def get_search(request: Request) -> Search:
+    """Retrieve the persistent Search instance from app state"""
+    return request.app.state.search
+
+
+@router.get("", status_code=200, tags=["Search"])
 @limiter.limit("2/second;20/minute")
 def find_showings(
     request: Request,
-    towns: str | None = Query(default=None, min_length=3),
     logger=Depends(get_logger),
-) -> list:
+    search=Depends(get_search),
+) -> list | dict:
     try:
-        search = Search(logger)
-        if towns is None:
-            data = search.search()
-        else:
-            towns = towns.split(",")
-            data = search.search(towns)
-        logger.info(f"Search.search() called, returned {len(data)} results. {towns=}")
+        data = search.search()
+        logger.info(
+            f"Search.search() called, returned {len(data.get('showings', []))} results."
+        )
         return data
 
     except Exception as e:

@@ -229,7 +229,11 @@ class CinemaManager:
 
     def retrieve_cinema_info(self) -> str:
         """Return a string showing info for each cinema in the database"""
-        return [cinema.to_json() for cinema in self.cinemas]
+        data = [cinema.to_json() for cinema in self.cinemas]
+        processed_data = {
+            f"{cinema['name']},{cinema['town']}": cinema for cinema in data
+        }
+        return processed_data
 
     def __str__(self):
         """

@@ -1,22 +1,23 @@
-from os import getenv
+# from os import getenv
 from datetime import datetime
 from requests import Session
 from pydantic import ValidationError
 from logging import Logger
 
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 from models.movie_model import MovieModel, AdditionalDataMovieModel
 from db_utilities import connect_to_database
 from data.country_info import country_codes
+from creds import TMDB_API_TOKEN
 
 
-# Check of environment variables are loaded, and if not load them from .env
-if getenv("DB_USER") is None:
-    load_dotenv()
+# # Check of environment variables are loaded, and if not load them from .env
+# if getenv("DB_USER") is None:
+#     load_dotenv()
 
 # Read environment variables
-TMDB_API_TOKEN = getenv("TMDB_API_TOKEN")
+# TMDB_API_TOKEN = getenv("TMDB_API_TOKEN")
 TABLE_NAME = "movies"
 
 # We have a list of movie_id's from the database. We get a list of (movie, showings) from the scraper. We want to loop through the list. For each movie, we want to see if that movie_id is in the database, and if not, add that new movie to movies table. We also want to view all showings for that item in the list, see which aren't in the showings table, and add them.
@@ -180,7 +181,6 @@ class Movie:
 
             # If no results found using title and year, try again without the year.
             if "tmdb_id" not in extra_movie_data.keys():
-
                 queryparams = {
                     "query": self.original_title,
                 }
@@ -379,7 +379,6 @@ class MovieManager:
     def add_new_movies_to_database(self, db=None, cursor=None) -> None:
         """Add new movies to the database."""
         if self.new_movies:
-
             movie_values_list = [movie.database_format() for movie in self.new_movies]
 
             columns = Movie.get_columns()
@@ -387,6 +386,12 @@ class MovieManager:
             insert_query = f"INSERT IGNORE INTO {TABLE_NAME} ({', '.join(columns)}) VALUES ({placeholders});"
             cursor.executemany(insert_query, movie_values_list)
             db.commit()
+
+            # Check for warnings during INSERT IGNORE
+            cursor.execute("SHOW WARNINGS;")
+            warnings = cursor.fetchall()
+            if warnings:
+                self.logger.warning(f"Errors during movie insert: {warnings}")
 
     def __str__(self):
         """Return a string representation of the MovieManager object."""

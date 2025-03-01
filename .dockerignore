@@ -9,3 +9,4 @@ docker_commands.txt
 docker_db_init_logs.txt
 *.conf
 *backup*
+.venv

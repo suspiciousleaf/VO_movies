@@ -1,26 +1,11 @@
-from os import getenv
 import mysql.connector
+
+from creds import DB_PORT, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME
 
 # Check of environment variables are loaded, and if not load them from .env. Also check if running locally or not, which changes some of the information.
 
-if getenv("DB_USER") is None:
-
-    from dotenv import load_dotenv
-
-    load_dotenv()
-    DB_PORT = getenv("DB_PORT_LOCAL")
-    DB_USER = getenv("DB_USER_LOCAL")
-    DB_PASSWORD = getenv("DB_PASSWORD_LOCAL")
-    DB_HOST = getenv("DB_HOST_LOCAL")
-    DB_NAME = getenv("DB_NAME_LOCAL")
-else:
-    DB_PORT = int(getenv("DB_PORT"))
-
-    # Read environment variables
-    DB_USER = getenv("DB_USER")
-    DB_PASSWORD = getenv("DB_PASSWORD")
-    DB_HOST = getenv("DB_HOST")
-    DB_NAME = getenv("DB_NAME")
+# TODO Improve data format returned
+# TODO Build read through cache
 
 
 class DatabaseConnectionError(Exception):

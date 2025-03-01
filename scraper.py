@@ -1,4 +1,3 @@
-from os import getenv
 import json
 import datetime
 from logging import Logger
@@ -9,17 +8,7 @@ from tqdm import tqdm
 from cinema import CinemaManager
 from showing import ShowingsManager
 from movie import MovieManager
-
-# Check of environment variables are loaded, and if not load them from .env.
-if getenv("DB_USER") is None:
-    from dotenv import load_dotenv
-
-    load_dotenv()
-
-# Read environment variables
-SCRAPING_ANT_API_KEY = getenv("SCRAPING_ANT_API_KEY")
-BASE_PREFIX = getenv("BASE_PREFIX")
-PAYLOAD = json.loads(getenv("PAYLOAD"))
+from creds import SCRAPING_ANT_API_KEY, BASE_PREFIX, PAYLOAD
 
 
 # Scraper class, instantiate once per cinema, scrapes the full date range and stores raw data to be processed.
@@ -113,7 +102,7 @@ class Scraper:
 
             except Exception as e:
                 self.logger.error(
-                    f"Request failed: {response.status_code=}",
+                    f"Request failed: {response.status_code=}, {target_url=}",
                     extra={
                         "extra_info": str(e).replace(
                             SCRAPING_ANT_API_KEY, "SCRAPING_ANT_API_KEY"
