@@ -28,13 +28,9 @@ class Search:
         Returns:
         list: A list of dictionaries containing search results.
         """
-        data_source = "cache"
-        if self.time_at_data_refresh is None:
-            self.refresh_data()
         data_age = time.time() - self.time_at_data_refresh
         if not self.data or data_age > self.max_data_age:
             self.refresh_data()
-            data_source = "database"
 
         #! Uncomment to save json locally
         # import json
@@ -63,6 +59,7 @@ class Search:
         """
 
         try:
+            self.time_at_data_refresh = time.time()
             cursor = db.cursor(dictionary=True)
             columns_required = "movies.movie_id AS movie_id, start_time, original_title, runtime, synopsis, cast, genres, release_date, rating_imdb, rating_rt, rating_meta, imdb_url, poster_hi_res, poster_lo_res, name AS cinema_name, town AS cinema_town, address AS cinema_address, showtimes.cinema_id"
             search_query = f"SELECT {columns_required} FROM showtimes LEFT JOIN movies ON showtimes.movie_id = movies.movie_id LEFT JOIN cinemas ON showtimes.cinema_id = cinemas.cinema_id WHERE start_time > DATE(NOW()) ORDER BY start_time ASC"
@@ -79,11 +76,9 @@ class Search:
                         "year": d_t.strftime("%Y"),
                     }
             self.data = self.process_data_from_db(results)
-            self.time_at_data_refresh = time.time()
-            # self.logger.critical(self.time_at_data_refresh)
         except Exception as e:
             self.logger.error(f"Search.search_showings() failed: {e}")
-            # return []
+            return []
 
     @staticmethod
     def date_with_suffix(n: str) -> str:
@@ -95,7 +90,6 @@ class Search:
             suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
         return f"{n}{suffix}"
 
-    # @staticmethod
     def process_data_from_db(self, showings):
         processed_data = {"movies": {}, "showings": []}
         movie_names = set()
@@ -112,8 +106,10 @@ class Search:
                         "cast": showing.get("cast"),
                         "genres": showing.get("genres"),
                         "release_date": showing.get("release_date"),
-                        "rating_imdb": showing.get("rating_imdb", 0) / 10,
-                        "rating_rt": showing.get("rating_rt", 0),
+                        "rating_imdb": showing.get("rating_imdb") / 10
+                        if showing.get("rating_imdb")
+                        else None,
+                        "rating_rt": showing.get("rating_rt"),
                         "rating_meta": showing.get("rating_meta"),
                         "imdb_url": showing.get("imdb_url"),
                         "poster_hi_res": showing.get("poster_hi_res"),
@@ -156,5 +152,3 @@ if __name__ == "__main__":
     #     logger.info(
     #         f"{results['data_source']}, {results['data_age']:.2f} s, took {t1 * 1000:.2f} ms"
     #     )
-
-# TODO Bug in read through cache "Error processing movie unsupported operand type(s) for /: 'NoneType' and 'int':"
