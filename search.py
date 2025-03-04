@@ -29,6 +29,8 @@ class Search:
         list: A list of dictionaries containing search results.
         """
         data_source = "cache"
+        if self.time_at_data_refresh is None:
+            self.refresh_data()
         data_age = time.time() - self.time_at_data_refresh
         if not self.data or data_age > self.max_data_age:
             self.refresh_data()
@@ -62,7 +64,7 @@ class Search:
 
         try:
             cursor = db.cursor(dictionary=True)
-            columns_required = "start_time, original_title, runtime, synopsis, cast, genres, release_date, rating, imdb_url, poster_hi_res, poster_lo_res, name AS cinema_name, town AS cinema_town, address AS cinema_address, showtimes.cinema_id"
+            columns_required = "movies.movie_id AS movie_id, start_time, original_title, runtime, synopsis, cast, genres, release_date, rating_imdb, rating_rt, rating_meta, imdb_url, poster_hi_res, poster_lo_res, name AS cinema_name, town AS cinema_town, address AS cinema_address, showtimes.cinema_id"
             search_query = f"SELECT {columns_required} FROM showtimes LEFT JOIN movies ON showtimes.movie_id = movies.movie_id LEFT JOIN cinemas ON showtimes.cinema_id = cinemas.cinema_id WHERE start_time > DATE(NOW()) ORDER BY start_time ASC"
 
             cursor.execute(search_query)
@@ -78,7 +80,7 @@ class Search:
                     }
             self.data = self.process_data_from_db(results)
             self.time_at_data_refresh = time.time()
-
+            # self.logger.critical(self.time_at_data_refresh)
         except Exception as e:
             self.logger.error(f"Search.search_showings() failed: {e}")
             # return []
@@ -93,40 +95,46 @@ class Search:
             suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
         return f"{n}{suffix}"
 
-    @staticmethod
-    def process_data_from_db(showings):
+    # @staticmethod
+    def process_data_from_db(self, showings):
         processed_data = {"movies": {}, "showings": []}
         movie_names = set()
         showings_set = set()
 
         for showing in showings:
-            if showing.get("original_title") not in movie_names:
-                movie_names.add(showing.get("original_title"))
-                processed_data["movies"][showing.get("original_title")] = {
-                    "runtime": showing.get("runtime"),
-                    "synopsis": showing.get("synopsis"),
-                    "cast": showing.get("cast"),
-                    "genres": showing.get("genres"),
-                    "release_date": showing.get("release_date"),
-                    "rating": showing.get("rating"),
-                    "imdb_url": showing.get("imdb_url"),
-                    "poster_hi_res": showing.get("poster_hi_res"),
-                    "poster_lo_res": showing.get("poster_lo_res"),
-                }
-            cinema = f"{showing['cinema_name']},{showing['cinema_town']}"
-            original_title = showing.get("original_title")
-            start_time = f"{showing.get('start_time', {}).get('time')},{showing.get('start_time', {}).get('date')},{showing.get('start_time', {}).get('year')}"
-            showing_string = f"{start_time},{original_title},{cinema}"
-
-            if showing_string not in showings_set:
-                showings_set.add(showing_string)
-                processed_data["showings"].append(
-                    {
-                        "cinema": cinema,
-                        "original_title": original_title,
-                        "start_time": showing.get("start_time"),
+            try:
+                if showing.get("original_title") not in movie_names:
+                    movie_names.add(showing.get("original_title"))
+                    processed_data["movies"][showing.get("original_title")] = {
+                        "movie_id": showing.get("movie_id"),
+                        "runtime": showing.get("runtime"),
+                        "synopsis": showing.get("synopsis"),
+                        "cast": showing.get("cast"),
+                        "genres": showing.get("genres"),
+                        "release_date": showing.get("release_date"),
+                        "rating_imdb": showing.get("rating_imdb", 0) / 10,
+                        "rating_rt": showing.get("rating_rt", 0),
+                        "rating_meta": showing.get("rating_meta"),
+                        "imdb_url": showing.get("imdb_url"),
+                        "poster_hi_res": showing.get("poster_hi_res"),
+                        "poster_lo_res": showing.get("poster_lo_res"),
                     }
-                )
+                cinema = f"{showing['cinema_name']},{showing['cinema_town']}"
+                original_title = showing.get("original_title")
+                start_time = f"{showing.get('start_time', {}).get('time')},{showing.get('start_time', {}).get('date')},{showing.get('start_time', {}).get('year')}"
+                showing_string = f"{start_time},{original_title},{cinema}"
+
+                if showing_string not in showings_set:
+                    showings_set.add(showing_string)
+                    processed_data["showings"].append(
+                        {
+                            "cinema": cinema,
+                            "original_title": original_title,
+                            "start_time": showing.get("start_time"),
+                        }
+                    )
+            except Exception as e:
+                self.logger.warning(f"Error processing movie: {e}: {showing}")
         return processed_data
 
 
@@ -148,3 +156,5 @@ if __name__ == "__main__":
     #     logger.info(
     #         f"{results['data_source']}, {results['data_age']:.2f} s, took {t1 * 1000:.2f} ms"
     #     )
+
+# TODO Bug in read through cache "Error processing movie unsupported operand type(s) for /: 'NoneType' and 'int':"

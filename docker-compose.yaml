@@ -1,9 +1,13 @@
 services:
-  resto:
-    # image: suspiciousleaf/assessment-resto:resto
+  voflix_v2:
+    # image: suspiciousleaf/voflix_v2:voflix_v2
     container_name: voflix_v2
     build: .
+    env_file:
+      - .env
     restart: unless-stopped
     ports:
       - "127.0.0.1:7990:7990"
     entrypoint: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7990"]
+
+    # Needs to be hooked up to the mysql database that is already running on VPS

@@ -4,9 +4,6 @@ from creds import DB_PORT, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME
 
 # Check of environment variables are loaded, and if not load them from .env. Also check if running locally or not, which changes some of the information.
 
-# TODO Improve data format returned
-# TODO Build read through cache
-
 
 class DatabaseConnectionError(Exception):
     """Custom error that is raised when connecting to the database fails"""

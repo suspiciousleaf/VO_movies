@@ -1,5 +1,4 @@
 .env
-creds.py
 raw_data_*
 test*
 *.log*
