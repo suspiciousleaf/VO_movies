@@ -13,7 +13,7 @@ COPY pyproject.toml uv.lock README.md /app/
 RUN pip install --no-cache-dir uv
 
 # Install dependencies using uv
-RUN uv pip install --system --resolution=highest --requirements pyproject.toml
+RUN uv pip install . --system
 
 # Copy the project files into the container
 COPY . /app

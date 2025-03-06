@@ -232,7 +232,6 @@ class ScraperManager:
         try:
             # Get a list of upcoming movies so we know which ones to update
             upcoming_movies = self.search.search().get("movies", [])
-
             # Filter the results to get just the details we need
             IMDB_IDS = [
                 {
