@@ -1,8 +1,9 @@
 import time
+
 from logging import Logger
 from creds import DATA_REFRESH_AGE
 
-from db_utilities import connect_to_database
+from db_utilities import connect_to_database, DatabaseConnectionError
 
 
 class Search:
@@ -17,9 +18,12 @@ class Search:
         """Initialize the Search object."""
         self.logger = logger
         self.data: list | None = None
-        self.time_at_data_refresh: float | None = None
+        self.time_at_data_refresh: float = 0.0
         self.max_data_age = DATA_REFRESH_AGE
-        self.refresh_data()
+        try:
+            self.data = self.refresh_data()
+        except DatabaseConnectionError as e:
+            self.logger.error(f"DatabaseConnectionError: {e}")
 
     def search(self) -> list[dict]:
         """
@@ -28,9 +32,11 @@ class Search:
         Returns:
         list: A list of dictionaries containing search results.
         """
+        data_source = "cache"
         data_age = time.time() - self.time_at_data_refresh
         if not self.data or data_age > self.max_data_age:
-            self.refresh_data()
+            self.data = self.refresh_data()
+            data_source = "database"
 
         #! Uncomment to save json locally
         # import json
@@ -45,11 +51,11 @@ class Search:
 
         # with open("test.json", "w", encoding="utf8") as f:
         #     json.dump(self.data, f, default=custom_serializer)
-
+        self.logger.info(f"Search.search() sourced data from {data_source}")
         return self.data
 
     @connect_to_database
-    def refresh_data(self, db, cursor):
+    def refresh_data(self, db, cursor) -> list:
         """
         Update the cached data from the database
 
@@ -59,9 +65,8 @@ class Search:
         """
 
         try:
-            self.time_at_data_refresh = time.time()
             cursor = db.cursor(dictionary=True)
-            columns_required = "movies.movie_id AS movie_id, start_time, original_title, runtime, synopsis, cast, genres, release_date, rating_imdb, rating_rt, rating_meta, imdb_url, poster_hi_res, poster_lo_res, name AS cinema_name, town AS cinema_town, address AS cinema_address, showtimes.cinema_id"
+            columns_required = "movies.movie_id AS movie_id, start_time, original_title, runtime, synopsis, cast, genres, release_date, rating_imdb, rating_rt, rating_meta, imdb_url, poster_hi_res, poster_lo_res, name AS cinema_name, town AS cinema_town, showtimes.cinema_id"
             search_query = f"SELECT {columns_required} FROM showtimes LEFT JOIN movies ON showtimes.movie_id = movies.movie_id LEFT JOIN cinemas ON showtimes.cinema_id = cinemas.cinema_id WHERE start_time > DATE(NOW()) ORDER BY start_time ASC"
 
             cursor.execute(search_query)
@@ -75,10 +80,15 @@ class Search:
                         "date": f"{d_t.strftime('%#d')} {d_t.strftime('%B')}",
                         "year": d_t.strftime("%Y"),
                     }
-            self.data = self.process_data_from_db(results)
+            data = self._process_data_from_db(results)
+            self.time_at_data_refresh = time.time()
+            self.logger.info(
+                f"Data refreshed at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}"
+            )
+            self.time_at_data_refresh = time.time()
+            return data
         except Exception as e:
-            self.logger.error(f"Search.search_showings() failed: {e}")
-            return []
+            self.logger.error(f"Search.refresh_data() failed: {e}", exc_info=True)
 
     @staticmethod
     def date_with_suffix(n: str) -> str:
@@ -90,7 +100,7 @@ class Search:
             suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
         return f"{n}{suffix}"
 
-    def process_data_from_db(self, showings):
+    def _process_data_from_db(self, showings):
         processed_data = {"movies": {}, "showings": []}
         movie_names = set()
         showings_set = set()
@@ -100,6 +110,7 @@ class Search:
                 if showing.get("original_title") not in movie_names:
                     movie_names.add(showing.get("original_title"))
                     processed_data["movies"][showing.get("original_title")] = {
+                        # movie_id is needed to update ratings, not for main results
                         "movie_id": showing.get("movie_id"),
                         "runtime": showing.get("runtime"),
                         "synopsis": showing.get("synopsis"),
