@@ -27,6 +27,6 @@ BASE_PREFIX = getenv("BASE_PREFIX")
 PAYLOAD = json.loads(getenv("PAYLOAD"))
 CINEMA_CODE = getenv("CINEMA_CODE")
 ORIGINS = getenv("PROD_URLS").split(",") + getenv("TEST_URLS").split(",")
-DATA_REFRESH_AGE = 10  # Seconds
+DATA_REFRESH_AGE = int(getenv("DATA_REFRESH_AGE"))
 OMDB_API_URL = getenv("OMDB_API_URL")
 OMDB_API_KEY = getenv("OMDB_API_KEY")
