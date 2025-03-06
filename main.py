@@ -50,13 +50,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# # Create search
-# search = Search(logger)
-
-# # Add dependencies to app state
-# app.state.logger = logger
-# app.state.search = search
-
 # Add routers
 app.include_router(cinema_router)
 app.include_router(search_router)
@@ -105,7 +98,7 @@ def run_scraper(
     t0 = time.perf_counter()
 
     try:
-        scraper_man = ScraperManager(
+        ScraperManager(
             start_day=start,
             end_day=end,
             logger=logger,
