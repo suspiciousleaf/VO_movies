@@ -108,3 +108,6 @@ def run_scraper(
     except Exception as e:
         logger.error(e)
         raise HTTPException(status_code=500, detail={"message": "Server Error"})
+
+
+# TODO Set up different endpoints for showings and movies. Maybe also cache cinema data?

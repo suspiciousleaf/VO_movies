@@ -25,9 +25,9 @@ class Search:
         except DatabaseConnectionError as e:
             self.logger.error(f"DatabaseConnectionError: {e}")
 
-    def search(self) -> list[dict]:
+    def get_movies(self) -> dict:
         """
-        Perform a search for showtimes.
+        Perform a search for movies.
 
         Returns:
         list: A list of dictionaries containing search results.
@@ -51,8 +51,24 @@ class Search:
 
         # with open("test.json", "w", encoding="utf8") as f:
         #     json.dump(self.data, f, default=custom_serializer)
-        self.logger.info(f"Search.search() sourced data from {data_source}")
-        return self.data
+        self.logger.info(f"Search.get_movies() sourced data from {data_source}")
+        return self.data.get("movies", {})
+
+    def get_showings(self) -> list[dict]:
+        """
+        Perform a search for movies.
+
+        Returns:
+        list: A list of dictionaries containing search results.
+        """
+        data_source = "cache"
+        data_age = time.time() - self.time_at_data_refresh
+        if not self.data or data_age > self.max_data_age:
+            self.data = self.refresh_data()
+            data_source = "database"
+
+        self.logger.info(f"Search.get_showings() sourced data from {data_source}")
+        return self.data.get("showings", {})
 
     @connect_to_database
     def refresh_data(self, db, cursor) -> list:
