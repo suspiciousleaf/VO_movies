@@ -22,9 +22,10 @@ def find_showings(
     request: Request,
     logger=Depends(get_logger),
     search=Depends(get_search),
+    force_refresh: bool = False,
 ) -> list[ShowingData]:
     try:
-        data = search.get_showings()
+        data = search.get_showings(force_refresh)
         logger.info(
             f"Search.get_showings() called, returned {len(data or [])} results."
         )
@@ -43,9 +44,10 @@ def find_movies(
     request: Request,
     logger=Depends(get_logger),
     search=Depends(get_search),
+    force_refresh: bool = False,
 ) -> MovieCollection:
     try:
-        data = search.get_movies()
+        data = search.get_movies(force_refresh)
         logger.info(f"Search.get_movies() called, returned {len(data or [])} results.")
         return data
 

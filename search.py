@@ -9,14 +9,29 @@ from db_utilities import connect_to_database, DatabaseConnectionError
 
 class Search:
     """
-    A class for searching showtimes in the database.
+    A class that manages cached access to movie and showing data from the database.
+
+    This class implements a thread-safe caching mechanism that reduces database load
+    by storing movie and showing data in memory and refreshing it only when necessary.
 
     Attributes:
-    results (list): A list to store the search results.
+        logger (Logger): Logger instance for recording operations and errors.
+        data (dict): Cached data containing movies and showings.
+        time_at_data_refresh (float): Timestamp of the last data refresh.
+        max_data_age (int): Maximum age of cached data in seconds before refresh.
+        _refresh_lock (Lock): Thread lock to prevent concurrent database refreshes.
     """
 
     def __init__(self, logger: Logger):
-        """Initialize the Search object."""
+        """
+        Initialize the Search object with empty cache and refresh settings.
+
+        Args:
+            logger (Logger): Logger instance for recording operations and errors.
+
+        Raises:
+            DatabaseConnectionError: If initial database connection fails.
+        """
         self.logger: Logger = logger
         self.data: dict = {}
         self.time_at_data_refresh: float = 0.0
@@ -29,10 +44,18 @@ class Search:
 
     def get_movies(self, force_refresh=False) -> dict:
         """
-        Perform a search for movies.
+        Retrieve movie data from cache or refresh from database if needed.
+
+        The method checks if the cached data is stale based on age or if a refresh
+        is explicitly requested. Uses thread-safe mechanisms to prevent multiple
+        concurrent refreshes.
+
+        Args:
+            force_refresh (bool, optional): Force a data refresh regardless of cache age.
+                Defaults to False.
 
         Returns:
-        list: A list of dictionaries containing search results.
+            dict: Dictionary mapping movie titles to their details. Empty dict if no data.
         """
         data_source = "cache"
         current_data_age = time.time() - self.time_at_data_refresh
@@ -40,6 +63,7 @@ class Search:
         if not self.data or force_refresh or current_data_age > self.max_data_age:
             with self._refresh_lock:
                 # Check conditions again after aquiring lock to prevent double refreshes.
+                current_data_age = time.time() - self.time_at_data_refresh
                 if (
                     not self.data
                     or force_refresh
@@ -55,10 +79,19 @@ class Search:
 
     def get_showings(self, force_refresh=False) -> list[dict]:
         """
-        Perform a search for movies.
+        Retrieve showing data from cache or refresh from database if needed.
+
+        The method checks if the cached data is stale based on age or if a refresh
+        is explicitly requested. Uses thread-safe mechanisms to prevent multiple
+        concurrent refreshes.
+
+        Args:
+            force_refresh (bool, optional): Force a data refresh regardless of cache age.
+                Defaults to False.
 
         Returns:
-        list: A list of dictionaries containing search results.
+            list[dict]: List of showing dictionaries with cinema, title and time information.
+                Empty list if no data.
         """
         data_source = "cache"
         current_data_age = time.time() - self.time_at_data_refresh
@@ -66,6 +99,7 @@ class Search:
         if not self.data or force_refresh or current_data_age > self.max_data_age:
             with self._refresh_lock:
                 # Check conditions again after aquiring lock to prevent double refreshes.
+                current_data_age = time.time() - self.time_at_data_refresh
                 if (
                     not self.data
                     or force_refresh
@@ -82,11 +116,19 @@ class Search:
     @connect_to_database
     def _refresh_data(self, db, cursor) -> dict:
         """
-        Update the cached data from the database
+        Fetch fresh data from the database and update the cache.
+
+        This method is decorated with @connect_to_database which handles the database
+        connection. It queries upcoming showtimes and related movie information,
+        formats the data, and updates the cache timestamp.
 
         Args:
-        db: Database connection object.
-        cursor: Database cursor object. This is passed by the decorator, but overridden in this method to return as dictionary.
+            db: Database connection object (provided by decorator).
+            cursor: Database cursor object (provided by decorator).
+
+        Returns:
+            dict: Refreshed data dictionary with 'movies' and 'showings' keys.
+                Returns empty structures if errors occur.
         """
 
         try:
@@ -117,7 +159,15 @@ class Search:
 
     @staticmethod
     def date_with_suffix(n: str) -> str:
-        """Function to get the date suffix"""
+        """
+        Add an appropriate ordinal suffix to a numeric date.
+
+        Args:
+            n (str): Numeric day of the month as string.
+
+        Returns:
+            str: Date with appropriate suffix (e.g., "1st", "2nd", "3rd", "4th").
+        """
         n = int(n)
         if 11 <= n % 100 <= 13:
             suffix = "th"
@@ -126,7 +176,18 @@ class Search:
         return f"{n}{suffix}"
 
     def _process_data_from_db(self, showings: list[dict]) -> dict:
-        """Takes the raw data returned from the database and creates thed ata format used in the cache, with movies and showings separated"""
+        """
+        Process raw database results into structured cache format.
+
+        This method separates movie details from showing information and
+        deduplicates entries to create an efficient cache structure.
+
+        Args:
+            showings (list[dict]): Raw showing data from database query.
+
+        Returns:
+            dict: Processed data with 'movies' dict and 'showings' list.
+        """
         processed_data = {"movies": {}, "showings": []}
         movie_names = set()
         showings_set = set()
