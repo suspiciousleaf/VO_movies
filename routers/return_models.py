@@ -29,6 +29,25 @@ class MovieData(BaseModel):
     def empty_string_instead_of_None(cls, value):
         return value or ""
 
+    class Config:
+        """This is used by the SwaggerUI automatic documentation to prefil the endpoint testing"""
+
+        json_schema_extra = {
+            "example": {
+                "runtime": 89,
+                "synopsis": "Mismatched cousins David and Benji reunite for a tour through Poland to honor their beloved grandmother. The adventure takes a turn when the pair's old tensions resurface against the backdrop of their family history.",
+                "cast": "Jesse Eisenberg,Kieran Culkin,Will Sharpe",
+                "genres": "Comedy Drama",
+                "release_date": "2024-11-01",
+                "rating_imdb": 7.2,
+                "rating_rt": 96,
+                "rating_meta": 86,
+                "imdb_url": "https://www.imdb.com/title/tt21823606",
+                "poster_hi_res": "https://image.tmdb.org/t/p/w780/38lb62nJcNvVgCDkFt2wiVE0bX4.jpg",
+                "poster_lo_res": "https://image.tmdb.org/t/p/w342/38lb62nJcNvVgCDkFt2wiVE0bX4.jpg",
+            }
+        }
+
 
 class MovieCollection(RootModel):
     root: dict[str, MovieData]
