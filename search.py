@@ -1,4 +1,5 @@
 import time
+from threading import Lock
 
 from logging import Logger
 from creds import DATA_REFRESH_AGE
@@ -16,16 +17,17 @@ class Search:
 
     def __init__(self, logger: Logger):
         """Initialize the Search object."""
-        self.logger = logger
-        self.data: list | None = None
+        self.logger: Logger = logger
+        self.data: dict = {}
         self.time_at_data_refresh: float = 0.0
-        self.max_data_age = DATA_REFRESH_AGE
+        self.max_data_age: int = DATA_REFRESH_AGE
+        self._refresh_lock: Lock = Lock()
         try:
-            self.data = self.refresh_data()
+            self.data = self._refresh_data()
         except DatabaseConnectionError as e:
             self.logger.error(f"DatabaseConnectionError: {e}")
 
-    def get_movies(self) -> dict:
+    def get_movies(self, force_refresh=False) -> dict:
         """
         Perform a search for movies.
 
@@ -33,28 +35,25 @@ class Search:
         list: A list of dictionaries containing search results.
         """
         data_source = "cache"
-        data_age = time.time() - self.time_at_data_refresh
-        if not self.data or data_age > self.max_data_age:
-            self.data = self.refresh_data()
-            data_source = "database"
+        current_data_age = time.time() - self.time_at_data_refresh
+        # Check conditions to refresh cache. Empty cache, force_refresh, or stale data
+        if not self.data or force_refresh or current_data_age > self.max_data_age:
+            with self._refresh_lock:
+                # Check conditions again after aquiring lock to prevent double refreshes.
+                if (
+                    not self.data
+                    or force_refresh
+                    or current_data_age > self.max_data_age
+                ):
+                    self.data = self._refresh_data()
+                    data_source = "database"
 
-        #! Uncomment to save json locally
-        # import json
-        # from datetime import date
-
-        # def custom_serializer(obj):
-        #     if isinstance(obj, date):  # Check if obj is a date
-        #         return obj.isoformat()  # Convert to string (e.g., "2025-03-01")
-        #     raise TypeError(
-        #         f"Object of type {obj.__class__.__name__} is not JSON serializable"
-        #     )
-
-        # with open("test.json", "w", encoding="utf8") as f:
-        #     json.dump(self.data, f, default=custom_serializer)
-        self.logger.info(f"Search.get_movies() sourced data from {data_source}")
+        self.logger.info(
+            f"Search.get_movies() sourced data from {data_source}, current_data_age={round(current_data_age, 0)}s, {force_refresh=}"
+        )
         return self.data.get("movies", {})
 
-    def get_showings(self) -> list[dict]:
+    def get_showings(self, force_refresh=False) -> list[dict]:
         """
         Perform a search for movies.
 
@@ -62,16 +61,26 @@ class Search:
         list: A list of dictionaries containing search results.
         """
         data_source = "cache"
-        data_age = time.time() - self.time_at_data_refresh
-        if not self.data or data_age > self.max_data_age:
-            self.data = self.refresh_data()
-            data_source = "database"
+        current_data_age = time.time() - self.time_at_data_refresh
+        # Check conditions to refresh cache. Empty cache, force_refresh, or stale data
+        if not self.data or force_refresh or current_data_age > self.max_data_age:
+            with self._refresh_lock:
+                # Check conditions again after aquiring lock to prevent double refreshes.
+                if (
+                    not self.data
+                    or force_refresh
+                    or current_data_age > self.max_data_age
+                ):
+                    self.data = self._refresh_data()
+                    data_source = "database"
 
-        self.logger.info(f"Search.get_showings() sourced data from {data_source}")
-        return self.data.get("showings", {})
+        self.logger.info(
+            f"Search.get_showings() sourced data from {data_source}, current_data_age={round(current_data_age, 0)}s, {force_refresh=}"
+        )
+        return self.data.get("showings", [])
 
     @connect_to_database
-    def refresh_data(self, db, cursor) -> list:
+    def _refresh_data(self, db, cursor) -> dict:
         """
         Update the cached data from the database
 
@@ -96,8 +105,7 @@ class Search:
                         "date": f"{d_t.strftime('%#d')} {d_t.strftime('%B')}",
                         "year": d_t.strftime("%Y"),
                     }
-            data = self._process_data_from_db(results)
-            self.time_at_data_refresh = time.time()
+            data: dict = self._process_data_from_db(results)
             self.logger.info(
                 f"Data refreshed at {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}"
             )
@@ -105,6 +113,7 @@ class Search:
             return data
         except Exception as e:
             self.logger.error(f"Search.refresh_data() failed: {e}", exc_info=True)
+            return {"movies": {}, "showings": []}
 
     @staticmethod
     def date_with_suffix(n: str) -> str:
@@ -116,7 +125,8 @@ class Search:
             suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
         return f"{n}{suffix}"
 
-    def _process_data_from_db(self, showings):
+    def _process_data_from_db(self, showings: list[dict]) -> dict:
+        """Takes the raw data returned from the database and creates thed ata format used in the cache, with movies and showings separated"""
         processed_data = {"movies": {}, "showings": []}
         movie_names = set()
         showings_set = set()
@@ -172,10 +182,10 @@ if __name__ == "__main__":
     # while True:
     #     x = input("Enter anything to continue")
     #     t0 = time.perf_counter()
-    results = search.search()
+    results = search.get_movies()
     # t1 = time.perf_counter() - t0
     # logger.info(f"Number of results: {len(results)}")
     # if results:
     #     logger.info(
-    #         f"{results['data_source']}, {results['data_age']:.2f} s, took {t1 * 1000:.2f} ms"
+    #         f"{results['data_source']}, {results['current_data_age']:.2f} s, took {t1 * 1000:.2f} ms"
     #     )
