@@ -32,13 +32,13 @@ class Cinema:
             town (str): The town where the cinema is located.
             logger(Logger): Logger
         """
-        self.cinema_id = cinema_id
-        self.name = name
-        self.address = address
-        self.info = info
-        self.gps = self.parse_gps(gps)
-        self.town = town
-        self.logger = logger
+        self.cinema_id: str = cinema_id
+        self.name: str = name
+        self.address: str | None = address
+        self.info: str | None = info
+        self.gps: list[float] | None = self.parse_gps(gps)
+        self.town: str = town
+        self.logger: Logger = logger
 
     def parse_gps(self, gps: str | list[float] | None) -> list[float] | None:
         """
@@ -64,7 +64,7 @@ class Cinema:
         return gps or None
 
     @connect_to_database
-    def add_to_database(self, db, cursor, logger: Logger):
+    def add_to_database(self, db, cursor, logger: Logger) -> dict:
         """Adds cinema object to the database if not already present"""
         try:
             columns = list(self.__dict__.keys())
@@ -96,17 +96,18 @@ class Cinema:
                 "info": f"cinema.add_to_database: {e}",
             }
 
-    def to_json(self):
+    def to_json(self) -> dict:
         """Return a representation of the object as a dict"""
         return {
             "name": self.name,
             "town": self.town,
+            "cinema_id": self.cinema_id,
             "additional_info": self.info,
             "address": self.address,
             "gps_coordinates": self.gps,
         }
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Return a string representation of the Cinema object.
         """
@@ -118,13 +119,13 @@ class CinemaManager:
 
     def __init__(self, logger: Logger):
         """Initialize a CinemaManager object."""
-        self.logger = logger
-        self.cinemas = self.retrieve_cinemas(logger=logger)
-        self.cinema_ids = set(cinema.cinema_id for cinema in self.cinemas)
+        self.logger: Logger = logger
+        self.cinemas: list[Cinema] = self.retrieve_cinemas(logger=logger)
+        self.cinema_ids: set[str] = set(cinema.cinema_id for cinema in self.cinemas)
 
     @staticmethod
     @connect_to_database
-    def retrieve_cinemas(db, cursor, logger) -> list[str]:
+    def retrieve_cinemas(db, cursor, logger) -> list[Cinema] | None:
         """
         Retrieve cinema information for all cinemas in the database.
 
@@ -174,7 +175,7 @@ class CinemaManager:
 
             return location
 
-    async def add_cinema_to_database(self, cinema: dict):
+    async def add_cinema_to_database(self, cinema: dict) -> dict:
         """Creates a new Cinema object and adds it to the database, so that the cinema will be scraped in the future.
         New cinema details to be provided as a dict with keys matching the database columns:
         {"cinema_id":str,
@@ -212,7 +213,7 @@ class CinemaManager:
                 return resp_dict
 
     @connect_to_database
-    def delete_cinema(self, db, cursor, cinema_id: dict):
+    def delete_cinema(self, db, cursor, cinema_id: dict) -> dict:
         """Delete cinema from database using cinema_id"""
         if cinema_id["cinema_id"] not in self.cinema_ids:
             return {"ok": False, "code": 409, "info": "Cinema ID not in database"}
@@ -227,7 +228,7 @@ class CinemaManager:
             except Exception as e:
                 return {"ok": False, "code": 400, "info": f"Bad request: {e}"}
 
-    def retrieve_cinema_info(self) -> str:
+    def retrieve_cinema_info(self) -> dict[str,dict]:
         """Return a string showing info for each cinema in the database"""
         data = [cinema.to_json() for cinema in self.cinemas]
         processed_data = {
@@ -235,7 +236,7 @@ class CinemaManager:
         }
         return processed_data
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Return a string representation of the CinemaManager object showing how many cinemas it contains.
         """
