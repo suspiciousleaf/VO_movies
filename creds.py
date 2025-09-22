@@ -26,7 +26,16 @@ SCRAPING_ANT_API_KEY = getenv("SCRAPING_ANT_API_KEY")
 BASE_PREFIX = getenv("BASE_PREFIX")
 PAYLOAD = json.loads(getenv("PAYLOAD"))
 CINEMA_CODE = getenv("CINEMA_CODE")
-ORIGINS = getenv("PROD_URLS").split(",") + getenv("TEST_URLS").split(",")
 DATA_REFRESH_AGE = int(getenv("DATA_REFRESH_AGE"))
 OMDB_API_URL = getenv("OMDB_API_URL")
 OMDB_API_KEY = getenv("OMDB_API_KEY")
+
+
+def get_origin_list(env_var: str) -> list[str]:
+    return getenv(env_var, "").split(",") if getenv(env_var) else []
+
+
+PROD_URLS = get_origin_list("PROD_URLS")
+TEST_URLS = get_origin_list("TEST_URLS")
+
+ORIGINS = PROD_URLS + TEST_URLS if PROD_URLS else ["*"]
