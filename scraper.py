@@ -33,11 +33,11 @@ class Scraper:
             start_day (int): The starting day for scraping. Today is day 0.
             end_day (int): The ending day for scraping.
         """
-        self.logger = logger
-        self.session = session
-        self.cinema_id = cinema_id
-        self.target_urls = self.create_url_list(start_day, end_day)
-        self.raw_json_data = []
+        self.logger: Logger = logger
+        self.session: requests.Session = session
+        self.cinema_id: str = cinema_id
+        self.target_urls: list[str] = self.create_url_list(start_day, end_day)
+        self.raw_json_data: list[dict] = []
         try:
             self.scrape_urls()
         except Exception:
