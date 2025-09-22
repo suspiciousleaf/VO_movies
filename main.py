@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request, HTTPException, Header
+from fastapi import FastAPI, Request, HTTPException, Header, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -34,7 +34,7 @@ async def lifespan(app: FastAPI):
     logger = getLogger(__name__)
     setup_logging()
     app.state.logger = logger
-    app.state.search = Search(logger)  # Store a single instance in app.state
+    app.state.search = Search(logger) 
     yield
 
 
@@ -67,7 +67,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 @app.get("/", tags=["Server Health Check"])
 @limiter.limit("2/second;20/minute")
 def ping(request: Request) -> str:
-    return "V.O.Flix is running."
+    return "V.O.Flix API is running."
 
 
 # Endpoint to activate scraper manually
@@ -108,6 +108,3 @@ def run_scraper(
     except Exception as e:
         logger.error(e)
         raise HTTPException(status_code=500, detail={"message": "Server Error"})
-
-
-# TODO Set up different endpoints for showings and movies. Maybe also cache cinema data?
