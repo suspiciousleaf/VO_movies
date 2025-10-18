@@ -21,8 +21,8 @@ class MovieData(BaseModel):
     rating_rt: int | None
     rating_meta: int | None
     imdb_url: HttpUrl | str
-    poster_hi_res: HttpUrl
-    poster_lo_res: HttpUrl
+    poster_hi_res: HttpUrl | None
+    poster_lo_res: HttpUrl | None
 
     # If any values are None, return an empty string instead
     @field_validator("imdb_url", "cast", "genres", mode="before")
