@@ -53,11 +53,11 @@ To build the API image, pull the MySQL image, and start up the two containers, r
 
 `docker compose up --build`
 
-The API can be accessed through the browser on `localhost` port 8000. You'll need to run the scraper in order to populate the database with movies and showing data. 
+The API can be accessed through the browser on `localhost` port 7990. You'll need to run the scraper in order to populate the database with movies and showing data. 
 
 To run on a VPS, in `docker-compose.yaml` in voflix service info, update the "ports" from
 
-`127.0.0.1:8000:8000` to `80:8000`
+`127.0.0.1:87990:7990` to `80:8000`
 <br><br>
 
 ## License
