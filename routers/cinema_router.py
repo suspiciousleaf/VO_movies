@@ -1,33 +1,25 @@
-from os import getenv
-
 from fastapi import APIRouter, HTTPException, Request, Header, Depends
 
 from routers.cinema_model import CinemaModel, CinemaDelete
 from cinema import CinemaManager
 from routers.limiter import limiter
 from dependencies import get_logger
+from creds import CINEMA_CODE
 
 
 router = APIRouter(
     prefix="/cinema",
 )
 
-# Get CINEMA_CODE for request authorization
-if getenv("CINEMA_CODE") is None:
-    from dotenv import load_dotenv
 
-    load_dotenv()
-CINEMA_CODE = getenv("CINEMA_CODE")
-
-
-@router.get("s", status_code=200)
+@router.get("s", status_code=200, tags=["Cinema"])
 @limiter.limit("2/second;20/minute")
 def get_cinemas(
     request: Request,
     logger=Depends(get_logger),
 ):
     try:
-        logger.info(f"cinemas endpoint requested")
+        logger.info("cinemas endpoint requested")
         cinema_man = CinemaManager(logger)
         return cinema_man.retrieve_cinema_info()
     except Exception as e:
@@ -37,15 +29,15 @@ def get_cinemas(
         )
 
 
-@router.post("/add", status_code=201)
+@router.post("/add", status_code=201, tags=["Cinema"])
 @limiter.limit("2/second;20/minute")
 async def add_cinema(
     request: Request,
     cinema: CinemaModel,
     logger=Depends(get_logger),
-    authorization: str = Header(None),
+    auth: str | None = Header(None),
 ):
-    check_cinema_code(authorization, logger, "add")
+    check_cinema_code(auth, logger, "add")
     try:
         logger.info(f"/add (cinema) endpoint requested: {cinema.__dict__}")
         cinema_man = CinemaManager(logger)
@@ -61,17 +53,17 @@ async def add_cinema(
         raise HTTPException(status_code=500, detail={"message": "Server Error"})
 
 
-@router.delete("/delete")
+@router.delete("/delete", tags=["Cinema"])
 @limiter.limit("2/second;20/minute")
 async def delete_cinema(
     request: Request,
     cinema_id: CinemaDelete,
     logger=Depends(get_logger),
-    authorization: str = Header(None),
+    auth: str | None = Header(None),
 ):
-    check_cinema_code(authorization, logger, "delete")
+    check_cinema_code(auth, logger, "delete")
     try:
-        logger.info(f"/delete endpoint requested")
+        logger.info("/delete endpoint requested")
         cinema_man = CinemaManager(logger)
         response = cinema_man.delete_cinema(cinema_id=cinema_id.__dict__, logger=logger)
         response["payload"] = cinema_id
@@ -85,9 +77,9 @@ async def delete_cinema(
         raise HTTPException(status_code=500, detail={"message": "Server Error"})
 
 
-def check_cinema_code(authorization, logger, request_type):
+def check_cinema_code(auth, logger, request_type):
     """Check if the correct authorization token has been provided"""
-    if authorization != CINEMA_CODE:
+    if not auth or auth.strip() != CINEMA_CODE:
         logger.error(f"Unauthorized access attempt: {request_type}")
         raise HTTPException(
             status_code=401,

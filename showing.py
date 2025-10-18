@@ -10,7 +10,6 @@ TABLE_NAME = "showtimes"
 
 
 class Showing:
-
     @staticmethod
     def get_columns() -> tuple[str]:
         """Returns a tuple of the database column names to be written to"""
@@ -164,7 +163,6 @@ class ShowingsManager:
     def add_new_showings_to_database(self, db=None, cursor=None) -> None:
         if self.new_showings:
             """Run this to add all new showings stored in self.new_showings to database."""
-
             # List of dicts of values for each new showing to be inserted into {TABLE_NAME} table
             showing_values_list = [
                 showing.database_format() for showing in self.new_showings
@@ -178,7 +176,9 @@ class ShowingsManager:
             cursor.executemany(insert_query, showing_values_list)
             # Commit changes to database
             db.commit()
-            warnings = cursor.fetchwarnings()
+
+            cursor.execute("SHOW WARNINGS;")
+            warnings = cursor.fetchall()
             if warnings:
                 self.logger.warning(
                     f"Warning(s) while inserting showings into database: {warnings}"

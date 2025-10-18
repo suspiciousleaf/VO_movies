@@ -1,5 +1,4 @@
 # Project specific additions
-creds.py
 raw_data_*
 test*
 *.log*

@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Query, HTTPException, Request, Depends
+from fastapi import APIRouter, HTTPException, Request, Depends
 
 from search import Search
+from routers.return_models import MovieCollection, ShowingData
 from routers.limiter import limiter
 from dependencies import get_logger
 
@@ -10,25 +11,48 @@ router = APIRouter(
 )
 
 
-@router.get("", status_code=200)
+def get_search(request: Request) -> Search:
+    """Retrieve the persistent Search instance from app state"""
+    return request.app.state.search
+
+
+@router.get("/showings", status_code=200, tags=["Search"])
 @limiter.limit("2/second;20/minute")
 def find_showings(
     request: Request,
-    towns: str | None = Query(default=None, min_length=3),
     logger=Depends(get_logger),
-) -> list:
+    search=Depends(get_search),
+    force_refresh: bool = False,
+) -> list[ShowingData]:
     try:
-        search = Search(logger)
-        if towns is None:
-            data = search.search()
-        else:
-            towns = towns.split(",")
-            data = search.search(towns)
-        logger.info(f"Search.search() called, returned {len(data)} results. {towns=}")
+        data = search.get_showings(force_refresh)
+        logger.info(
+            f"Search.get_showings() called, returned {len(data or [])} results."
+        )
         return data
 
     except Exception as e:
-        logger.error(f"Search.search() failed: {e}", exc_info=True)
+        logger.error(f"Search.get_showings() failed: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=500, detail="Request failed, please try again later"
+        )
+
+
+@router.get("/movies", status_code=200, tags=["Search"])
+@limiter.limit("2/second;20/minute")
+def find_movies(
+    request: Request,
+    logger=Depends(get_logger),
+    search=Depends(get_search),
+    force_refresh: bool = False,
+) -> MovieCollection:
+    try:
+        data = search.get_movies(force_refresh)
+        logger.info(f"Search.get_movies() called, returned {len(data or [])} results.")
+        return data
+
+    except Exception as e:
+        logger.error(f"Search.get_movies() failed: {e}", exc_info=True)
         raise HTTPException(
             status_code=500, detail="Request failed, please try again later"
         )

@@ -1,0 +1,16 @@
+[project]
+name = "vo-movies"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.10",
+    "geopy>=2.4.1",
+    "mysql-connector-python>=9.2.0",
+    "python-dotenv>=1.0.1",
+    "requests>=2.32.3",
+    "slowapi>=0.1.9",
+    "tqdm>=4.67.1",
+    "uvicorn>=0.34.0",
+]

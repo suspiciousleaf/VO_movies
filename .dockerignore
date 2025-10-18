@@ -1,5 +1,4 @@
 .env
-creds.py
 raw_data_*
 test*
 *.log*
@@ -9,3 +8,4 @@ docker_commands.txt
 docker_db_init_logs.txt
 *.conf
 *backup*
+.venv

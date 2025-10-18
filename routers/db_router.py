@@ -11,9 +11,9 @@ router = APIRouter(
 )
 
 
-@router.get("/", status_code=200)
+@router.get("/", status_code=200, tags=["Database"])
 @limiter.limit("2/second;20/minute")
-def test_db(request: Request, logger=Depends(get_logger)):
+def test_database_connection(request: Request, logger=Depends(get_logger)):
     logger.info("Received request to test database connection")
     try:
         result = test_db_connection(logger=logger)
@@ -27,9 +27,9 @@ def test_db(request: Request, logger=Depends(get_logger)):
         )
 
 
-@router.get("/build", status_code=200)
+@router.get("/build", status_code=200, tags=["Database"])
 @limiter.limit("2/second;20/minute")
-def get_build_db(request: Request, logger=Depends(get_logger)):
+def validate_database_schema(request: Request, logger=Depends(get_logger)):
     try:
         result = build_db(logger=logger)
         return result

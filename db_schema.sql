@@ -3,7 +3,6 @@ CREATE TABLE movies (
     movie_id VARCHAR(191) PRIMARY KEY,
     original_title VARCHAR(191),
     french_title VARCHAR(191),
-    rating FLOAT,
     runtime SMALLINT UNSIGNED,
     synopsis VARCHAR(1000),
     cast VARCHAR(191),
@@ -15,7 +14,11 @@ CREATE TABLE movies (
     poster_hi_res VARCHAR(255),
     poster_lo_res VARCHAR(255),
     tagline VARCHAR(255),
-    tmdb_id INT UNSIGNED);
+    tmdb_id INT UNSIGNED,
+    rating_imdb TINYINT UNSIGNED,
+    rating_rt TINYINT UNSIGNED,
+    rating_meta TINYINT UNSIGNED,
+    date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
 -- Create cinemas table
 CREATE TABLE cinemas (
@@ -30,7 +33,7 @@ CREATE TABLE cinemas (
 -- hash_id is used to compare showings in database with newly scrapes showings to identify unknown ones, using SHA256
 CREATE TABLE showtimes (
     showtime_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    movie_id CHAR(16),
+    movie_id VARCHAR(191),
     cinema_id CHAR(5),
     start_time DATETIME,
     hash_id CHAR(64),
