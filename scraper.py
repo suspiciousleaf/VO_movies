@@ -99,7 +99,14 @@ class Scraper:
                     data = response.json()
                     for showing in data["results"]:
                         if "ENGLISH" in showing["movie"]["languages"]:
-                            if showing["showtimes"]["original"]:
+                            # Showings can be listed as "original", "original_st", or "original_st_sme"
+                            if any(
+                                (
+                                    showing["showtimes"]["original"],
+                                    showing["showtimes"]["original_st"],
+                                    showing["showtimes"]["original_st_sme"],
+                                )
+                            ):
                                 self.raw_json_data.append(showing)
 
             except Exception as e:
