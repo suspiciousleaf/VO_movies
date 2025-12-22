@@ -18,6 +18,7 @@ class Cinema:
         info: str,
         gps: str | list[float],
         town: str,
+        department: str,
         logger: Logger,
     ) -> None:
         """
@@ -30,6 +31,7 @@ class Cinema:
             info (str): Additional information about the cinema.
             gps (str): The GPS coordinates of the cinema in raw format.
             town (str): The town where the cinema is located.
+            department(str): Department where the cinema is located.
             logger(Logger): Logger
         """
         self.cinema_id: str = cinema_id
@@ -38,6 +40,7 @@ class Cinema:
         self.info: str | None = info
         self.gps: list[float] | None = self.parse_gps(gps)
         self.town: str = town
+        self.department: str = department
         self.logger: Logger = logger
 
     def parse_gps(self, gps: str | list[float] | None) -> list[float] | None:
@@ -101,6 +104,7 @@ class Cinema:
         return {
             "name": self.name,
             "town": self.town,
+            "department": self.department,
             "cinema_id": self.cinema_id,
             "additional_info": self.info,
             "address": self.address,
