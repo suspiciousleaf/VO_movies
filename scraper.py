@@ -143,10 +143,13 @@ class Scraper:
         """
         try:
             response = self.session.post(target_url, json=PAYLOAD, timeout=10)
+            self.logger.debug(
+                f"Direct request sent. URL: {target_url} Status code: {response.status_code}"
+            )
 
             if response.status_code != 200:
-                self.logger.debug(
-                    f"Direct request failed with status {response.status_code}: {target_url}"
+                self.logger.info(
+                    f"Direct request failed. URL: {target_url} Status code: {response.status_code} Headers: {response.headers} Body: {response.text[:500]}"
                 )
                 return False
 
@@ -316,7 +319,7 @@ class ScraperManager:
                                 "User-Agent": ua.random,
                                 "Accept": "*/*",
                                 "Accept-Language": "en-US,en;q=0.5",
-                                "Accept-Encoding": "gzip, deflate, br, zstd",
+                                "Accept-Encoding": "gzip, deflate",
                                 "Connection": "keep-alive",
                                 "Referer": f"{REFERER}{cinema}.html",
                             }
