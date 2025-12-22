@@ -133,11 +133,16 @@ class ShowingsManager:
         Args:
             item (dict): The showing data.
             cinema_id (str): The ID of the cinema."""
+        showings = (
+            item["showtimes"].get("original", [])
+            + item["showtimes"].get("original_st", [])
+            + item["showtimes"].get("original_st_sme", [])
+        )
 
-        if item["showtimes"]["original"]:
-            for showing in item["showtimes"]["original"]:
+        if showings:
+            for showing in showings:
                 try:
-                    # Identify valuesfor new showing
+                    # Identify values for new showing
                     movie_id = item["movie"]["id"]
                     date_str = showing["startsAt"]
                     start_time = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
