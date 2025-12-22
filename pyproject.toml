@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "fake-useragent>=2.2.0",
     "fastapi>=0.115.10",
     "geopy>=2.4.1",
     "mysql-connector-python>=9.2.0",
