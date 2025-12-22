@@ -133,9 +133,9 @@ class CinemaManager:
             list[Cinema]: List of Cinema objects.
         """
         try:
-            logger.debug(f"Retrieving cinemas from databse")
+            logger.debug("Retrieving cinemas from databse")
             cursor = db.cursor(dictionary=True)
-            query = f"SELECT cinema_id, name, address, info, ST_AsText(gps) AS gps, town FROM {TABLE_NAME};"
+            query = f"SELECT cinema_id, name, address, info, ST_AsText(gps) AS gps, town, department FROM {TABLE_NAME};"
             cursor.execute(query)
             results = cursor.fetchall()
 
@@ -156,7 +156,6 @@ class CinemaManager:
         address = cinema.get("address") or ""
         name = cinema.get("name") or ""
         town = cinema.get("town") or ""
-        geolocator = Nominatim(user_agent="cinema-app")
         async with Nominatim(
             user_agent="cinema-app", adapter_factory=AioHTTPAdapter
         ) as geolocator:
@@ -228,7 +227,7 @@ class CinemaManager:
             except Exception as e:
                 return {"ok": False, "code": 400, "info": f"Bad request: {e}"}
 
-    def retrieve_cinema_info(self) -> dict[str,dict]:
+    def retrieve_cinema_info(self) -> dict[str, dict]:
         """Return a string showing info for each cinema in the database"""
         data = [cinema.to_json() for cinema in self.cinemas]
         processed_data = {
