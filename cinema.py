@@ -18,6 +18,7 @@ class Cinema:
         info: str,
         gps: str | list[float],
         town: str,
+        department: str,
         logger: Logger,
     ) -> None:
         """
@@ -30,6 +31,7 @@ class Cinema:
             info (str): Additional information about the cinema.
             gps (str): The GPS coordinates of the cinema in raw format.
             town (str): The town where the cinema is located.
+            department(str): Department where the cinema is located.
             logger(Logger): Logger
         """
         self.cinema_id: str = cinema_id
@@ -38,6 +40,7 @@ class Cinema:
         self.info: str | None = info
         self.gps: list[float] | None = self.parse_gps(gps)
         self.town: str = town
+        self.department: str = department
         self.logger: Logger = logger
 
     def parse_gps(self, gps: str | list[float] | None) -> list[float] | None:
@@ -101,6 +104,7 @@ class Cinema:
         return {
             "name": self.name,
             "town": self.town,
+            "department": self.department,
             "cinema_id": self.cinema_id,
             "additional_info": self.info,
             "address": self.address,
@@ -133,9 +137,9 @@ class CinemaManager:
             list[Cinema]: List of Cinema objects.
         """
         try:
-            logger.debug(f"Retrieving cinemas from databse")
+            logger.debug("Retrieving cinemas from database")
             cursor = db.cursor(dictionary=True)
-            query = f"SELECT cinema_id, name, address, info, ST_AsText(gps) AS gps, town FROM {TABLE_NAME};"
+            query = f"SELECT cinema_id, name, address, info, ST_AsText(gps) AS gps, town, department FROM {TABLE_NAME};"
             cursor.execute(query)
             results = cursor.fetchall()
 
@@ -156,7 +160,6 @@ class CinemaManager:
         address = cinema.get("address") or ""
         name = cinema.get("name") or ""
         town = cinema.get("town") or ""
-        geolocator = Nominatim(user_agent="cinema-app")
         async with Nominatim(
             user_agent="cinema-app", adapter_factory=AioHTTPAdapter
         ) as geolocator:
@@ -228,7 +231,7 @@ class CinemaManager:
             except Exception as e:
                 return {"ok": False, "code": 400, "info": f"Bad request: {e}"}
 
-    def retrieve_cinema_info(self) -> dict[str,dict]:
+    def retrieve_cinema_info(self) -> dict[str, dict]:
         """Return a string showing info for each cinema in the database"""
         data = [cinema.to_json() for cinema in self.cinemas]
         processed_data = {

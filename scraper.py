@@ -1,16 +1,26 @@
 import json
 import datetime
+import time
+import random
 from logging import Logger
 
 import requests
 from tqdm import tqdm
+from fake_useragent import UserAgent
 
 from cinema import CinemaManager
 from showing import ShowingsManager
 from movie import MovieManager
 from search import Search
 from db_utilities import connect_to_database
-from creds import SCRAPING_ANT_API_KEY, BASE_PREFIX, PAYLOAD, OMDB_API_URL, OMDB_API_KEY
+from creds import (
+    SCRAPING_ANT_API_KEY,
+    BASE_PREFIX,
+    REFERER,
+    PAYLOAD,
+    OMDB_API_URL,
+    OMDB_API_KEY,
+)
 
 
 # Scraper class, instantiate once per cinema, scrapes the full date range and stores raw data to be processed.
@@ -24,7 +34,7 @@ class Scraper:
         end_day: int,
     ) -> None:
         """
-        Initialize a Scraper object.
+        Initialize a Scraper object. Runs for a single cinema.
 
         Args:
             logger (Logger): Logger object.
@@ -38,6 +48,11 @@ class Scraper:
         self.cinema_id: str = cinema_id
         self.target_urls: list[str] = self.create_url_list(start_day, end_day)
         self.raw_json_data: list[dict] = []
+        self.failed_urls: list[str] = []
+        self.direct_success_count: int = 0
+        self.scrapingant_success_count: int = 0
+        self.total_fail_count: int = 0
+
         try:
             self.scrape_urls()
         except Exception:
@@ -75,49 +90,160 @@ class Scraper:
         """
         return self.raw_json_data
 
-    def scrape_urls(self) -> list:
+    def get_stats(self):
+        """
+        Return scraping statistics for this cinema.
+
+        Returns:
+            dict: Dictionary containing success/failure counts.
+        """
+        return {
+            "direct_success": self.direct_success_count,
+            "scrapingant_success": self.scrapingant_success_count,
+            "total_fail": self.total_fail_count,
+        }
+
+    def scrape_urls(self) -> list | None:
         """
         Run scraper on all target URLs and process responses.
+        First tries direct requests, then falls back to ScrapingAnt for failures.
 
         Returns:
             list: List of scraped data.
         """
+        # First pass: try direct requests
         for target_url in self.target_urls:
-            base_url = "https://api.scrapingant.com/v2/general"
-            params = {
-                "url": target_url,
-                "x-api-key": SCRAPING_ANT_API_KEY,
-                "proxy_country": "FR",
-                "browser": "false",
-            }
+            success = self._scrape_direct(target_url)
+            if not success:
+                self.failed_urls.append(target_url)
+
+            time.sleep(random.uniform(2.5, 3.5))
+
+        # Second pass: use ScrapingAnt for failed URLs
+        if self.failed_urls:
+            self.logger.info(
+                f"Retrying {len(self.failed_urls)} failed URLs with ScrapingAnt for cinema {self.cinema_id}"
+            )
+            with requests.Session() as ant_session:
+                for target_url in self.failed_urls:
+                    success = self._scrape_with_scrapingant(target_url, ant_session)
+                    if not success:
+                        self.total_fail_count += 1
+            self.failed_urls = []
+
+    def _scrape_direct(self, target_url: str) -> bool:
+        """
+        Attempt to scrape URL directly with requests.
+
+        Args:
+            target_url (str): URL to scrape.
+
+        Returns:
+            bool: True if successful, False otherwise.
+        """
+        try:
+            response = self.session.post(target_url, json=PAYLOAD, timeout=10)
+            self.logger.debug(
+                f"Direct request sent. URL: {target_url} Status code: {response.status_code}"
+            )
+
+            if response.status_code != 200:
+                self.logger.info(
+                    f"Direct request failed. URL: {target_url} Status code: {response.status_code} Headers: {response.headers} Body: {response.text[:500]}"
+                )
+                return False
 
             try:
-                response = self.session.post(base_url, params=params, json=PAYLOAD)
-                response.raise_for_status()
+                data = response.json()
+            except json.JSONDecodeError:
+                self.logger.debug(f"Invalid JSON from direct request: {target_url}")
+                return False
 
-                if response.status_code == 200:
-                    data = response.json()
-                    for showing in data["results"]:
-                        if "ENGLISH" in showing["movie"]["languages"]:
-                            # Showings can be listed as "original", "original_st", or "original_st_sme"
-                            if any(
-                                (
-                                    showing["showtimes"]["original"],
-                                    showing["showtimes"]["original_st"],
-                                    showing["showtimes"]["original_st_sme"],
-                                )
-                            ):
-                                self.raw_json_data.append(showing)
-
-            except Exception as e:
-                self.logger.error(
-                    f"Request failed: {response.status_code=}, {target_url=}",
-                    extra={
-                        "extra_info": str(e).replace(
-                            SCRAPING_ANT_API_KEY, "SCRAPING_ANT_API_KEY"
-                        )
-                    },
+            if not data or "results" not in data:
+                self.logger.debug(
+                    f"Empty or invalid data from direct request: {target_url}"
                 )
+                return False
+
+            self._process_response_data(data)
+            self.direct_success_count += 1
+            return True
+
+        except (requests.RequestException, requests.Timeout, ConnectionError) as e:
+            self.logger.debug(f"Direct request exception for {target_url}: {str(e)}")
+            return False
+        except Exception as e:
+            self.logger.error(
+                f"Unexpected error in direct request for {target_url}: {str(e)}"
+            )
+            return False
+
+    def _scrape_with_scrapingant(
+        self, target_url: str, ant_session: requests.Session
+    ) -> bool:
+        """
+        Scrape URL using ScrapingAnt API.
+
+        Args:
+            target_url (str): URL to scrape.
+            ant_session (requests.Session): Session for ScrapingAnt
+
+        Returns:
+            bool: True if successful, False otherwise.
+        """
+        base_url = "https://api.scrapingant.com/v2/general"
+        params = {
+            "url": target_url,
+            "x-api-key": SCRAPING_ANT_API_KEY,
+            "proxy_country": "FR",
+            "browser": "false",
+        }
+
+        try:
+            response = ant_session.post(
+                base_url, params=params, json=PAYLOAD, timeout=10
+            )
+            response.raise_for_status()
+
+            if response.status_code == 200:
+                data = response.json()
+                self._process_response_data(data)
+                self.scrapingant_success_count += 1
+                return True
+            else:
+                self.logger.error(
+                    f"ScrapingAnt request failed: {response.status_code=}, {target_url=}"
+                )
+                return False
+
+        except Exception as e:
+            self.logger.error(
+                f"ScrapingAnt request failed: {target_url=}",
+                extra={
+                    "extra_info": str(e).replace(
+                        SCRAPING_ANT_API_KEY, "SCRAPING_ANT_API_KEY"
+                    )
+                },
+            )
+            return False
+
+    def _process_response_data(self, data: dict) -> None:
+        """
+        Process response data and add English showings to raw_json_data.
+
+        Args:
+            data (dict): Response data containing results.
+        """
+        for showing in data["results"]:
+            languages = showing.get("movie", {}).get("languages", [])
+            if "ENGLISH" in languages:
+                # Showings can be listed as "original", "original_st", or "original_st_sme"
+                showtimes = showing.get("showtimes", {})
+                if any(
+                    showtimes.get(k)
+                    for k in ("original", "original_st", "original_st_sme")
+                ):
+                    self.raw_json_data.append(showing)
 
 
 # Instantiate to initialize scraping across the specified date range, will scrape the data for all cinemas, process the raw data, and add new data to database. Raw data can also be saved, or imported rather than scraping.
@@ -143,6 +269,10 @@ class ScraperManager:
         self.logger = logger
         self.all_scraped_json_data = {}
         self.local_data_filename = local_data_filename
+        self.total_direct_success = 0
+        self.total_scrapingant_success = 0
+        self.total_failures = 0
+
         if self.local_data_filename is not None and save_raw_json_data:
             error_message = "`save_raw_json_data` and `local_data_filename` are mutually exclusive: When instantiating a ScraperManager object, one or both arguments must be false or not provided"
             raise ScraperManagerInitializationError(error_message)
@@ -164,6 +294,8 @@ class ScraperManager:
             logger.info(self.show_man)
             self.update_ratings()
 
+            self._log_scraping_stats()
+
             if save_raw_json_data:
                 self._save_raw_data()
         except Exception as e:
@@ -177,8 +309,22 @@ class ScraperManager:
         # If `local_data_filename` is provided, raw data will be imported and processed. If not provided, new raw data will be scraped and processed.
         try:
             if self.local_data_filename is None:
-                with requests.Session() as session:
-                    for cinema in tqdm(self.cinema_man.cinema_ids, unit="Cinema"):
+                ua = UserAgent()
+
+                for cinema in tqdm(self.cinema_man.cinema_ids, unit="Cinema"):
+                    # Create new session with random user agent for each cinema
+                    with requests.Session() as session:
+                        session.headers.update(
+                            {
+                                "User-Agent": ua.random,
+                                "Accept": "*/*",
+                                "Accept-Language": "en-US,en;q=0.5",
+                                "Accept-Encoding": "gzip, deflate",
+                                "Connection": "keep-alive",
+                                "Referer": f"{REFERER}{cinema}.html",
+                            }
+                        )
+
                         scraper = Scraper(
                             logger=self.logger,
                             session=session,
@@ -186,6 +332,13 @@ class ScraperManager:
                             start_day=self.start_day,
                             end_day=self.end_day,
                         )
+
+                        # Collect statistics
+                        stats = scraper.get_stats()
+                        self.total_direct_success += stats["direct_success"]
+                        self.total_scrapingant_success += stats["scrapingant_success"]
+                        self.total_failures += stats["total_fail"]
+
                         data = scraper.return_data()
                         self.all_scraped_json_data[cinema] = data
                         self.process_data(cinema, data)
@@ -208,6 +361,29 @@ class ScraperManager:
                 self.show_man.process_showing(showing, cinema)
             except Exception as e:
                 self.logger.error(f"Unable to process data: {e}")
+
+    def _log_scraping_stats(self):
+        """Log statistics about scraping success and failures."""
+        total_requests = (
+            self.total_direct_success
+            + self.total_scrapingant_success
+            + self.total_failures
+        )
+
+        if total_requests == 0:
+            self.logger.info("No scraping attempts were made.")
+            return
+
+        direct_pct = (self.total_direct_success / total_requests) * 100
+        scrapingant_pct = (self.total_scrapingant_success / total_requests) * 100
+        fail_pct = (self.total_failures / total_requests) * 100
+
+        self.logger.info(
+            f"Scraping Statistics - Total Requests: {total_requests} | "
+            f"Direct Success: {self.total_direct_success} ({direct_pct:.1f}%) | "
+            f"ScrapingAnt Success: {self.total_scrapingant_success} ({scrapingant_pct:.1f}%) | "
+            f"Total Failures: {self.total_failures} ({fail_pct:.1f}%)"
+        )
 
     @connect_to_database
     def update_ratings(self, db, cursor) -> None:
@@ -264,7 +440,9 @@ class ScraperManager:
                             "plot": "short",
                         }
 
-                        response = session.get(url=OMDB_API_URL, params=params)
+                        response = session.get(
+                            url=OMDB_API_URL, params=params, timeout=10
+                        )
                         response.raise_for_status()
 
                         ratings = response.json().get("Ratings", {})
