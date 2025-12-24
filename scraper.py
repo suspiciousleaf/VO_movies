@@ -117,7 +117,7 @@ class Scraper:
             if not success:
                 self.failed_urls.append(target_url)
 
-            time.sleep(random.uniform(0.2, 0.6))
+            time.sleep(random.uniform(2.5, 3.5))
 
         # Second pass: use ScrapingAnt for failed URLs
         if self.failed_urls:
