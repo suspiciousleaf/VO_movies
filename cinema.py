@@ -137,7 +137,7 @@ class CinemaManager:
             list[Cinema]: List of Cinema objects.
         """
         try:
-            logger.debug("Retrieving cinemas from databse")
+            logger.debug("Retrieving cinemas from database")
             cursor = db.cursor(dictionary=True)
             query = f"SELECT cinema_id, name, address, info, ST_AsText(gps) AS gps, town, department FROM {TABLE_NAME};"
             cursor.execute(query)
