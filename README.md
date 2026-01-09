@@ -34,7 +34,7 @@ This project was built because I like going to the movies, and I don't like watc
 * `Cinema router` allows cinemas included by the scraper to be retrieved, added, and deleted. Cinemas to be added are validated using [Pydantic](https://docs.pydantic.dev/latest/).
 * `Search router` allows showings to be retrieved with optional csv location filter.
 * `Database router` allows the database connection to be tested, and can create and populate tables for a new deployment.
-* Webscraping is done synchronously using [requests](https://pypi.org/project/requests/) as it uses [ScrapingAnt](https://scrapingant.com/)'s free tier, which does not permit concurrency. 
+* Webscraping is done synchronously with a several second delay between requests to reduce the chance of being blocked - any failed requests are forwarded on to [ScrapingAnt's](https://scrapingant.com/) API, which provides a proxy rotation service.
 * Each new movie and showing is validated using [Pydantic](https://docs.pydantic.dev/latest/) before being inserted into the database. Additional movie details are retrieved from [The Movie Database API](https://www.themoviedb.org/).
 * The date range for scraping can be selected, with the option to save the raw data, or to load raw data from a json file for testing.
 * `MySQL` is used for the database, with [mysql-connector](https://www.mysql.com/products/connector/) and SQL syntax for queries.
@@ -43,11 +43,11 @@ This project was built because I like going to the movies, and I don't like watc
 ## Installation and setup instructions:
 
 You'll need to:
-* Install [Docker](https://docs.docker.com/get-docker/) and [docker compose](https://docs.docker.com/compose/install/linux/)
+* Install [Docker](https://docs.docker.com/get-docker/)
 * Obtain a [ScrapingAnt API key](https://app.scrapingant.com/signup)
 * Obtain a [TMDB API key](https://developer.themoviedb.org/v4/reference/intro/getting-started)
 * Get a base prefix URL for scraping, send me a message for this
-* Creat a `.env` file with these variables added, along with port numbers
+* Create a `.env` file with these variables added, along with port numbers
 
 To build the API image, pull the MySQL image, and start up the two containers, run:
 
