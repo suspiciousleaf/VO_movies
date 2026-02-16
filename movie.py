@@ -1,10 +1,7 @@
-# from os import getenv
 from datetime import datetime
 from requests import Session
 from pydantic import ValidationError
 from logging import Logger
-
-# from dotenv import load_dotenv
 
 from models.movie_model import MovieModel, AdditionalDataMovieModel
 from db_utilities import connect_to_database
@@ -12,12 +9,6 @@ from data.country_info import country_codes
 from creds import TMDB_API_TOKEN
 
 
-# # Check of environment variables are loaded, and if not load them from .env
-# if getenv("DB_USER") is None:
-#     load_dotenv()
-
-# Read environment variables
-# TMDB_API_TOKEN = getenv("TMDB_API_TOKEN")
 TABLE_NAME = "movies"
 
 # We have a list of movie_id's from the database. We get a list of (movie, showings) from the scraper. We want to loop through the list. For each movie, we want to see if that movie_id is in the database, and if not, add that new movie to movies table. We also want to view all showings for that item in the list, see which aren't in the showings table, and add them.
@@ -68,10 +59,15 @@ class Movie:
             movie_model = MovieModel(**data, logger=logger)
 
         except ValidationError as e:
-            self.logger.error(f"Validation error: {e}")
+            self.logger.error(
+                f"MovieModel Validation error for MovieModel with input data: {data}"
+            )
+            self.logger.error(f"MovieModel Validation error: {e}")
             raise e
         except Exception as e:
-            self.logger.error(f"Unable to create Movie instance: {e}")
+            self.logger.error(
+                f"Unable to create Movie instance: {e} \n Movie data: {data}"
+            )
             raise e
 
         # If validation succeeds, assign the validated data to attributes
@@ -97,19 +93,27 @@ class Movie:
             "imdb_url": ("imdb_id"),
             "poster_slug": ("poster_path"),
         }
-
+        extra_movie_data = {}
         try:
             extra_movie_data = self.get_additional_details(additional_required_details)
+
+            if not extra_movie_data.get("original_title"):
+                extra_movie_data["original_title"] = self.original_title
 
             additional_details_movie_model = AdditionalDataMovieModel(
                 **extra_movie_data, logger=logger
             )
 
         except ValidationError as e:
-            self.logger.error(f"Validation error: {e}")
+            self.logger.error(
+                f"AdditionalDataMovieModel Validation error for input data: {extra_movie_data}"
+            )
+            self.logger.error(f"AdditionalDataMovieModel Validation error: {e}")
             raise e
         except Exception as e:
-            self.logger.error(f"Unable to create Movie instance: {e}")
+            self.logger.error(
+                f"Unable to create Movie instance: {e} \n AdditionalDataMovieModel data: {extra_movie_data}"
+            )
             raise e
 
         # Origin countries are given as a csv of ISO 3166-1 alpha-2 codes. This will convert that into a csv of full country names
@@ -132,7 +136,7 @@ class Movie:
         self.tmdb_id = additional_details_movie_model.tmdb_id
         self.runtime = additional_details_movie_model.runtime
 
-    def get_additional_details(self, additional_required_details):
+    def get_additional_details(self, additional_required_details: dict) -> dict:
         """Retrieve additional details for the movie from an TMDB API.
 
         Returns:
@@ -161,7 +165,7 @@ class Movie:
         }
 
         try:
-            id_url = f"https://api.themoviedb.org/3/search/movie"
+            id_url = "https://api.themoviedb.org/3/search/movie"
 
             if isinstance(self.release_date, datetime):
                 # production year can lag behind listed year, so search the production year then the two following years
@@ -235,12 +239,13 @@ class Movie:
             self.logger.warning(
                 f"{self.original_title}: additional movie details not found: {e}"
             )
+            return {}
         finally:
             s.close()
         return extra_movie_data
 
     @staticmethod
-    def get_columns() -> tuple[str]:
+    def get_columns() -> tuple[str, ...]:
         """Returns a tuple of the database column names to be written to"""
         return (
             "movie_id",
@@ -282,7 +287,7 @@ class MovieManager:
     def __init__(self, logger: Logger) -> None:
         """Initialize a MovieManager object."""
         self.logger = logger
-        self.current_movie_ids = set(self.retrieve_movies())
+        self.current_movie_ids = set(self.retrieve_movies())  # type: ignore[call-arg]
         self.new_movies = []
 
     @connect_to_database
@@ -323,7 +328,7 @@ class MovieManager:
             except Exception as e:
                 self.logger.error(f"Unable to create Movie: {e}")
 
-    def create_movie(self, item: dict) -> Movie:
+    def create_movie(self, item: dict) -> Movie | None:
         try:
             """Create a Movie object from raw JSON data."""
             movie_details = {
@@ -346,7 +351,6 @@ class MovieManager:
 
         except Exception as e:
             self.logger.error(f"Movie could not be created: {e}")
-            return None
 
     @staticmethod
     def get_cast(cast_json):
