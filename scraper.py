@@ -292,7 +292,7 @@ class ScraperManager:
             self.show_man.add_new_showings_to_database()
             logger.info(self.movie_man)
             logger.info(self.show_man)
-            self.update_ratings()
+            self.update_ratings()  # type: ignore[call-arg]
 
             self._log_scraping_stats()
 
