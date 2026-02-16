@@ -18,8 +18,5 @@ RUN uv pip install . --system
 # Copy the project files into the container
 COPY . /app
 
-# Expose the port the app runs on - this is for clarity since the docker compose file handles port forwarding
-EXPOSE 7990
-
 # Set the entrypoint to an interactive shell for debugging, this will be overridden by the docker-compose file if present
 ENTRYPOINT ["tail", "-f", "/dev/null"]
