@@ -72,6 +72,7 @@ class Cinema:
         try:
             columns = list(self.__dict__.keys())
             values = self.__dict__
+            values.pop("logger")
             gps = values.get("gps")
 
             # If GPS details are provided, extracts lat and lon to be added via placeholder, and removes "gps" key so it can be placed in the correct index for addition.
