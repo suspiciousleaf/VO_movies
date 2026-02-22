@@ -51,6 +51,12 @@ app.add_middleware(
     allow_origins=ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=[
+        "Retry-After",
+        "X-RateLimit-Limit",
+        "X-RateLimit-Remaining",
+        "X-RateLimit-Reset",
+    ],
 )
 
 # Rate limiter middleware
