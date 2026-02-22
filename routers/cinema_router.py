@@ -30,7 +30,7 @@ def get_cinemas(
 
 
 @router.post("/add", status_code=201, tags=["Cinema"])
-@limiter.limit("2/second;20/minute")
+@limiter.limit("2/second;30/minute")
 async def add_cinema(
     request: Request,
     cinema: CinemaModel,
