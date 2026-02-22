@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request, Depends
+from fastapi import APIRouter, HTTPException, Request, Response, Depends
 
 from build_db import build_db
 from db_utilities import test_db_connection
@@ -13,7 +13,9 @@ router = APIRouter(
 
 @router.get("/", status_code=200, tags=["Database"])
 @limiter.limit("2/second;20/minute")
-def test_database_connection(request: Request, logger=Depends(get_logger)):
+def test_database_connection(
+    request: Request, response: Response, logger=Depends(get_logger)
+):
     logger.info("Received request to test database connection")
     try:
         result = test_db_connection(logger=logger)
@@ -29,7 +31,9 @@ def test_database_connection(request: Request, logger=Depends(get_logger)):
 
 @router.get("/build", status_code=200, tags=["Database"])
 @limiter.limit("2/second;20/minute")
-def validate_database_schema(request: Request, logger=Depends(get_logger)):
+def validate_database_schema(
+    request: Request, response: Response, logger=Depends(get_logger)
+):
     try:
         result = build_db(logger=logger)
         return result

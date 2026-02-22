@@ -3,7 +3,7 @@ import time
 import asyncio
 from logging import getLogger
 
-from fastapi import FastAPI, Request, HTTPException, Header
+from fastapi import FastAPI, Request, Response, HTTPException, Header
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -45,6 +45,11 @@ async def lifespan(app: FastAPI):
 # Initialize app
 app = FastAPI(lifespan=lifespan)
 
+# Rate limiter middleware
+app.add_middleware(SlowAPIMiddleware)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 # CORS permissions
 app.add_middleware(
     CORSMiddleware,
@@ -59,11 +64,6 @@ app.add_middleware(
     ],
 )
 
-# Rate limiter middleware
-app.add_middleware(SlowAPIMiddleware)
-app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
-
 # Include routers
 app.include_router(cinema_router)
 app.include_router(search_router)
@@ -76,7 +76,7 @@ app.add_exception_handler(RequestValidationError, validation_exception_handler)
 # Endpoint to ping server
 @app.get("/", tags=["Server Health Check"])
 @limiter.limit("2/second;20/minute")
-def ping(request: Request) -> str:
+def ping(request: Request, response: Response) -> str:
     return "V.O.Flix API is running."
 
 
@@ -85,6 +85,7 @@ def ping(request: Request) -> str:
 @limiter.limit("1/30seconds")
 async def run_scraper(
     request: Request,
+    response: Response,
     start: int = 0,
     end: int = 14,
     auth: str | None = Header(None),

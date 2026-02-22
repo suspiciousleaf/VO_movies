@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request, Depends
+from fastapi import APIRouter, HTTPException, Request, Response, Depends
 
 from search import Search
 from routers.return_models import MovieCollection, ShowingData
@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 
-def get_search(request: Request) -> Search:
+def get_search(request: Request, response: Response) -> Search:
     """Retrieve the persistent Search instance from app state"""
     return request.app.state.search
 
@@ -20,6 +20,7 @@ def get_search(request: Request) -> Search:
 @limiter.limit("2/second;20/minute")
 def find_showings(
     request: Request,
+    response: Response,
     logger=Depends(get_logger),
     search=Depends(get_search),
     force_refresh: bool = False,
@@ -42,6 +43,7 @@ def find_showings(
 @limiter.limit("2/second;20/minute")
 def find_movies(
     request: Request,
+    response: Response,
     logger=Depends(get_logger),
     search=Depends(get_search),
     force_refresh: bool = False,

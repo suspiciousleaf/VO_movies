@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request, Header, Depends
+from fastapi import APIRouter, HTTPException, Request, Response, Header, Depends
 
 from routers.cinema_model import CinemaModel, CinemaDelete
 from cinema import CinemaManager
@@ -16,6 +16,7 @@ router = APIRouter(
 @limiter.limit("2/second;20/minute")
 def get_cinemas(
     request: Request,
+    response: Response,
     logger=Depends(get_logger),
 ):
     try:
@@ -33,6 +34,7 @@ def get_cinemas(
 @limiter.limit("2/second;30/minute")
 async def add_cinema(
     request: Request,
+    response: Response,
     cinema: CinemaModel,
     logger=Depends(get_logger),
     auth: str | None = Header(None),
@@ -57,6 +59,7 @@ async def add_cinema(
 @limiter.limit("2/second;20/minute")
 async def delete_cinema(
     request: Request,
+    response: Response,
     cinema_id: CinemaDelete,
     logger=Depends(get_logger),
     auth: str | None = Header(None),
