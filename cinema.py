@@ -67,7 +67,7 @@ class Cinema:
         return gps or None
 
     @connect_to_database
-    def add_to_database(self, db, cursor, logger: Logger) -> dict:
+    def add_to_database(self, db, cursor) -> dict:
         """Adds cinema object to the database if not already present"""
         try:
             columns = list(self.__dict__.keys())
@@ -93,7 +93,7 @@ class Cinema:
             return {"ok": True, "info": None}
 
         except Exception as e:
-            logger.error(f"CinemaManager.add_to_database:  {e}")
+            self.logger.error(f"CinemaManager.add_to_database:  {e}")
             return {
                 "ok": False,
                 "info": f"cinema.add_to_database: {e}",
@@ -186,7 +186,8 @@ class CinemaManager:
         "address":str | None,
         "info":str | None,
         "gps": list[float] | None,
-        "town":str | None}
+        "town":str | None,
+        "department": str}
 
         Note: "cinema_id" is obligatory, "gps" will attempt to be found if not provided.
         """
