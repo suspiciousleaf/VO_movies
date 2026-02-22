@@ -2,7 +2,7 @@ services:
   voflix:
     image: ${VOFLIX_IMAGE}
     container_name: voflix
-#    build: .
+    # build: .
     depends_on:
       - db
     env_file:
