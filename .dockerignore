@@ -9,3 +9,5 @@ docker_db_init_logs.txt
 *.conf
 *backup*
 .venv
+herault_cine.json
+cinema_importer.py

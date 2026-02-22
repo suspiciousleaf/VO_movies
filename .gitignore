@@ -9,6 +9,8 @@ cinema_info.py
 docker_db_init_logs.txt
 *.conf
 *backup*
+cinema_importer.py
+herault_cine.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
