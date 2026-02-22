@@ -70,9 +70,16 @@ class Cinema:
     def add_to_database(self, db, cursor) -> dict:
         """Adds cinema object to the database if not already present"""
         try:
-            columns = list(self.__dict__.keys())
-            values = self.__dict__
-            values.pop("logger")
+            values = {
+                "cinema_id": self.cinema_id,
+                "name": self.name,
+                "address": self.address,
+                "info": self.info,
+                "gps": self.gps,
+                "town": self.town,
+                "department": self.department,
+            }
+            columns = list(values.keys())
             gps = values.get("gps")
 
             # If GPS details are provided, extracts lat and lon to be added via placeholder, and removes "gps" key so it can be placed in the correct index for addition.
