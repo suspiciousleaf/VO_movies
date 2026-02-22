@@ -12,12 +12,13 @@ class GPSInvalidError(ValueError):
 
 
 class CinemaModel(BaseModel):
-    # Validate input data format. Use Regex to ensure cinema ID is in the correct format. Name and town are required, address, info, and gps are optional
+    # Validate input data format. Use Regex to ensure cinema ID is in the correct format. Name, town, and department are required, address, info, and gps are optional
     cinema_id: Annotated[
         str, StringConstraints(min_length=5, max_length=5, pattern=r"^[A-Z]\d{4}$")
     ]
     name: Annotated[str, StringConstraints(min_length=2, max_length=191)]
     address: Annotated[str, StringConstraints(max_length=255)] | None = None
+    department: Annotated[str, StringConstraints(min_length=3, max_length=191)]
     info: Annotated[str, StringConstraints(max_length=255)] | None = None
     gps: list[float] | None = None
     town: Annotated[str, StringConstraints(min_length=3, max_length=191)]

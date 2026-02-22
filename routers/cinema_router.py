@@ -39,10 +39,10 @@ async def add_cinema(
 ):
     check_cinema_code(auth, logger, "add")
     try:
-        logger.info(f"/add (cinema) endpoint requested: {cinema.__dict__}")
+        logger.info(f"/add (cinema) endpoint requested: {cinema.model_dump()}")
         cinema_man = CinemaManager(logger)
-        response = await cinema_man.add_cinema_to_database(cinema.__dict__)
-        response["payload"] = cinema.__dict__
+        response = await cinema_man.add_cinema_to_database(cinema.model_dump())
+        response["payload"] = cinema.model_dump()
         if response["ok"]:
             return response
         else:
@@ -62,10 +62,11 @@ async def delete_cinema(
     auth: str | None = Header(None),
 ):
     check_cinema_code(auth, logger, "delete")
+    response = {"info": "Exception before response was sent"}
     try:
         logger.info("/delete endpoint requested")
         cinema_man = CinemaManager(logger)
-        response = cinema_man.delete_cinema(cinema_id=cinema_id.__dict__, logger=logger)
+        response = cinema_man.delete_cinema(cinema_id=cinema_id.__dict__, logger=logger)  # type: ignore
         response["payload"] = cinema_id
         if response["ok"]:
             return response
