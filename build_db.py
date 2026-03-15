@@ -96,4 +96,4 @@ def build_db(db, cursor, logger):
     """Initialize the database by creating tables and adding cinema data."""
     tables_present = create_tables(db, cursor, logger=logger)
     add_cinemas(db, cursor, logger=logger)
-    return f"Tables in databse: {tables_present}"
+    return f"Tables in database: {tables_present}"
