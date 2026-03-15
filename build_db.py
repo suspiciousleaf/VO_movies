@@ -80,6 +80,8 @@ def add_cinemas(db, cursor, logger):
     cinema_data_to_add = [
         cinema for cinema in cinema_data if cinema[0] not in current_cinema_ids
     ]
+    if cinema_data_to_add:
+        logger.info(f"Adding cinemas to database: {cinema_data_to_add}")
 
     query = """
         INSERT INTO cinemas (cinema_id, `name`, `address`, info, gps, town, department) 
