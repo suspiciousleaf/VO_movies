@@ -108,6 +108,8 @@ class AdditionalDataMovieModel(BaseModel, arbitrary_types_allowed=True):
     poster_lo_res: str | None = Field(None, max_length=255)
     poster_hi_res: str | None = Field(None, max_length=255)
     tmdb_id: int | None = None
+    original_language: str | None = Field(None, max_length=191)
+    spoken_languages: str | None = Field(None, max_length=191)
 
     @field_validator("runtime", mode="before")
     def validate_smallint_un(cls, input, values):

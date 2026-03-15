@@ -139,6 +139,8 @@ class Movie:
         self.poster_lo_res = additional_details_movie_model.poster_lo_res
         self.tmdb_id = additional_details_movie_model.tmdb_id
         self.runtime = additional_details_movie_model.runtime
+        self.original_language = additional_details_movie_model.original_language
+        self.spoken_languages = additional_details_movie_model.spoken_languages
 
     def get_additional_details(self, additional_required_details: dict) -> dict:
         """Retrieve additional details for the movie from an TMDB API.
@@ -154,6 +156,11 @@ class Movie:
                 - imdb_url (str): The IMDB URL of the movie.
                 - poster_hi_res (str): The URL to the high-resolution poster image of the movie.
                 - poster_lo_res (str): The URL to the low-resolution poster image of the movie.
+                - rating_imdb
+                - rating_rt
+                - rating_meta
+                - spoken_languages
+                - original_language
 
         Raises:
             Exception: If additional movie details are not found.
@@ -243,15 +250,19 @@ class Movie:
                 )
 
             try:
-                #! Add original language and spoken lanaguages to database, compare with non english movies that are displayed
                 # TODO Scan through spoken languages or original language, and remove non English
                 # Log additional data for monitoring, to remove non English movies scraped in error
                 original_language = response_data.get("original_language")
                 # iso_639_1 = "en", "fr" etc
                 spoken_languages = [
                     language.get("iso_639_1")
-                    for language in response_data.get("spoken_languages", {})
+                    for language in response_data.get("spoken_languages", [])
                 ]
+                extra_movie_data["original_language"] = original_language
+                extra_movie_data["spoken_languages"] = (
+                    ",".join(spoken_languages) if spoken_languages else None
+                )
+
                 self.logger.info(
                     f"Scraper additional details for {self.original_title}: {original_language=}, {spoken_languages=}"
                 )
@@ -428,6 +439,8 @@ class Movie:
             "poster_hi_res",
             "poster_lo_res",
             "tmdb_id",
+            "original_language",
+            "spoken_languages",
         )
 
     def database_format(self):
