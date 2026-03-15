@@ -82,8 +82,8 @@ def add_cinemas(db, cursor, logger):
     ]
 
     query = """
-        INSERT INTO cinemas (cinema_id, `name`, `address`, info, gps, town) 
-        VALUES (%s, %s, %s, %s, ST_GeomFromText(%s, 4326), %s);
+        INSERT INTO cinemas (cinema_id, `name`, `address`, info, gps, town, department) 
+        VALUES (%s, %s, %s, %s, ST_GeomFromText(%s, 4326), %s, %s);
     """
 
     cursor.executemany(query, cinema_data_to_add)
