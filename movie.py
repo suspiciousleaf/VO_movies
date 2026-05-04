@@ -1,7 +1,10 @@
+import unicodedata
 from datetime import datetime
-from requests import Session
+from requests import Session, HTTPError
 from pydantic import ValidationError
 from logging import Logger
+
+from rapidfuzz.distance import JaroWinkler
 
 from models.movie_model import MovieModel, AdditionalDataMovieModel
 from db_utilities import connect_to_database
@@ -10,6 +13,7 @@ from creds import TMDB_API_TOKEN
 
 
 TABLE_NAME = "movies"
+MAX_RESULTS_BEFORE_YEAR_FILTER = 20
 
 # We have a list of movie_id's from the database. We get a list of (movie, showings) from the scraper. We want to loop through the list. For each movie, we want to see if that movie_id is in the database, and if not, add that new movie to movies table. We also want to view all showings for that item in the list, see which aren't in the showings table, and add them.
 
@@ -84,14 +88,15 @@ class Movie:
 
         # The info below is not available from the initial source, so it is aquired from TBDM on instantiation. Dict below holds the attribute name for the Movie object, and the key value that stores the information in the json from the API.
         additional_required_details = {
-            "original_title": ("original_title"),
-            "origin_country": ("origin_country"),
-            "rating": ("vote_average"),
-            "runtime": ("runtime"),
-            "tagline": ("tagline"),
-            "synopsis": ("overview"),
-            "imdb_url": ("imdb_id"),
-            "poster_slug": ("poster_path"),
+            "original_title": "original_title",
+            "origin_country": "origin_country",
+            "rating": "vote_average",
+            "runtime": "runtime",
+            "tagline": "tagline",
+            "synopsis": "overview",
+            "imdb_url": "imdb_id",
+            "poster_slug": "poster_path",
+            "tmdb_id": "id",
         }
         extra_movie_data = {}
         try:
@@ -135,6 +140,8 @@ class Movie:
         self.poster_lo_res = additional_details_movie_model.poster_lo_res
         self.tmdb_id = additional_details_movie_model.tmdb_id
         self.runtime = additional_details_movie_model.runtime
+        self.original_language = additional_details_movie_model.original_language
+        self.spoken_languages = additional_details_movie_model.spoken_languages
 
     def get_additional_details(self, additional_required_details: dict) -> dict:
         """Retrieve additional details for the movie from an TMDB API.
@@ -148,8 +155,14 @@ class Movie:
                 - tagline (str): The tagline of the movie.
                 - synopsis (str): The synopsis of the movie.
                 - imdb_url (str): The IMDB URL of the movie.
+                - tmdb_id (int): The ID for the movie on TMDB
                 - poster_hi_res (str): The URL to the high-resolution poster image of the movie.
                 - poster_lo_res (str): The URL to the low-resolution poster image of the movie.
+                - rating_imdb
+                - rating_rt
+                - rating_meta
+                - spoken_languages
+                - original_language
 
         Raises:
             Exception: If additional movie details are not found.
@@ -167,52 +180,98 @@ class Movie:
         try:
             id_url = "https://api.themoviedb.org/3/search/movie"
 
-            if isinstance(self.release_date, datetime):
-                # production year can lag behind listed year, so search the production year then the two following years
-                for year in range(self.release_date.year, self.release_date.year + 3):
-                    queryparams = {
-                        "query": self.original_title,
-                        "primary_release_year": year,
-                    }
+            # TMDB ID must be identified first, then other details can be retrieved. To ensure a correct match when multiple movies have the same title, we retrieve all matches, get extended details for all of them, and then try to match cast members and production year
+            queryparams = {
+                "query": self.original_title,
+            }
 
-                    # TMDB ID must be identified first, then other details can be retrieved
-                    response = s.get(id_url, params=queryparams, headers=headers)
-                    response.raise_for_status()
-                    results = response.json().get("results")
-                    if results:
-                        extra_movie_data["tmdb_id"] = results[0]["id"]
-                        break
+            response = s.get(id_url, params=queryparams, headers=headers)
+            response.raise_for_status()
+            results = response.json().get("results")
+            if not results:
+                raise Exception("Movie not found on TMDB")
 
-            # If no results found using title and year, try again without the year.
-            if "tmdb_id" not in extra_movie_data.keys():
-                queryparams = {
-                    "query": self.original_title,
-                }
+            # If we get too many results due to a generic movie name, or we don't have any cast members to use for matching, run the search again using the production year data that we have. This can be incorrect to is only used if necessary.
+            no_cast = not self.cast
+            too_many_results = len(results) >= MAX_RESULTS_BEFORE_YEAR_FILTER
 
+            if (no_cast or too_many_results) and self.release_date:
+                # Retry with year to narrow results
+                queryparams["year"] = str(self.release_date.year)
                 response = s.get(id_url, params=queryparams, headers=headers)
                 response.raise_for_status()
-                results = response.json().get("results")
-                if results:
-                    extra_movie_data["tmdb_id"] = results[0]["id"]
-                else:
-                    raise Exception("Movie not found")
+                results = response.json().get("results", [])
+                if not results:
+                    raise Exception("Movie not found on TMDB with year filter")
 
-            details_url = (
-                f"https://api.themoviedb.org/3/movie/{extra_movie_data['tmdb_id']}"
-            )
+            if results:
+                possible_ids: list = [result["id"] for result in results]
+            else:
+                raise Exception("Movie not found on TMDB")
 
-            # TMDB ID must be identified first, then other details can be retrieved
-            response = s.get(details_url, headers=headers)
+            params = {"append_to_response": "credits"}
+            possible_matches: list = []
+            for tmdb_id in possible_ids:
+                # Get details for all possible matches
+                detail_url = f"https://api.themoviedb.org/3/movie/{tmdb_id}"
+
+                # TMDB ID must be identified first, then other details can be retrieved
+                try:
+                    response = s.get(detail_url, headers=headers, params=params)
+                    response.raise_for_status()
+                except HTTPError as e:
+                    self.logger.warning(
+                        f"HTTP error, Unable to retrieve additional details for TMDB ID {tmdb_id}:{e}"
+                    )
+                except Exception as e:
+                    self.logger.warning(
+                        f"Exception retrieving additional movie details for TMDB ID {tmdb_id}:{e}"
+                    )
+
+                response_data = response.json()
+
+                possible_matches.append(self.process_possible_match(response_data))
+
+            best_match = self.find_correct_match(possible_matches)
+            if best_match is None:
+                raise Exception(
+                    f"No confident TMDB match found for '{self.original_title}'"
+                )
+
+            # Best match is found, retrieve full details
+            chosen_id = best_match["id"]
+            detail_url = f"https://api.themoviedb.org/3/movie/{chosen_id}"
+            response = s.get(detail_url, headers=headers, params=params)
             response.raise_for_status()
-
             response_data = response.json()
 
             for detail, key in additional_required_details.items():
                 info = response_data.get(key)
-                if isinstance(info, list):
-                    extra_movie_data[detail] = ",".join(info)
-                else:
-                    extra_movie_data[detail] = info
+                extra_movie_data[detail] = (
+                    ",".join(info) if isinstance(info, list) else info
+                )
+
+            try:
+                # TODO Scan through spoken languages or original language, and remove non English
+                # Log additional data for monitoring, to remove non English movies scraped in error
+                original_language = response_data.get("original_language")
+                # iso_639_1 = "en", "fr" etc
+                spoken_languages = [
+                    language.get("iso_639_1")
+                    for language in response_data.get("spoken_languages", [])
+                ]
+                extra_movie_data["original_language"] = original_language
+                extra_movie_data["spoken_languages"] = (
+                    ",".join(spoken_languages) if spoken_languages else None
+                )
+
+                self.logger.info(
+                    f"Scraper additional details for {self.original_title}: {original_language=}, {spoken_languages=}"
+                )
+            except Exception as e:
+                self.logger.warning(
+                    f"Failed to log additional info for {self.original_title}: {e}"
+                )
 
             # Overwrite production year data with release data from TMDB
             self.release_date = datetime.strptime(
@@ -244,6 +303,124 @@ class Movie:
             s.close()
         return extra_movie_data
 
+    def find_correct_match(self, possible_matches: list[dict]) -> dict | None:
+        """
+        Given a list of processed possible TMDB matches, return the best one based on
+        cast member similarity. Returns None if no match scores above threshold.
+        """
+
+        if not possible_matches:
+            self.logger.warning(f"No possible matches found for {self.original_title}")
+            return
+
+        if not self.cast:
+            self.logger.info(
+                f"'{self.original_title}': no cast available, selecting top TMDB result"
+            )
+            return possible_matches[0]
+
+        MATCH_THRESHOLD = 0.5
+
+        scored = [
+            (match, self._score_cast_against_match(match)) for match in possible_matches
+        ]
+
+        scored.sort(key=lambda x: x[1], reverse=True)
+
+        # TODO remove later if all runs smoothly
+        for match, score in scored:
+            self.logger.info(f"TMDB ID {match.get('id')}: cast match score {score:.2f}")
+
+        best_match, best_score = scored[0] if scored else (None, 0.0)
+
+        if best_score >= MATCH_THRESHOLD:
+            self.logger.info(
+                f"'{self.original_title}': matched TMDB ID {best_match.get('id')} "
+                f"with cast score {best_score:.2f}"
+            )
+            return best_match
+
+        self.logger.warning(
+            f"'{self.original_title}': no confident cast match found, (best score: {best_score:.2f})"
+        )
+        return None
+
+    @staticmethod
+    def process_possible_match(raw_match: dict) -> dict:
+        match: dict = {}
+        match["id"] = raw_match.get("id")
+        match["cast"] = []
+        credits = raw_match.get("credits", {})
+        for cast_member in credits.get("cast", []):
+            name = cast_member.get("original_name")
+            if name is not None:
+                match["cast"].append(name)
+        return match
+
+    @staticmethod
+    def _normalise_cast_name(name: str) -> str:
+        """Strip accents, lowercase, remove punctuation for comparison."""
+        # Decompose unicode characters (e.g. é -> e + combining accent)
+        nfkd = unicodedata.normalize("NFKD", name)
+        # Drop combining characters (the accents)
+        ascii_name = "".join(c for c in nfkd if not unicodedata.combining(c))
+        return ascii_name.lower().strip()
+
+    @staticmethod
+    def _name_tokens(name: str) -> tuple[str, str]:
+        """Return (last_name, first_initial) tuple for token-based matching."""
+        parts = name.split()
+        last = parts[-1] if parts else ""
+        first_initial = parts[0][0] if len(parts) > 1 else ""
+        return last.lower(), first_initial.lower()
+
+    @staticmethod
+    def _score_name_match(source_name: str, candidate_name: str) -> float:
+        """
+        Score how well two names match. Returns 0.0 to 1.0.
+        Tries normalised exact match first, then token match, then Jaro-Winkler.
+        """
+        norm_source = Movie._normalise_cast_name(source_name)
+        norm_candidate = Movie._normalise_cast_name(candidate_name)
+
+        # 1. Exact match after normalisation
+        if norm_source == norm_candidate:
+            return 1.0
+
+        # 2. Token match: last name + first initial
+        src_last, src_initial = Movie._name_tokens(norm_source)
+        cand_last, cand_initial = Movie._name_tokens(norm_candidate)
+        if src_last == cand_last and src_initial == cand_initial:
+            return 0.95
+
+        # 3. Jaro-Winkler fuzzy match on full normalised name
+        similarity = JaroWinkler.similarity(norm_source, norm_candidate)
+        return similarity if similarity >= 0.8 else 0.0
+
+    def _score_cast_against_match(self, possible_match: dict) -> float:
+        """
+        Score a possible TMDB match against original scraped cast.
+        Returns the average best-match score across all cast members in self.cast.
+        """
+        if not self.cast:
+            return 0.0
+
+        candidate_cast = possible_match.get("cast", [])
+        if not candidate_cast:
+            return 0.0
+
+        total_score = 0.0
+        cast_members = self.cast.split(",")
+        for source_name in cast_members:
+            # Find the best match for this cast member in the candidate's cast list
+            best = max(
+                (self._score_name_match(source_name, c) for c in candidate_cast),
+                default=0.0,
+            )
+            total_score += best
+
+        return total_score / len(cast_members)
+
     @staticmethod
     def get_columns() -> tuple[str, ...]:
         """Returns a tuple of the database column names to be written to"""
@@ -264,6 +441,8 @@ class Movie:
             "poster_hi_res",
             "poster_lo_res",
             "tmdb_id",
+            "original_language",
+            "spoken_languages",
         )
 
     def database_format(self):
@@ -329,8 +508,8 @@ class MovieManager:
                 self.logger.error(f"Unable to create Movie: {e}")
 
     def create_movie(self, item: dict) -> Movie | None:
+        """Create a Movie object from raw JSON data."""
         try:
-            """Create a Movie object from raw JSON data."""
             movie_details = {
                 "movie_id": item["movie"]["id"],
                 "original_title": item["movie"]["originalTitle"].strip(),
@@ -338,9 +517,12 @@ class MovieManager:
                 "genres": [
                     genre["tag"].replace("_", " ").title()
                     for genre in item["movie"]["genres"]
+                    if genre["tag"] is not None
                 ],
                 "languages": [
-                    language.title() for language in item["movie"]["languages"]
+                    language.title()
+                    for language in item["movie"]["languages"]
+                    if language is not None
                 ],
                 "cast": self.get_cast(item["movie"]["cast"]["edges"]),
                 "release_date": self.get_release_date(item),
@@ -350,7 +532,7 @@ class MovieManager:
             return new_movie
 
         except Exception as e:
-            self.logger.error(f"Movie could not be created: {e}")
+            self.logger.error(f"Movie could not be created: {e}, raw json data: {item}")
 
     @staticmethod
     def get_cast(cast_json):
@@ -384,6 +566,9 @@ class MovieManager:
         """Add new movies to the database."""
         if self.new_movies:
             movie_values_list = [movie.database_format() for movie in self.new_movies]
+
+            for movie in self.new_movies:
+                self.logger.info(f"Adding new movie to database: \n{movie}")
 
             columns = Movie.get_columns()
             placeholders = ", ".join(f"%({key})s" for key in columns)
