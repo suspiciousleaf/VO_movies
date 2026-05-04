@@ -88,14 +88,15 @@ class Movie:
 
         # The info below is not available from the initial source, so it is aquired from TBDM on instantiation. Dict below holds the attribute name for the Movie object, and the key value that stores the information in the json from the API.
         additional_required_details = {
-            "original_title": ("original_title"),
-            "origin_country": ("origin_country"),
-            "rating": ("vote_average"),
-            "runtime": ("runtime"),
-            "tagline": ("tagline"),
-            "synopsis": ("overview"),
-            "imdb_url": ("imdb_id"),
-            "poster_slug": ("poster_path"),
+            "original_title": "original_title",
+            "origin_country": "origin_country",
+            "rating": "vote_average",
+            "runtime": "runtime",
+            "tagline": "tagline",
+            "synopsis": "overview",
+            "imdb_url": "imdb_id",
+            "poster_slug": "poster_path",
+            "tmdb_id": "id",
         }
         extra_movie_data = {}
         try:
@@ -154,6 +155,7 @@ class Movie:
                 - tagline (str): The tagline of the movie.
                 - synopsis (str): The synopsis of the movie.
                 - imdb_url (str): The IMDB URL of the movie.
+                - tmdb_id (int): The ID for the movie on TMDB
                 - poster_hi_res (str): The URL to the high-resolution poster image of the movie.
                 - poster_lo_res (str): The URL to the low-resolution poster image of the movie.
                 - rating_imdb
@@ -515,9 +517,12 @@ class MovieManager:
                 "genres": [
                     genre["tag"].replace("_", " ").title()
                     for genre in item["movie"]["genres"]
+                    if genre["tag"] is not None
                 ],
                 "languages": [
-                    language.title() for language in item["movie"]["languages"]
+                    language.title()
+                    for language in item["movie"]["languages"]
+                    if language is not None
                 ],
                 "cast": self.get_cast(item["movie"]["cast"]["edges"]),
                 "release_date": self.get_release_date(item),
@@ -527,7 +532,7 @@ class MovieManager:
             return new_movie
 
         except Exception as e:
-            self.logger.error(f"Movie could not be created: {e}")
+            self.logger.error(f"Movie could not be created: {e}, raw json data: {item}")
 
     @staticmethod
     def get_cast(cast_json):
